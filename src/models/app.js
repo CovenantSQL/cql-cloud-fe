@@ -9,16 +9,18 @@ import { CANCEL_REQUEST_MESSAGE } from 'utils/constant'
 import api from 'api'
 import config from 'config'
 
-const { queryRouteList, logoutUser, queryUserInfo } = api
+const { queryAccount, queryRouteList, logoutUser, queryUserInfo } = api
 
 export default {
   namespace: 'app',
   state: {
+    // persistant
     theme: store.get('theme') || 'light',
     collapsed: store.get('collapsed') || false,
     token: store.get('token') || '',
     userInfo: store.get('userInfo') || {},
     keypairs: store.get('keypairs') || {},
+    // state
     user: {},
     permissions: {
       visit: [],
@@ -73,10 +75,12 @@ export default {
 
     setup({ dispatch }) {
       dispatch({ type: 'query' })
+      // dispatch({ type: 'checkToken' })
     },
   },
   effects: {
     *query({ payload }, { call, put, select }) {
+      console.log('app/query called')
       const { success, user } = yield call(queryUserInfo, payload)
       const { locationPathname } = yield select(_ => _.app)
 
@@ -115,6 +119,41 @@ export default {
           })
         }
       } else if (queryLayout(config.layouts, locationPathname) !== 'public') {
+        router.push({
+          pathname: '/login',
+          search: stringify({
+            from: locationPathname,
+          }),
+        })
+      }
+    },
+
+    *checkToken({ payload }, { call, put, select }) {
+      console.log('app/checkToken called')
+      // use account info for check token viability
+      const {
+        success,
+        data: { keypairs },
+      } = yield call(queryAccount)
+      yield put({ type: 'app/handleKeypairsChange', payload: keypairs })
+
+      const { locationPathname } = yield select(_ => _.app)
+
+      if (success) {
+        if (
+          pathMatchRegexp(
+            ['/', '/login', '/callback/github'],
+            window.location.pathname
+          )
+        ) {
+          console.log('in')
+          keypairs === null
+            ? router.push({ pathname: '/wallets' })
+            : router.push({ pathname: '/dashboard' })
+        }
+      } else if (queryLayout(config.layouts, locationPathname) !== 'public') {
+        // token is invalid, reset token to empty
+        yield put({ type: 'app/handleTokenChange', payload: '' })
         router.push({
           pathname: '/login',
           search: stringify({

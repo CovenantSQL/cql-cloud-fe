@@ -1,8 +1,11 @@
 import { get } from 'lodash'
-import { router } from 'utils'
+// import { router } from 'utils'
 import api from 'api'
 
-const { queryToken, queryAccount } = api
+const {
+  queryToken,
+  // queryAccount,
+} = api
 
 export default {
   namespace: 'callback',
@@ -24,17 +27,17 @@ export default {
       }
 
       // get user's main wallet
-      try {
-        const account = yield call(queryAccount)
-        const keypairs = get(account, 'data.token')
-        yield put({ type: 'app/handleKeypairsChange', payload: keypairs })
-        console.log('//--------- account', account)
-        if (!keypairs) {
-          router.push('/wallets')
-        }
-      } catch (e) {
-        console.error(e)
-      }
+      yield put({ type: 'app/checkToken' })
+      // try {
+      //   const account = yield call(queryAccount)
+      //   const keypairs = get(account, 'data.token')
+      //   yield put({ type: 'app/handleKeypairsChange', payload: keypairs })
+      //   if (!keypairs) {
+      //     router.push('/wallets')
+      //   }
+      // } catch (e) {
+      //   console.error(e)
+      // }
     },
   },
 }
