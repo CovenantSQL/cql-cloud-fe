@@ -1,7 +1,8 @@
 import React, { PureComponent, Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { Icon } from 'antd'
+import qs from 'query-string'
 import { connect } from 'dva'
-import { Button, Row, Icon, Input } from 'antd'
 import { GlobalFooter } from 'ant-design-pro'
 import { Trans, withI18n } from '@lingui/react'
 import { setLocale } from 'utils'
@@ -11,14 +12,17 @@ import styles from './index.less'
 
 @withI18n()
 @connect(({ loading }) => ({ loading }))
-class Login extends PureComponent {
-  handleGithubLogin = () => {
+class GithubCallback extends PureComponent {
+  componentDidMount() {
     const { dispatch } = this.props
-    dispatch({ type: 'login/loginGithub', payload: {} })
+    const params = qs.parse(this.props.location.search)
+    const { code, state } = params
+
+    dispatch({ type: 'callback/token', payload: { code, state } })
   }
 
   render() {
-    const { loading, i18n } = this.props
+    const { loading } = this.props
 
     let footerLinks = [
       {
@@ -42,23 +46,7 @@ class Login extends PureComponent {
 
     return (
       <Fragment>
-        <div className={styles.form}>
-          <div className={styles.logo}>
-            <img alt="logo" src={config.logoPath} />
-            <span>{config.siteName}</span>
-          </div>
-          <form>
-            <Row>
-              <Button
-                type="primary"
-                onClick={this.handleGithubLogin}
-                loading={loading.effects.login}
-              >
-                <Trans>Sign in with Github</Trans>
-              </Button>
-            </Row>
-          </form>
-        </div>
+        <div className={styles.form}>Github login...</div>
         <div className={styles.footer}>
           <GlobalFooter links={footerLinks} copyright={config.copyright} />
         </div>
@@ -67,10 +55,8 @@ class Login extends PureComponent {
   }
 }
 
-Login.propTypes = {
-  form: PropTypes.object,
-  dispatch: PropTypes.func,
+GithubCallback.propTypes = {
   loading: PropTypes.object,
 }
 
-export default Login
+export default GithubCallback

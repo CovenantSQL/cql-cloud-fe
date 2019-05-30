@@ -15,4 +15,9 @@ export default {
   queryPostList: '/posts',
 
   queryDashboard: '/dashboard',
+
+  // CQL APIs
+  queryGithubOAuth: '/admin/auth/authorize',
+  queryToken: '/admin/auth/callback',
+  queryAccount: '/admin/account',
 }

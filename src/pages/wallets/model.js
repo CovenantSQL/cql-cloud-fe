@@ -1,8 +1,7 @@
 import { router, pathMatchRegexp } from 'utils'
-import { get } from 'lodash'
 import api from 'api'
 
-const { loginUser, queryGithubOAuth } = api
+const { loginUser } = api
 
 export default {
   namespace: 'login',
@@ -24,13 +23,6 @@ export default {
         }
       } else {
         throw data
-      }
-    },
-    *loginGithub({}, { put, call, select }) {
-      const data = yield call(queryGithubOAuth)
-      const redirectUrl = get(data, 'data.url')
-      if (redirectUrl) {
-        window.location.href = redirectUrl
       }
     },
   },

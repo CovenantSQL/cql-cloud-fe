@@ -1,6 +1,8 @@
 import request from 'utils/request'
 import { apiPrefix } from 'utils/config'
 
+import store from 'store'
+
 import api from './api'
 
 const gen = params => {
@@ -34,5 +36,13 @@ APIFunction.queryWeather = params => {
     data: params,
   })
 }
+
+// CQL
+// APIFunction.queryAccount = (params = {}) => {
+//   return request({
+//     url: `http://api00.cn.gridb.io:15153/v3/admin/account`,
+//     data: params,
+//   })
+// }
 
 export default APIFunction

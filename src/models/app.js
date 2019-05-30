@@ -14,6 +14,11 @@ const { queryRouteList, logoutUser, queryUserInfo } = api
 export default {
   namespace: 'app',
   state: {
+    theme: store.get('theme') || 'light',
+    collapsed: store.get('collapsed') || false,
+    token: store.get('token') || '',
+    userInfo: store.get('userInfo') || {},
+    keypairs: store.get('keypairs') || {},
     user: {},
     permissions: {
       visit: [],
@@ -29,8 +34,6 @@ export default {
     ],
     locationPathname: '',
     locationQuery: {},
-    theme: store.get('theme') || 'light',
-    collapsed: store.get('collapsed') || false,
     notifications: [
       {
         title: 'New User is registered.',
@@ -106,7 +109,7 @@ export default {
             routeList,
           },
         })
-        if (pathMatchRegexp(['/','/login'], window.location.pathname)) {
+        if (pathMatchRegexp(['/', '/login'], window.location.pathname)) {
           router.push({
             pathname: '/dashboard',
           })
@@ -162,6 +165,21 @@ export default {
     handleCollapseChange(state, { payload }) {
       store.set('collapsed', payload)
       state.collapsed = payload
+    },
+
+    handleTokenChange(state, { payload }) {
+      store.set('token', payload)
+      state.token = payload
+    },
+
+    handleUserInfoChange(state, { payload }) {
+      store.set('userInfo', payload)
+      state.userInfo = payload
+    },
+
+    handleKeypairsChange(state, { payload }) {
+      store.set('keypairs', payload)
+      state.keypairs = payload
     },
 
     allNotificationsRead(state) {

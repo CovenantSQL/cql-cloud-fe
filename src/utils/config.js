@@ -1,6 +1,6 @@
 module.exports = {
-  siteName: 'AntD Admin',
-  copyright: 'Ant Design Admin  © 2018 zuiidea',
+  siteName: 'Covenant Cloud',
+  copyright: 'Covenant Cloud  © 2019 CovenantLabs',
   logoPath: '/logo.svg',
   apiPrefix: '/api/v1',
   fixedHeader: true, // sticky primary layout header
@@ -10,7 +10,7 @@ module.exports = {
     {
       name: 'primary',
       include: [/.*/],
-      exclude: [/(\/(en|zh))*\/login/],
+      exclude: [/(\/(en|zh))*\/(login|callback)/],
     },
   ],
 
@@ -18,11 +18,11 @@ module.exports = {
   i18n: {
     /* Countrys flags: https://www.flaticon.com/packs/countrys-flags */
     languages: [
-      {
-        key: 'pt-br',
-        title: 'Português',
-        flag: '/brazil.svg',
-      },
+      // {
+      //   key: 'pt-br',
+      //   title: 'Português',
+      //   flag: '/brazil.svg',
+      // },
       {
         key: 'en',
         title: 'English',

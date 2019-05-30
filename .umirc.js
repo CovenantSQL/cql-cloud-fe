@@ -76,6 +76,17 @@ export default {
       changeOrigin: true,
       pathRewrite: { '^/api/v1/weather': '/v3/weather' },
     },
+    // For local test only, should remove before deployment
+    '/api/v1/admin/': {
+      target: 'http://api00.cn.gridb.io:15153/',
+      changeOrigin: true,
+      pathRewrite: { '^/api/v1/': '/v3/' },
+    },
+    '/api/v1/account/': {
+      target: 'http://api00.cn.gridb.io:15153/',
+      changeOrigin: true,
+      pathRewrite: { '^/api/v1/': '/v3/' },
+    },
   },
   alias: {
     api: resolve(__dirname, './src/services/'),

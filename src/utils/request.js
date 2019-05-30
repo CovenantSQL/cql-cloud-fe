@@ -4,6 +4,7 @@ import pathToRegexp from 'path-to-regexp'
 import { message } from 'antd'
 import { CANCEL_REQUEST_MESSAGE } from 'utils/constant'
 import qs from 'qs'
+import store from 'store'
 
 const { CancelToken } = axios
 window.cancelRequest = new Map()
@@ -44,6 +45,16 @@ export default function request(options) {
       cancel,
     })
   })
+
+  // Add X-CQL-Token for authorization
+  const token = store.get('token')
+  if (token) {
+    axios.interceptors.request.use(function(config) {
+      config.headers['X-CQL-Token'] = token
+      return config
+    })
+  }
+  console.log('--------------- options & data', options, data)
 
   return axios(options)
     .then(response => {
