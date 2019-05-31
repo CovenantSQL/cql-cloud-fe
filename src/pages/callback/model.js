@@ -28,16 +28,6 @@ export default {
 
       // get user's main wallet
       yield put({ type: 'app/checkToken' })
-      // try {
-      //   const account = yield call(queryAccount)
-      //   const keypairs = get(account, 'data.token')
-      //   yield put({ type: 'app/handleKeypairsChange', payload: keypairs })
-      //   if (!keypairs) {
-      //     router.push('/wallets')
-      //   }
-      // } catch (e) {
-      //   console.error(e)
-      // }
     },
   },
 }

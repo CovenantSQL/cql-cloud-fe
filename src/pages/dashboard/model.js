@@ -38,6 +38,9 @@ export default modelExtend(model, {
           pathMatchRegexp('/dashboard', pathname) ||
           pathMatchRegexp('/', pathname)
         ) {
+          // query userinfo
+          dispatch({ type: 'app/query' })
+          // query dashboard related
           dispatch({ type: 'query' })
           dispatch({ type: 'queryWeather' })
         }

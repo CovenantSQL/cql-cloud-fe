@@ -165,7 +165,6 @@ export default {
             window.location.pathname
           )
         ) {
-          console.log('in')
           keypairs === null
             ? router.push({ pathname: '/wallets' })
             : router.push({ pathname: '/dashboard' })
@@ -185,7 +184,6 @@ export default {
     *signOut({ payload }, { call, put }) {
       // clear token
       yield put({ type: 'handleTokenChange', payload: '' })
-      console.log('localstorage', store.get('token'))
 
       // clear user related state
       yield put({
