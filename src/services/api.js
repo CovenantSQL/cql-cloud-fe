@@ -20,4 +20,5 @@ export default {
   queryGithubOAuth: '/admin/auth/authorize',
   queryToken: '/admin/auth/callback',
   queryAccount: '/admin/account',
+  queryCQLUserInfo: '/admin/userinfo',
 }

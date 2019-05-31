@@ -5,11 +5,18 @@ import { stringify } from 'qs'
 import store from 'store'
 import { ROLE_TYPE } from 'utils/constant'
 import { queryLayout, pathMatchRegexp } from 'utils'
-import { CANCEL_REQUEST_MESSAGE } from 'utils/constant'
+import { CANCEL_REQUEST_MESSAGE, USER_PERMISSION } from 'utils/constant'
+import routes from 'utils/routes'
 import api from 'api'
 import config from 'config'
 
-const { queryAccount, queryRouteList, logoutUser, queryUserInfo } = api
+const {
+  queryAccount,
+  queryRouteList,
+  logoutUser,
+  queryUserInfo,
+  queryCQLUserInfo,
+} = api
 
 export default {
   namespace: 'app',
@@ -74,37 +81,47 @@ export default {
     },
 
     setup({ dispatch }) {
+      // if not login then redirect to login page
       dispatch({ type: 'query' })
-      // dispatch({ type: 'checkToken' })
     },
   },
   effects: {
     *query({ payload }, { call, put, select }) {
       console.log('app/query called')
-      const { success, user } = yield call(queryUserInfo, payload)
+      // add CQL login check logic
+      const { success, data } = yield call(queryCQLUserInfo)
       const { locationPathname } = yield select(_ => _.app)
 
-      if (success && user) {
-        const { list } = yield call(queryRouteList)
-        const { permissions } = user
-        let routeList = list
-        if (
-          permissions.role === ROLE_TYPE.ADMIN ||
-          permissions.role === ROLE_TYPE.DEVELOPER
-        ) {
-          permissions.visit = list.map(item => item.id)
-        } else {
-          routeList = list.filter(item => {
-            const cases = [
-              permissions.visit.includes(item.id),
-              item.mpid
-                ? permissions.visit.includes(item.mpid) || item.mpid === '-1'
-                : true,
-              item.bpid ? permissions.visit.includes(item.bpid) : true,
-            ]
-            return cases.every(_ => _)
-          })
+      if (success) {
+        // if login, set permisson as developer
+        let permissions = USER_PERMISSION.DEVELOPER
+        permissions.visit = routes.map(item => item.id)
+        const routeList = routes
+
+        // construct user data
+        const {
+          id,
+          name,
+          location,
+          email,
+          company,
+          blog,
+          bio,
+          created_at,
+          avatar_url,
+        } = data.extra
+        const user = {
+          id,
+          name,
+          email,
+          username: name,
+          phone: 0,
+          address: location,
+          isMale: 0,
+          createTime: created_at,
+          avatar: avatar_url,
         }
+
         yield put({
           type: 'updateState',
           payload: {
@@ -118,6 +135,40 @@ export default {
             pathname: '/dashboard',
           })
         }
+        // if (success && user) {
+        //   const { list } = yield call(queryRouteList)
+        //   const { permissions } = user
+        //   let routeList = list
+        //   if (
+        //     permissions.role === ROLE_TYPE.ADMIN ||
+        //     permissions.role === ROLE_TYPE.DEVELOPER
+        //   ) {
+        //     permissions.visit = list.map(item => item.id)
+        //   } else {
+        //     routeList = list.filter(item => {
+        //       const cases = [
+        //         permissions.visit.includes(item.id),
+        //         item.mpid
+        //           ? permissions.visit.includes(item.mpid) || item.mpid === '-1'
+        //           : true,
+        //         item.bpid ? permissions.visit.includes(item.bpid) : true,
+        //       ]
+        //       return cases.every(_ => _)
+        //     })
+        //   }
+        //   yield put({
+        //     type: 'updateState',
+        //     payload: {
+        //       user,
+        //       permissions,
+        //       routeList,
+        //     },
+        //   })
+        //   if (pathMatchRegexp(['/', '/login'], window.location.pathname)) {
+        //     router.push({
+        //       pathname: '/dashboard',
+        //     })
+        //   }
       } else if (queryLayout(config.layouts, locationPathname) !== 'public') {
         router.push({
           pathname: '/login',
