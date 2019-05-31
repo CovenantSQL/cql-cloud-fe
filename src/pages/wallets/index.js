@@ -1,39 +1,27 @@
 import React, { PureComponent, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { Button, Row, Form, Icon, Input } from 'antd'
+import { Button, Divider, Row, Form, Icon, Input, Empty } from 'antd'
 import { GlobalFooter } from 'ant-design-pro'
 import { Trans, withI18n } from '@lingui/react'
 import { setLocale } from 'utils'
 import config from 'utils/config'
 
 import styles from './index.less'
-const FormItem = Form.Item
 
 @withI18n()
-@connect(({ loading }) => ({ loading }))
-@Form.create()
+@connect(({ loading, wallets }) => ({ loading, wallets }))
 class Wallets extends PureComponent {
-  handleOk = () => {
-    const { dispatch, form } = this.props
-    const { validateFieldsAndScroll } = form
-    validateFieldsAndScroll((errors, values) => {
-      if (errors) {
-        return
-      }
-      dispatch({ type: 'login/login', payload: values })
-    })
-  }
+  handleOk = () => {}
 
   render() {
-    const { loading, form, i18n } = this.props
-    const { getFieldDecorator } = form
+    const { loading, wallets } = this.props
 
     let footerLinks = [
       {
         key: 'github',
         title: <Icon type="github" />,
-        href: 'https://github.com/zuiidea/antd-admin',
+        href: 'https://github.com/covenantsql/covenantsql',
         blankTarget: true,
       },
     ]
@@ -54,57 +42,44 @@ class Wallets extends PureComponent {
         <div className={styles.form}>
           <div className={styles.logo}>
             <img alt="logo" src={config.logoPath} />
-            <span>{config.siteName}</span>
+            <span>Wallets Setup</span>
           </div>
           <form>
-            <FormItem hasFeedback>
-              {getFieldDecorator('username', {
-                rules: [
-                  {
-                    required: true,
-                  },
-                ],
-              })(
-                <Input
-                  onPressEnter={this.handleOk}
-                  placeholder={i18n.t`Username`}
-                />
-              )}
-            </FormItem>
-            <FormItem hasFeedback>
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    required: true,
-                  },
-                ],
-              })(
-                <Input
-                  type="password"
-                  onPressEnter={this.handleOk}
-                  placeholder={i18n.t`Password`}
-                />
-              )}
-            </FormItem>
-            <Row>
+            <Row className={styles.actions}>
               <Button
                 type="primary"
                 onClick={this.handleOk}
                 loading={loading.effects.login}
               >
-                <Trans>Sign in</Trans>
+                <Trans>Create Wallet</Trans>
               </Button>
-              <p>
-                <span>
-                  <Trans>Username</Trans>
-                  ：guest
-                </span>
-                <span>
-                  <Trans>Password</Trans>
-                  ：guest
-                </span>
-              </p>
+              <Button
+                type="primary"
+                onClick={this.handleOk}
+                loading={loading.effects.login}
+              >
+                <Trans>Upload Wallet</Trans>
+              </Button>
             </Row>
+            <Divider>
+              <Trans>Cloud Wallets</Trans>
+            </Divider>
+            {wallets.keypairs ? (
+              <Row>
+                <div className={styles.wallets}>wallets</div>
+                <div>
+                  <Button
+                    type="primary"
+                    onClick={this.handleOk}
+                    loading={loading.effects.login}
+                  >
+                    <Trans>Sign in</Trans>
+                  </Button>
+                </div>
+              </Row>
+            ) : (
+              <Empty />
+            )}
           </form>
         </div>
         <div className={styles.footer}>

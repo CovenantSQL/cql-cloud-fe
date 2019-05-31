@@ -1,28 +1,38 @@
 import { router, pathMatchRegexp } from 'utils'
 import api from 'api'
 
-const { loginUser } = api
+const { queryAccount } = api
 
 export default {
-  namespace: 'login',
+  namespace: 'wallets',
 
-  state: {},
+  state: {
+    keypairs: null,
+  },
+
+  subscriptions: {
+    setup({ dispatch }) {
+      dispatch({ type: 'queryCurrentWallets' })
+    },
+  },
 
   effects: {
-    *login({ payload }, { put, call, select }) {
-      const data = yield call(loginUser, payload)
-      const { locationQuery } = yield select(_ => _.app)
-      if (data.success) {
-        const { from } = locationQuery
-        yield put({ type: 'app/query' })
-        if (!pathMatchRegexp('/login', from)) {
-          if (from === '/') router.push('/dashboard')
-          else router.push(from)
-        } else {
-          router.push('/dashboard')
-        }
-      } else {
-        throw data
+    *queryCurrentWallets({ payload }, { put, call, select }) {
+      const { data } = yield call(queryAccount)
+      yield put({
+        type: 'updateState',
+        payload: {
+          keypairs: data.keypair,
+        },
+      })
+    },
+  },
+
+  reducers: {
+    updateState(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
       }
     },
   },

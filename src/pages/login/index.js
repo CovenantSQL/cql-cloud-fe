@@ -24,7 +24,7 @@ class Login extends PureComponent {
       {
         key: 'github',
         title: <Icon type="github" />,
-        href: 'https://github.com/zuiidea/antd-admin',
+        href: 'https://github.com/covenantsql/covenantsql',
         blankTarget: true,
       },
     ]

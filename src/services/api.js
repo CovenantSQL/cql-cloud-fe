@@ -21,4 +21,7 @@ export default {
   queryToken: '/admin/auth/callback',
   queryAccount: '/admin/account',
   queryCQLUserInfo: '/admin/userinfo',
+  createWallet: 'POST /admin/keypair',
+  uploadWallet: 'POST /admin/keypair/upload',
+  setMainWallet: 'PUT /admin/keypair/main',
 }
