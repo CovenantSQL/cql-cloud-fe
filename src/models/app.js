@@ -3,6 +3,7 @@
 import { router } from 'utils'
 import { stringify } from 'qs'
 import store from 'store'
+import { message } from 'antd'
 import { ROLE_TYPE } from 'utils/constant'
 import { queryLayout, pathMatchRegexp } from 'utils'
 import { CANCEL_REQUEST_MESSAGE, USER_PERMISSION } from 'utils/constant'
@@ -87,10 +88,10 @@ export default {
   },
   effects: {
     *query({ payload }, { call, put, select }) {
-      console.log('app/query called')
-      // add CQL login check logic
-      const { success, data } = yield call(queryCQLUserInfo)
       const { locationPathname } = yield select(_ => _.app)
+      console.log('app/query locationPathname', locationPathname)
+      // add CQL login check logic
+      const { success, data, msg } = yield call(queryCQLUserInfo)
 
       if (success) {
         // if login, set permisson as developer
@@ -135,41 +136,8 @@ export default {
             pathname: '/dashboard',
           })
         }
-        // if (success && user) {
-        //   const { list } = yield call(queryRouteList)
-        //   const { permissions } = user
-        //   let routeList = list
-        //   if (
-        //     permissions.role === ROLE_TYPE.ADMIN ||
-        //     permissions.role === ROLE_TYPE.DEVELOPER
-        //   ) {
-        //     permissions.visit = list.map(item => item.id)
-        //   } else {
-        //     routeList = list.filter(item => {
-        //       const cases = [
-        //         permissions.visit.includes(item.id),
-        //         item.mpid
-        //           ? permissions.visit.includes(item.mpid) || item.mpid === '-1'
-        //           : true,
-        //         item.bpid ? permissions.visit.includes(item.bpid) : true,
-        //       ]
-        //       return cases.every(_ => _)
-        //     })
-        //   }
-        //   yield put({
-        //     type: 'updateState',
-        //     payload: {
-        //       user,
-        //       permissions,
-        //       routeList,
-        //     },
-        //   })
-        //   if (pathMatchRegexp(['/', '/login'], window.location.pathname)) {
-        //     router.push({
-        //       pathname: '/dashboard',
-        //     })
-        //   }
       } else if (queryLayout(config.layouts, locationPathname) !== 'public') {
+        message.error(msg)
         router.push({
           pathname: '/login',
           search: stringify({
@@ -204,7 +172,7 @@ export default {
         }
       } else if (queryLayout(config.layouts, locationPathname) !== 'public') {
         // token is invalid, reset token to empty
-        yield put({ type: 'app/handleTokenChange', payload: '' })
+        yield put({ type: 'handleTokenChange', payload: '' })
         router.push({
           pathname: '/login',
           search: stringify({
@@ -215,28 +183,31 @@ export default {
     },
 
     *signOut({ payload }, { call, put }) {
-      const data = yield call(logoutUser)
-      if (data.success) {
-        yield put({
-          type: 'updateState',
-          payload: {
-            user: {},
-            permissions: { visit: [] },
-            menu: [
-              {
-                id: '1',
-                icon: 'laptop',
-                name: 'Dashboard',
-                zhName: '仪表盘',
-                router: '/dashboard',
-              },
-            ],
-          },
-        })
-        yield put({ type: 'query' })
-      } else {
-        throw data
-      }
+      // clear token
+      yield put({ type: 'handleTokenChange', payload: '' })
+      console.log('localstorage', store.get('token'))
+
+      // clear user related state
+      yield put({
+        type: 'updateState',
+        payload: {
+          user: {},
+          permissions: { visit: [] },
+          menu: [
+            {
+              id: '1',
+              icon: 'laptop',
+              name: 'Dashboard',
+              zhName: '仪表盘',
+              router: '/dashboard',
+            },
+          ],
+        },
+      })
+
+      // query to redirect
+      // yield put({ type: 'query' })
+      router.push('/login')
     },
   },
   reducers: {

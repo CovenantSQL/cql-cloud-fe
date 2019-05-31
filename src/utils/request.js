@@ -54,7 +54,6 @@ export default function request(options) {
       return config
     })
   }
-  console.log('--------------- options & data', options, data)
 
   return axios(options)
     .then(response => {
@@ -79,6 +78,11 @@ export default function request(options) {
     })
     .catch(error => {
       const { response, message } = error
+
+      // handle token expired or missing
+      if (response.status === 403) {
+        return response.data
+      }
 
       if (String(message) === CANCEL_REQUEST_MESSAGE) {
         return {
