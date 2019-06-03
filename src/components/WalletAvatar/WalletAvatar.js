@@ -28,8 +28,8 @@ const WalletAvatar = ({ seed = '', cutoff = 16 }) => {
 }
 
 WalletAvatar.propTypes = {
-  wallet: PropTypes.string.isRequired,
-  cutoff: PropTypes.number.isRequired,
+  seed: PropTypes.string.isRequired,
+  cutoff: PropTypes.number,
 }
 
 export default WalletAvatar

@@ -11,10 +11,11 @@ import {
   Input,
   Radio,
   Empty,
+  message,
 } from 'antd'
 import { GlobalFooter } from 'ant-design-pro'
 import { Trans, withI18n } from '@lingui/react'
-import { setLocale } from 'utils'
+import { router, setLocale } from 'utils'
 import config from 'utils/config'
 
 import { WalletAvatar } from 'components'
@@ -26,7 +27,6 @@ import styles from './index.less'
 class Wallets extends PureComponent {
   state = {
     createWalletVisible: false,
-    selectedWallet: '',
   }
 
   handleOk = () => {}
@@ -40,14 +40,32 @@ class Wallets extends PureComponent {
     })
   }
 
+  setMainWallet = () => {
+    const { dispatch } = this.props
+    const success = dispatch({ type: 'wallets/setMainWallet' })
+    if (success) {
+      message.success(
+        'Set main wallet success, redirecting you to control panel...'
+      )
+      // redirect to dashboard
+      setTimeout(() => {
+        // router.push('/dashboard')
+      }, 2000)
+    } else {
+      message.error('Set main wallet error, please try again later')
+    }
+  }
+
   handleWalletSelect = e => {
-    this.setState({
-      selectedWallet: e.target.value,
+    const { dispatch } = this.props
+    dispatch({
+      type: 'wallets/udpateSelectedMainWallet',
+      payload: e.target.value,
     })
   }
 
   _renderWalletsRadioGroup = () => {
-    const keypairs = this.props.wallets.keypairs
+    const { selectedMainWallet, keypairs } = this.props.wallets
     const radioStyle = {
       display: 'block',
       height: '50px',
@@ -57,7 +75,7 @@ class Wallets extends PureComponent {
     return (
       <Radio.Group
         onChange={this.handleWalletSelect}
-        value={this.state.selectedWallet}
+        value={selectedMainWallet}
       >
         {keypairs.map(k => (
           <Radio key={k.account} value={k.account} style={radioStyle}>
@@ -129,10 +147,10 @@ class Wallets extends PureComponent {
                 <div className={styles.setMainBtnWrapper}>
                   <Button
                     type="primary"
-                    onClick={this.handleOk}
+                    onClick={this.setMainWallet}
                     loading={loading.effects.login}
                   >
-                    <Trans>🌟Set as Mainwallet</Trans>
+                    <Trans>🌟 Goto Control Panel</Trans>
                   </Button>
                 </div>
               </Row>

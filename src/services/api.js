@@ -23,5 +23,5 @@ export default {
   queryCQLUserInfo: '/admin/userinfo',
   createWallet: 'POST /admin/keypair',
   uploadWallet: 'POST /admin/keypair/upload',
-  setMainWallet: 'PUT /admin/keypair/main',
+  setMainWallet: 'POST /admin/keypair/main',
 }
