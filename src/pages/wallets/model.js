@@ -1,7 +1,7 @@
 import { router, pathMatchRegexp } from 'utils'
 import api from 'api'
 
-const { queryAccount, createWallet, setMainWallet } = api
+const { queryAccount, createWallet, setMainWallet, deleteWallet } = api
 
 export default {
   namespace: 'wallets',
@@ -43,6 +43,13 @@ export default {
           },
         })
         yield put({ type: 'queryCurrentWallets' })
+      }
+    },
+    *deleteCQLWallet({ payload }, { put, call }) {
+      const { data, success } = yield call(deleteWallet, payload)
+      if (success) {
+        yield put({ type: 'queryCurrentWallets' })
+        return success
       }
     },
     *setMainWallet({ payload }, { put, call, select }) {

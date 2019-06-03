@@ -11,6 +11,7 @@ import {
   Input,
   Radio,
   Empty,
+  Modal,
   message,
 } from 'antd'
 import { GlobalFooter } from 'ant-design-pro'
@@ -38,6 +39,27 @@ class Wallets extends PureComponent {
 
     this.setState({
       createWalletVisible: true,
+    })
+  }
+
+  deleteWallet = account => {
+    const { dispatch } = this.props
+
+    Modal.confirm({
+      title: 'Do you Want to delete this wallet?',
+      content: `Deleting wallet: ${account}`,
+      onOk() {
+        const success = dispatch({
+          type: 'wallets/deleteCQLWallet',
+          payload: { account },
+        })
+        if (success) {
+          message.success(`Delete wallet ${account.slice(0, 16)}.. success`)
+        }
+      },
+      onCancel() {
+        console.log('Cancel delete')
+      },
     })
   }
 
@@ -90,6 +112,11 @@ class Wallets extends PureComponent {
             <span className={styles.balance}>
               <Tag color="blue">{k.balance} PTC</Tag>
             </span>
+            <Icon
+              style={{ color: 'red' }}
+              onClick={() => this.deleteWallet(k.account)}
+              type="delete"
+            />
           </Radio>
         ))}
       </Radio.Group>
