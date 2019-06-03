@@ -1,11 +1,23 @@
 import React, { PureComponent, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { Button, Divider, Row, Form, Icon, Input, Radio, Empty } from 'antd'
+import {
+  Button,
+  Tag,
+  Divider,
+  Row,
+  Form,
+  Icon,
+  Input,
+  Radio,
+  Empty,
+} from 'antd'
 import { GlobalFooter } from 'ant-design-pro'
 import { Trans, withI18n } from '@lingui/react'
 import { setLocale } from 'utils'
 import config from 'utils/config'
+
+import { WalletAvatar } from 'components'
 
 import styles from './index.less'
 
@@ -49,9 +61,10 @@ class Wallets extends PureComponent {
       >
         {keypairs.map(k => (
           <Radio key={k.account} value={k.account} style={radioStyle}>
-            {k.account}
-            <br />
-            {k.balance}
+            <WalletAvatar seed={k.account} />
+            <span className={styles.balance}>
+              <Tag color="blue">{k.balance} PTC</Tag>
+            </span>
           </Radio>
         ))}
       </Radio.Group>
