@@ -3,6 +3,7 @@ import { connect } from 'dva'
 import PropTypes from 'prop-types'
 import { Input, Tag, Button, Modal } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
+import { WalletAvatar } from 'components'
 import styles from './CreateWalletModal.less'
 
 // const { confirm } = Modal
@@ -11,52 +12,45 @@ import styles from './CreateWalletModal.less'
 @connect(({ loading, wallets }) => ({ loading, wallets }))
 class CreateWalletModal extends PureComponent {
   render() {
-    const { i18n } = this.props
+    const { wallets, visible, close } = this.props
+    const { createdAccount } = wallets
 
     return (
       <>
         <Modal
+          visible={visible}
           title="生成 CovenantSQL 钱包"
           okText="私钥已存妥"
           okType="danger"
           cancelText="取消"
-          onOk={this.hideModal}
-          onCancel={this.hideModal}
+          onOk={close}
+          onCancel={close}
         >
-          <p className={styles.label}>
-            <Trans>私钥加密密码:</Trans>
+          <p className={styles.instru}>
+            <Trans>
+              你的 CovenantSQL 钱包已成功生成，为方便使用，你的钱包会暂存在
+              Covenant Cloud 上, 并绑定你的 Github 账户。你可以随时在 Covenant
+              Cloud 下载并加密，或移除你的钱包。
+            </Trans>
           </p>
-          <div className={styles.action}>
-            <Input.Password
-              placeholder="input password"
-              value={this.state.password}
-              onInput={this.inputPassword}
-            />
-            <Button
-              className={styles.createBtn}
-              loading={this.state.loading}
-              onClick={this.createWallet}
-              type="primary"
-            >
-              <Trans>创建</Trans>
-            </Button>
-          </div>
-          {this.state.account && (
-            <div className={styles.walletNkey}>
-              <div>
-                Wallet: <Tag color="green">{this.state.account}</Tag>
-              </div>
-              <div>
-                Private Key: <Tag color="volcano">{this.state.key}</Tag>
-              </div>
+          <div className={styles.walletNkey}>
+            <div>
+              <label>Wallet:</label>
+              <WalletAvatar seed={createdAccount.account} cutoff={28} />
             </div>
-          )}
+            <div className={styles.key}>
+              <label>Private Key:</label>
+              <Tag color="volcano">{createdAccount.key}</Tag>
+            </div>
+          </div>
         </Modal>
       </>
     )
   }
 }
 
-CreateWalletModal.propTypes = {}
-
+CreateWalletModal.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
+}
 export default CreateWalletModal

@@ -19,6 +19,7 @@ import { router, setLocale } from 'utils'
 import config from 'utils/config'
 
 import { WalletAvatar } from 'components'
+import CreateWalletModal from './components/CreateWalletModal'
 
 import styles from './index.less'
 
@@ -37,6 +38,12 @@ class Wallets extends PureComponent {
 
     this.setState({
       createWalletVisible: true,
+    })
+  }
+
+  hideCreateWalletModal = () => {
+    this.setState({
+      createWalletVisible: false,
     })
   }
 
@@ -164,6 +171,10 @@ class Wallets extends PureComponent {
               />
             )}
           </form>
+          <CreateWalletModal
+            visible={this.state.createWalletVisible}
+            close={this.hideCreateWalletModal}
+          />
         </div>
         <div className={styles.footer}>
           <GlobalFooter links={footerLinks} copyright={config.copyright} />

@@ -10,7 +10,7 @@ import styles from './WalletAvatar.less'
 const WalletAvatar = ({ seed = '', cutoff = 16 }) => {
   return (
     <div className={styles.walletAvatar}>
-      <Avatar shape="square" size={32} src={makeBlockie(seed)} />
+      {seed && <Avatar shape="square" size={32} src={makeBlockie(seed)} />}
       <span className={styles.seed}>
         <Popover
           content={

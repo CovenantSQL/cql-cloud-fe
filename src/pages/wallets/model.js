@@ -34,13 +34,16 @@ export default {
       })
     },
     *createCQLWallet({ payload }, { put, call }) {
-      const { data } = yield call(createWallet)
-      yield put({
-        type: 'updateState',
-        payload: {
-          createdAccount: data,
-        },
-      })
+      const { data, success } = yield call(createWallet)
+      if (success) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            createdAccount: data,
+          },
+        })
+        yield put({ type: 'queryCurrentWallets' })
+      }
     },
     *setMainWallet({ payload }, { put, call, select }) {
       const { selectedMainWallet } = yield select(_ => _.wallets)
