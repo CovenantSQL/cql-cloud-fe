@@ -71,7 +71,8 @@ class Wallets extends PureComponent {
     })
   }
 
-  downloadWalletHandler = account => {
+  downloadWalletHandler = (account, e) => {
+    e.preventDefault()
     this.setState({
       downloadWalletVisible: true,
       targetWalletToDownload: account,
@@ -132,7 +133,7 @@ class Wallets extends PureComponent {
             <span>
               <Tag
                 color={blue.primary}
-                onClick={() => this.downloadWalletHandler(k.account)}
+                onClick={e => this.downloadWalletHandler(k.account, e)}
                 style={{ fontSize: '10px', cursor: 'pointer' }}
               >
                 <Icon type="download" />
