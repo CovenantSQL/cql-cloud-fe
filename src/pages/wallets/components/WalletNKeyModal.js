@@ -68,7 +68,7 @@ class WalletNKeyModal extends PureComponent {
             <div className={styles.key}>
               <label>
                 <span style={{ marginRight: '5px' }}>
-                  <Trans>明文私钥</Trans>
+                  {isNewCreated ? <Trans>明文私钥</Trans> : <Trans>私钥</Trans>}
                 </span>
                 <Tooltip
                   title=<Trans>

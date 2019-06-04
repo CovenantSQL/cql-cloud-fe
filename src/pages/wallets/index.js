@@ -23,6 +23,7 @@ import config from 'utils/config'
 import { WalletAvatar } from 'components'
 import WalletNKeyModal from './components/WalletNKeyModal'
 import DownloadWalletModal from './components/DownloadWalletModal'
+import UploadWalletModal from './components/UploadWalletModal'
 
 import styles from './index.less'
 
@@ -31,6 +32,7 @@ import styles from './index.less'
 class Wallets extends PureComponent {
   state = {
     createWalletVisible: false,
+    upWalletVisible: true,
     downloadWalletVisible: false,
     targetWalletToDownload: '',
   }
@@ -68,6 +70,12 @@ class Wallets extends PureComponent {
       onCancel() {
         console.log('Cancel delete')
       },
+    })
+  }
+
+  onUploadWalletClick = () => {
+    this.setState({
+      upWalletVisible: true,
     })
   }
 
@@ -145,7 +153,7 @@ class Wallets extends PureComponent {
                 style={{ fontSize: '10px', cursor: 'pointer' }}
               >
                 <Icon type="delete" />
-                <Trans>删除</Trans>
+                <Trans>移除</Trans>
               </Tag>
             </span>
           </Radio>
@@ -195,7 +203,7 @@ class Wallets extends PureComponent {
               </Button>
               <Button
                 type="primary"
-                onClick={this.handleOk}
+                onClick={this.onUploadWalletClick}
                 loading={loading.effects.login}
               >
                 <Trans>Upload Wallet</Trans>
@@ -233,6 +241,10 @@ class Wallets extends PureComponent {
             visible={this.state.downloadWalletVisible}
             account={this.state.targetWalletToDownload}
             close={() => this.hideModal('downloadWalletVisible')}
+          />
+          <UploadWalletModal
+            visible={this.state.upWalletVisible}
+            close={() => this.hideModal('upWalletVisible')}
           />
           <WalletNKeyModal
             visible={this.state.createWalletVisible}

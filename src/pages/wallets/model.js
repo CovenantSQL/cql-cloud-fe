@@ -6,6 +6,7 @@ const {
   createWallet,
   setMainWallet,
   deleteWallet,
+  uploadWallet,
   downloadWallet,
 } = api
 
@@ -64,6 +65,14 @@ export default {
         account: selectedMainWallet,
       })
       return success
+    },
+    *uploadCQLWallet({ payload }, { put, call }) {
+      try {
+        const { data, success } = yield call(uploadWallet, payload)
+        return { account: data.account, success }
+      } catch (e) {
+        return { account: '', success: false }
+      }
     },
     *downloadCQLWallet({ payload }, { put, call }) {
       const { data, success } = yield call(downloadWallet, payload)
