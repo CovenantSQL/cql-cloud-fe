@@ -251,3 +251,11 @@ export function setLocale(language) {
     })
   }
 }
+
+const PTC_RATE = 1000000
+export function toPTC(amount, digit = 3) {
+  if (typeof amount !== 'number') {
+    return
+  }
+  return (amount / PTC_RATE).toFixed(digit)
+}

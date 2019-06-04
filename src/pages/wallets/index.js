@@ -17,7 +17,7 @@ import {
 import { red, blue } from '@ant-design/colors'
 import { GlobalFooter } from 'ant-design-pro'
 import { Trans, withI18n } from '@lingui/react'
-import { router, setLocale } from 'utils'
+import { router, setLocale, toPTC } from 'utils'
 import config from 'utils/config'
 
 import { WalletAvatar } from 'components'
@@ -101,7 +101,7 @@ class Wallets extends PureComponent {
       // redirect to dashboard
       setTimeout(() => {
         router.push('/dashboard')
-      }, 2000)
+      }, 1000)
     } else {
       message.error(i18n.t`钱包设置失败，请重试`)
     }
@@ -134,7 +134,7 @@ class Wallets extends PureComponent {
           >
             <WalletAvatar seed={k.account} />
             <span className={styles.balance}>
-              <Tag color="blue">{k.balance} PTC</Tag>
+              <Tag color="blue">{toPTC(k.balance)} PTC</Tag>
             </span>
             <span>
               <Tag

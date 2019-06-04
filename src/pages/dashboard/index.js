@@ -5,9 +5,9 @@ import { Row, Col, Card } from 'antd'
 import { Color } from 'utils'
 import { Page, ScrollBar } from 'components'
 import {
-  NumberCard,
+  // NumberCard,
   Quote,
-  Sales,
+  // Sales,
   Weather,
   RecentSales,
   Comments,
@@ -15,7 +15,8 @@ import {
   Browser,
   Cpu,
   User,
-} from './components'
+} from './components_bck'
+import { GetPTC } from './components'
 import styles from './index.less'
 
 const bodyStyle = {
@@ -48,9 +49,7 @@ class Dashboard extends PureComponent {
     } = dashboard
 
     const numberCards = numbers.map((item, key) => (
-      <Col key={key} lg={6} md={12}>
-        <NumberCard {...item} />
-      </Col>
+      <Col key={key} lg={6} md={12} />
     ))
 
     return (
@@ -59,35 +58,28 @@ class Dashboard extends PureComponent {
         className={styles.dashboard}
       >
         <Row gutter={24}>
-          {numberCards}
-          <Col lg={18} md={24}>
+          <Col lg={6} md={6}>
+            <GetPTC
+              {...weather}
+              loading={loading.effects['dashboard/queryWeather']}
+            />
+          </Col>
+
+          <Col style={{ marginTop: '200px' }} lg={24} md={24}>
             <Card
               bordered={false}
               bodyStyle={{
-                padding: '24px 36px 24px 0',
+                padding: 10,
+                height: 50,
+                background: Color.borderSplit,
               }}
             >
-              <Sales data={sales} />
+              备用 Components:
             </Card>
           </Col>
+
           <Col lg={6} md={24}>
             <Row gutter={24}>
-              <Col lg={24} md={12}>
-                <Card
-                  bordered={false}
-                  className={styles.weather}
-                  bodyStyle={{
-                    padding: 0,
-                    height: 204,
-                    background: Color.blue,
-                  }}
-                >
-                  <Weather
-                    {...weather}
-                    loading={loading.effects['dashboard/queryWeather']}
-                  />
-                </Card>
-              </Col>
               <Col lg={24} md={12}>
                 <Card
                   bordered={false}

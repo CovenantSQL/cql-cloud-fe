@@ -20,6 +20,7 @@ export default {
   queryGithubOAuth: '/admin/auth/authorize',
   queryToken: '/admin/auth/callback',
   queryAccount: '/admin/account',
+  getPTC: 'POST /admin/account/apply',
   queryCQLUserInfo: '/admin/userinfo',
 
   createWallet: 'POST /admin/keypair',
