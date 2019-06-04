@@ -32,7 +32,7 @@ import styles from './index.less'
 class Wallets extends PureComponent {
   state = {
     createWalletVisible: false,
-    upWalletVisible: true,
+    upWalletVisible: false,
     downloadWalletVisible: false,
     targetWalletToDownload: '',
   }
@@ -94,18 +94,16 @@ class Wallets extends PureComponent {
   }
 
   setMainWallet = async () => {
-    const { dispatch } = this.props
+    const { dispatch, i18n } = this.props
     const success = await dispatch({ type: 'wallets/setMainWallet' })
     if (success) {
-      message.success(
-        'Set main wallet success, redirecting you to control panel...'
-      )
+      message.success(i18n.t`钱包设置成功，正在转向至管理页面...`)
       // redirect to dashboard
       setTimeout(() => {
-        // router.push('/dashboard')
+        router.push('/dashboard')
       }, 2000)
     } else {
-      message.error('Set main wallet error, please try again later')
+      message.error(i18n.t`钱包设置失败，请重试`)
     }
   }
 
@@ -199,14 +197,14 @@ class Wallets extends PureComponent {
                 onClick={this.createWallet}
                 loading={loading.effects.login}
               >
-                <Trans>Create Wallet</Trans>
+                <Trans>生成钱包</Trans>
               </Button>
               <Button
                 type="primary"
                 onClick={this.onUploadWalletClick}
                 loading={loading.effects.login}
               >
-                <Trans>Upload Wallet</Trans>
+                <Trans>上传钱包</Trans>
               </Button>
             </Row>
             <Divider>
