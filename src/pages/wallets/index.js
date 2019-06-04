@@ -14,13 +14,15 @@ import {
   Modal,
   message,
 } from 'antd'
+import { red, blue } from '@ant-design/colors'
 import { GlobalFooter } from 'ant-design-pro'
 import { Trans, withI18n } from '@lingui/react'
 import { router, setLocale } from 'utils'
 import config from 'utils/config'
 
 import { WalletAvatar } from 'components'
-import CreateWalletModal from './components/CreateWalletModal'
+import WalletNKeyModal from './components/WalletNKeyModal'
+import DownloadWalletModal from './components/DownloadWalletModal'
 
 import styles from './index.less'
 
@@ -29,6 +31,8 @@ import styles from './index.less'
 class Wallets extends PureComponent {
   state = {
     createWalletVisible: false,
+    downloadWalletVisible: false,
+    targetWalletToDownload: '',
   }
 
   handleOk = () => {}
@@ -42,14 +46,18 @@ class Wallets extends PureComponent {
     })
   }
 
-  deleteWallet = account => {
+  deleteWallet = (account, e) => {
+    e.preventDefault()
     const { dispatch } = this.props
 
     Modal.confirm({
-      title: 'Do you Want to delete this wallet?',
-      content: `Deleting wallet: ${account}`,
-      onOk() {
-        const success = dispatch({
+      title: <Trans>确定要在 Covenant Cloud 上移除此钱包么？</Trans>,
+      content: `${account}`,
+      okText: <Trans>确认移除</Trans>,
+      okType: 'danger',
+      cancelText: <Trans>取消</Trans>,
+      async onOk() {
+        const success = await dispatch({
           type: 'wallets/deleteCQLWallet',
           payload: { account },
         })
@@ -63,15 +71,22 @@ class Wallets extends PureComponent {
     })
   }
 
-  hideCreateWalletModal = () => {
+  downloadWalletHandler = account => {
     this.setState({
-      createWalletVisible: false,
+      downloadWalletVisible: true,
+      targetWalletToDownload: account,
     })
   }
 
-  setMainWallet = () => {
+  hideModal = key => {
+    this.setState({
+      [key]: false,
+    })
+  }
+
+  setMainWallet = async () => {
     const { dispatch } = this.props
-    const success = dispatch({ type: 'wallets/setMainWallet' })
+    const success = await dispatch({ type: 'wallets/setMainWallet' })
     if (success) {
       message.success(
         'Set main wallet success, redirecting you to control panel...'
@@ -95,28 +110,43 @@ class Wallets extends PureComponent {
 
   _renderWalletsRadioGroup = () => {
     const { selectedMainWallet, keypairs } = this.props.wallets
-    const radioStyle = {
-      display: 'block',
-      height: '50px',
-      lineHeight: '30px',
-    }
-
     return (
       <Radio.Group
         onChange={this.handleWalletSelect}
         value={selectedMainWallet}
       >
         {keypairs.map(k => (
-          <Radio key={k.account} value={k.account} style={radioStyle}>
+          <Radio
+            key={k.account}
+            value={k.account}
+            style={{
+              display: 'block',
+              height: '50px',
+              lineHeight: '30px',
+            }}
+          >
             <WalletAvatar seed={k.account} />
             <span className={styles.balance}>
               <Tag color="blue">{k.balance} PTC</Tag>
             </span>
-            <Icon
-              style={{ color: 'red' }}
-              onClick={() => this.deleteWallet(k.account)}
-              type="delete"
-            />
+            <span>
+              <Tag
+                color={blue.primary}
+                onClick={() => this.downloadWalletHandler(k.account)}
+                style={{ fontSize: '10px', cursor: 'pointer' }}
+              >
+                <Icon type="download" />
+                <Trans>下载</Trans>
+              </Tag>
+              <Tag
+                color={red.primary}
+                onClick={e => this.deleteWallet(k.account, e)}
+                style={{ fontSize: '10px', cursor: 'pointer' }}
+              >
+                <Icon type="delete" />
+                <Trans>删除</Trans>
+              </Tag>
+            </span>
           </Radio>
         ))}
       </Radio.Group>
@@ -184,7 +214,7 @@ class Wallets extends PureComponent {
                     onClick={this.setMainWallet}
                     loading={loading.effects.login}
                   >
-                    <Trans>🌟 Goto Control Panel</Trans>
+                    <Trans>使用此钱包 🌟</Trans>
                   </Button>
                 </div>
               </Row>
@@ -198,9 +228,15 @@ class Wallets extends PureComponent {
               />
             )}
           </form>
-          <CreateWalletModal
+          <DownloadWalletModal
+            visible={this.state.downloadWalletVisible}
+            account={this.state.targetWalletToDownload}
+            close={() => this.hideModal('downloadWalletVisible')}
+          />
+          <WalletNKeyModal
             visible={this.state.createWalletVisible}
-            close={this.hideCreateWalletModal}
+            close={() => this.hideModal('createWalletVisible')}
+            isNewCreated
           />
         </div>
         <div className={styles.footer}>
