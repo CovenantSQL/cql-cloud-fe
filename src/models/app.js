@@ -28,6 +28,7 @@ export default {
     token: store.get('token') || '',
     userInfo: store.get('userInfo') || {},
     keypairs: store.get('keypairs') || {},
+    mainwallet: store.get('mainwallet') || '',
     // state
     user: {},
     permissions: {
@@ -147,37 +148,18 @@ export default {
       }
     },
 
-    *checkToken({ payload }, { call, put, select }) {
-      console.log('app/checkToken called')
-      // use account info for check token viability
+    *checkMainWallet({ payload }, { call, put, select }) {
+      console.log('app/checkMainWallet called')
       const {
         success,
-        data: { keypairs },
+        data: { keypairs, main },
       } = yield call(queryAccount)
-      yield put({ type: 'app/handleKeypairsChange', payload: keypairs })
+      yield put({ type: 'handleKeypairsChange', payload: keypairs })
+      yield put({ type: 'handleMainWalletChange', payload: main })
 
-      const { locationPathname } = yield select(_ => _.app)
-
-      if (success) {
-        if (
-          pathMatchRegexp(
-            ['/', '/login', '/callback/github'],
-            window.location.pathname
-          )
-        ) {
-          keypairs === null
-            ? router.push({ pathname: '/wallets' })
-            : router.push({ pathname: '/dashboard' })
-        }
-      } else if (queryLayout(config.layouts, locationPathname) !== 'public') {
-        // token is invalid, reset token to empty
-        yield put({ type: 'handleTokenChange', payload: '' })
-        router.push({
-          pathname: '/login',
-          search: stringify({
-            from: locationPathname,
-          }),
-        })
+      if (!main) {
+        router.push({ pathname: '/wallets' })
+        message.info('请设置钱包')
       }
     },
 
@@ -239,6 +221,11 @@ export default {
     handleKeypairsChange(state, { payload }) {
       store.set('keypairs', payload)
       state.keypairs = payload
+    },
+
+    handleMainWalletChange(state, { payload }) {
+      store.set('mainwallet', payload)
+      state.mainwallet = payload
     },
 
     allNotificationsRead(state) {

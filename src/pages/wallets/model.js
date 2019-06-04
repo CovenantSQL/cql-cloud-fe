@@ -31,7 +31,7 @@ export default {
   effects: {
     *queryCurrentWallets({ payload }, { put, call, select }) {
       const { data } = yield call(queryAccount)
-      console.log('cu', data)
+      console.log('wallets', data)
       yield put({
         type: 'updateState',
         payload: {

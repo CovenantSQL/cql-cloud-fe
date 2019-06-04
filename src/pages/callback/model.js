@@ -1,5 +1,5 @@
 import { get } from 'lodash'
-// import { router } from 'utils'
+import { router } from 'utils'
 import api from 'api'
 
 const {
@@ -27,7 +27,7 @@ export default {
       }
 
       // get user's main wallet
-      yield put({ type: 'app/checkToken' })
+      router.push({ pathname: '/dashboard' })
     },
   },
 }

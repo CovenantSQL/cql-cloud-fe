@@ -38,8 +38,11 @@ export default modelExtend(model, {
           pathMatchRegexp('/dashboard', pathname) ||
           pathMatchRegexp('/', pathname)
         ) {
-          // query userinfo
+          // check token validility
           dispatch({ type: 'app/query' })
+          // check mainwallet null
+          dispatch({ type: 'app/checkMainWallet' })
+
           // query dashboard related
           dispatch({ type: 'query' })
           dispatch({ type: 'queryWeather' })
