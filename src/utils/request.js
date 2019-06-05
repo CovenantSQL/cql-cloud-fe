@@ -5,6 +5,7 @@ import { message } from 'antd'
 import { CANCEL_REQUEST_MESSAGE } from 'utils/constant'
 import qs from 'qs'
 import store from 'store'
+import config from 'utils/config'
 
 const { CancelToken } = axios
 window.cancelRequest = new Map()
@@ -14,7 +15,7 @@ export default function request(options) {
   const cloneData = cloneDeep(data)
 
   try {
-    let domain = ''
+    let domain = config.apiEndpoint || ''
     const urlMatch = url.match(/[a-zA-z]+:\/\/[^/]*/)
     if (urlMatch) {
       ;[domain] = urlMatch
