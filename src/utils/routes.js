@@ -3,7 +3,7 @@
 const routes = [
   {
     id: '1',
-    icon: 'dashboard',
+    icon: 'control',
     name: 'Dashboard',
     zh: {
       name: '仪表盘',
@@ -25,6 +25,7 @@ const routes = [
     },
     icon: 'user',
     route: '/user',
+    menuParentId: '-1',
   },
   {
     id: '7',
@@ -38,6 +39,7 @@ const routes = [
     },
     icon: 'shopping-cart',
     route: '/post',
+    menuParentId: '-1',
   },
   {
     id: '21',
@@ -51,6 +53,7 @@ const routes = [
       name: 'Detalhes do usuário',
     },
     route: '/user/:id',
+    menuParentId: '-1',
   },
   {
     id: '3',
@@ -64,6 +67,7 @@ const routes = [
     },
     icon: 'api',
     route: '/request',
+    menuParentId: '-1',
   },
   {
     id: '4',
@@ -76,6 +80,7 @@ const routes = [
       name: 'Elementos UI',
     },
     icon: 'camera-o',
+    menuParentId: '-1',
   },
   {
     id: '45',
@@ -90,6 +95,7 @@ const routes = [
     },
     icon: 'edit',
     route: '/UIElement/editor',
+    menuParentId: '-1',
   },
   {
     id: '5',
@@ -102,6 +108,7 @@ const routes = [
       name: 'Graficos',
     },
     icon: 'code-o',
+    menuParentId: '-1',
   },
   {
     id: '51',
@@ -116,6 +123,7 @@ const routes = [
     },
     icon: 'line-chart',
     route: '/chart/ECharts',
+    menuParentId: '-1',
   },
   {
     id: '52',
@@ -130,6 +138,7 @@ const routes = [
     },
     icon: 'bar-chart',
     route: '/chart/highCharts',
+    menuParentId: '-1',
   },
   {
     id: '53',
@@ -144,6 +153,50 @@ const routes = [
     },
     icon: 'area-chart',
     route: '/chart/Recharts',
+    menuParentId: '-1',
+  },
+  // mock project routes
+  {
+    id: '101',
+    name: 'Project 1',
+    zh: {
+      name: 'Project 1',
+    },
+    icon: 'book',
+    route: '/project/101',
+  },
+  {
+    id: '1010',
+    breadcrumbParentId: '101',
+    menuParentId: '101',
+    name: 'Authentication',
+    zh: {
+      name: 'Authentication',
+    },
+    icon: 'contacts',
+    route: '/project/101/auth',
+  },
+  {
+    id: '1011',
+    breadcrumbParentId: '101',
+    menuParentId: '101',
+    name: 'Database',
+    zh: {
+      name: 'Database',
+    },
+    icon: 'database',
+    route: '/project/101/db',
+  },
+  {
+    id: '1012',
+    breadcrumbParentId: '101',
+    menuParentId: '101',
+    name: 'Security Rules',
+    zh: {
+      name: 'Security Rules',
+    },
+    icon: 'safety-certificate',
+    route: '/project/101/rules',
   },
 ]
 

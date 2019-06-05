@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { Row, Col, Card, Icon } from 'antd'
+import { Row, Col, Card, Icon, Switch } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
 import { Color } from 'utils'
 import { Page, ScrollBar } from 'components'
@@ -35,6 +35,9 @@ const bodyStyle = {
   loading,
 }))
 class Dashboard extends PureComponent {
+  state = {
+    show: false,
+  }
   render() {
     const { avatar, username, dashboard, loading } = this.props
     const {
@@ -126,80 +129,77 @@ class Dashboard extends PureComponent {
             </Col>
           </Row>
 
-          <Col style={{ marginTop: '200px' }} lg={24} md={24}>
-            <Card
-              bordered={false}
-              bodyStyle={{
-                padding: 10,
-                height: 50,
-                background: Color.borderSplit,
+          <div style={{ float: 'right' }}>
+            <Switch
+              size="small"
+              onChange={checked => {
+                this.setState({ show: checked })
               }}
-            >
-              备用 Components:
-            </Card>
-          </Col>
-
-          <Col lg={6} md={24}>
-            <Row gutter={24}>
-              <Col lg={24} md={12}>
-                <Card
-                  bordered={false}
-                  className={styles.quote}
-                  bodyStyle={{
-                    padding: 0,
-                    height: 204,
-                    background: Color.peach,
-                  }}
-                >
-                  <ScrollBar>
-                    <Quote {...quote} />
-                  </ScrollBar>
-                </Card>
-              </Col>
-            </Row>
-          </Col>
-          <Col lg={12} md={24}>
-            <Card bordered={false} {...bodyStyle}>
-              <RecentSales data={recentSales} />
-            </Card>
-          </Col>
-          <Col lg={12} md={24}>
-            <Card bordered={false} {...bodyStyle}>
-              <ScrollBar>
-                <Comments data={comments} />
-              </ScrollBar>
-            </Card>
-          </Col>
-          <Col lg={24} md={24}>
-            <Card
-              bordered={false}
-              bodyStyle={{
-                padding: '24px 36px 24px 0',
-              }}
-            >
-              <Completed data={completed} />
-            </Card>
-          </Col>
-          <Col lg={8} md={24}>
-            <Card bordered={false} {...bodyStyle}>
-              <Browser data={browser} />
-            </Card>
-          </Col>
-          <Col lg={8} md={24}>
-            <Card bordered={false} {...bodyStyle}>
-              <ScrollBar>
-                <Cpu {...cpu} />
-              </ScrollBar>
-            </Card>
-          </Col>
-          <Col lg={8} md={24}>
-            <Card
-              bordered={false}
-              bodyStyle={{ ...bodyStyle.bodyStyle, padding: 0 }}
-            >
-              <User {...user} avatar={avatar} username={username} />
-            </Card>
-          </Col>
+            />
+          </div>
+          <div style={{ display: this.state.show ? 'inherit' : 'none' }}>
+            <Col lg={6} md={24}>
+              <Row gutter={24}>
+                <Col lg={24} md={12}>
+                  <Card
+                    bordered={false}
+                    className={styles.quote}
+                    bodyStyle={{
+                      padding: 0,
+                      height: 204,
+                      background: Color.peach,
+                    }}
+                  >
+                    <ScrollBar>
+                      <Quote {...quote} />
+                    </ScrollBar>
+                  </Card>
+                </Col>
+              </Row>
+            </Col>
+            <Col lg={12} md={24}>
+              <Card bordered={false} {...bodyStyle}>
+                <RecentSales data={recentSales} />
+              </Card>
+            </Col>
+            <Col lg={12} md={24}>
+              <Card bordered={false} {...bodyStyle}>
+                <ScrollBar>
+                  <Comments data={comments} />
+                </ScrollBar>
+              </Card>
+            </Col>
+            <Col lg={24} md={24}>
+              <Card
+                bordered={false}
+                bodyStyle={{
+                  padding: '24px 36px 24px 0',
+                }}
+              >
+                <Completed data={completed} />
+              </Card>
+            </Col>
+            <Col lg={8} md={24}>
+              <Card bordered={false} {...bodyStyle}>
+                <Browser data={browser} />
+              </Card>
+            </Col>
+            <Col lg={8} md={24}>
+              <Card bordered={false} {...bodyStyle}>
+                <ScrollBar>
+                  <Cpu {...cpu} />
+                </ScrollBar>
+              </Card>
+            </Col>
+            <Col lg={8} md={24}>
+              <Card
+                bordered={false}
+                bodyStyle={{ ...bodyStyle.bodyStyle, padding: 0 }}
+              >
+                <User {...user} avatar={avatar} username={username} />
+              </Card>
+            </Col>
+          </div>
         </Row>
       </Page>
     )
