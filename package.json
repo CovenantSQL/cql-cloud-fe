@@ -1,8 +1,8 @@
 {
-  "name": "antd-admin",
+  "name": "cql-cloud-fe",
   "version": "5.0.6",
   "private": true,
-  "description": "An admin dashboard application demo built upon Ant Design and UmiJS",
+  "description": "CovenantSQL Database as a Service (DBaaS) platform frontend",
   "dependencies": {
     "@lingui/react": "^2.7.0",
     "ant-design-pro": "^2.3.0",
@@ -100,6 +100,7 @@
   "scripts": {
     "analyze": "cross-env ANALYZE=1 umi build",
     "build": "umi build",
+    "now-build": "umi build",
     "lint:js": "eslint --ext .js src",
     "lint:style": "stylelint \"src/**/*.less\" --syntax less",
     "start": "umi dev",

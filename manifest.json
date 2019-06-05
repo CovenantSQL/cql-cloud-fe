@@ -1,9 +1,9 @@
 {
-  "name": "Antd-Admin",
+  "name": "Covenant Cloud",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#fff",
-  "description": "A front-end solution for enterprise applications built upon Ant Design and UmiJS",
+  "description": "CovenantSQL Database as a Service (DBaaS) platform",
   "icons": [
     {
       "src": "logo.svg",
