@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'dva'
 import PropTypes from 'prop-types'
-import { Card, Spin, Modal } from 'antd'
+import { Card, Spin, Modal, Tag } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
 
 import { Color, toPTC } from 'utils'
@@ -25,20 +25,25 @@ class GetPTC extends PureComponent {
       this.setState({ loading: false })
 
       Modal.success({
-        title: i18n.t`领取 PTC 成功!`,
+        title: i18n.t`领取 PTC 成功！即将到账。`,
         content: (
           <div>
             <p>
-              <Trans>收取 PTC：</Trans>
+              <Trans>即将收取 PTC：</Trans>
               {toPTC(data.amount)}
+              <Trans>，会在几分钟内到账。</Trans>
             </p>
             <p>
-              <Trans>id: </Trans>
-              {data.id}
+              <div>
+                <Trans>id: </Trans>
+              </div>
+              <Tag color="blue">{data.id}</Tag>
             </p>
             <p>
-              <Trans>tx：</Trans>
-              {data.tx}
+              <div>
+                <Trans>tx：</Trans>
+              </div>
+              <Tag color="green">{data.tx}</Tag>
             </p>
           </div>
         ),
@@ -54,12 +59,12 @@ class GetPTC extends PureComponent {
           className={styles.card}
           bodyStyle={{
             padding: 0,
-            height: 180,
+            height: 150,
             background: Color.blue,
           }}
         >
           <div onClick={this.getPTC} className={styles.main}>
-            GET PTC
+            <Trans>领取 PTC</Trans>
           </div>
         </Card>
       </Spin>

@@ -2,13 +2,31 @@
 
 .main {
   color: #fff;
-  padding: 64px 24px;
+  padding: 24px;
   font-size: 24px;
   font-weight: 600;
-  text-align: center;
   cursor: pointer;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
 }
 .card {
+  &::after {
+    content: '';
+    background-image: url('./bg.png');
+    background-size: cover;
+    background-position: left;
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    left: -50%;
+    top: 0;
+    opacity: 0.8;
+    z-index: 1;
+  }
   &:hover {
     box-shadow: 4px 4px 40px rgba(143, 201, 251, 0.6) !important;
   }
