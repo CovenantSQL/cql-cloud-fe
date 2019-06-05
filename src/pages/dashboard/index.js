@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { Row, Col, Card } from 'antd'
+import { Row, Col, Card, Icon } from 'antd'
+import { Trans, withI18n } from '@lingui/react'
 import { Color } from 'utils'
 import { Page, ScrollBar } from 'components'
+import ScanSVG from './components/covenantscan.svg'
 import {
   // NumberCard,
   Quote,
@@ -58,12 +60,71 @@ class Dashboard extends PureComponent {
         className={styles.dashboard}
       >
         <Row gutter={24}>
-          <Col lg={6} md={6}>
-            <GetPTC
-              {...weather}
-              loading={loading.effects['dashboard/queryWeather']}
-            />
-          </Col>
+          <Row className={styles.section} gutter={24}>
+            <div className={styles.sectionTitle}>
+              <Trans>Utilities</Trans>
+            </div>
+            <Col lg={6} md={6}>
+              <GetPTC
+                {...weather}
+                loading={loading.effects['dashboard/queryWeather']}
+              />
+            </Col>
+            <Col lg={6} md={6}>
+              <Card
+                bordered={false}
+                className={styles.scanner}
+                bodyStyle={{
+                  padding: 10,
+                  height: 160,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  background: 'white',
+                }}
+              >
+                <a
+                  className={styles.content}
+                  href="http://scan.covenantsql.io"
+                  target="_blank"
+                >
+                  <img src={ScanSVG} alt="covenant-scan" />
+                  <div className={styles.sub}>
+                    <span>测试网浏览器</span>
+                    <Icon type="link" />
+                  </div>
+                </a>
+              </Card>
+            </Col>
+          </Row>
+
+          <Row className={styles.section} gutter={24}>
+            <div className={styles.sectionTitle}>
+              <Trans>Projects</Trans>
+            </div>
+            <Col lg={6} md={6}>
+              <Card
+                bordered={false}
+                bodyStyle={{
+                  padding: 10,
+                  height: 160,
+                  color: '#fefefe',
+                  fontSize: '24px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  background: Color.blue,
+                }}
+              >
+                <span style={{ marginRight: '6px' }}>
+                  <Icon type="plus-circle" theme="filled" />
+                </span>
+                <span style={{ fontWeight: '600' }}>
+                  <Trans>Create Project</Trans>
+                </span>
+              </Card>
+            </Col>
+          </Row>
 
           <Col style={{ marginTop: '200px' }} lg={24} md={24}>
             <Card

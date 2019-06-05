@@ -59,7 +59,7 @@ class GetPTC extends PureComponent {
           className={styles.card}
           bodyStyle={{
             padding: 0,
-            height: 150,
+            height: 160,
             background: Color.blue,
           }}
         >
