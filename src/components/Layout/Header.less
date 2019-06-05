@@ -70,6 +70,10 @@
     align-items: center;
   }
 
+  .leftContainer {
+    display: flex;
+    align-items: center;
+  }
   .button {
     width: 72px;
     height: 72px;
@@ -150,5 +154,11 @@
 @media (max-width: 767px) {
   .header {
     width: 100% !important;
+  }
+}
+
+:global {
+  .ant-popover {
+    z-index: 1090 !important;
   }
 }

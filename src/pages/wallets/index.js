@@ -132,10 +132,13 @@ class Wallets extends PureComponent {
               lineHeight: '30px',
             }}
           >
-            <WalletAvatar seed={k.account} />
-            <span className={styles.balance}>
-              <Tag color="blue">{toPTC(k.balance)} PTC</Tag>
-            </span>
+            <WalletAvatar
+              seed={k.account}
+              balance={k.balance}
+              avatarSize={24}
+              cutoff={10}
+              withBalance
+            />
             <span>
               <Tag
                 color={blue.primary}

@@ -80,6 +80,7 @@ export default modelExtend(model, {
     },
     *getPTC({ payload }, { call, put }) {
       const { data, success } = yield call(getPTC)
+      yield put({ type: 'app/checkMainWallet' })
       return { data, success }
     },
   },

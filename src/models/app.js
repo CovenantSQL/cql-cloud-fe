@@ -7,6 +7,7 @@ import { message } from 'antd'
 import { ROLE_TYPE } from 'utils/constant'
 import { queryLayout, pathMatchRegexp } from 'utils'
 import { CANCEL_REQUEST_MESSAGE, USER_PERMISSION } from 'utils/constant'
+import { find } from 'lodash'
 import routes from 'utils/routes'
 import api from 'api'
 import config from 'config'
@@ -28,7 +29,7 @@ export default {
     token: store.get('token') || '',
     userInfo: store.get('userInfo') || {},
     keypairs: store.get('keypairs') || {},
-    mainwallet: store.get('mainwallet') || '',
+    mainwallet: store.get('mainwallet') || { account: '', balance: 0 },
     // state
     user: {},
     permissions: {
@@ -154,8 +155,12 @@ export default {
         success,
         data: { keypairs, main },
       } = yield call(queryAccount)
-      yield put({ type: 'handleKeypairsChange', payload: keypairs })
-      yield put({ type: 'handleMainWalletChange', payload: main })
+
+      const mainwallet = find(keypairs, ['account', main])
+      yield put({
+        type: 'handleKeypairsChange',
+        payload: { keypairs, mainwallet },
+      })
 
       if (!main) {
         router.push({ pathname: '/wallets' })
@@ -219,13 +224,10 @@ export default {
     },
 
     handleKeypairsChange(state, { payload }) {
-      store.set('keypairs', payload)
-      state.keypairs = payload
-    },
-
-    handleMainWalletChange(state, { payload }) {
-      store.set('mainwallet', payload)
-      state.mainwallet = payload
+      store.set('keypairs', payload.keypairs)
+      store.set('mainwallet', payload.mainwallet)
+      state.keypairs = payload.keypairs
+      state.mainwallet = payload.mainwallet
     },
 
     allNotificationsRead(state) {

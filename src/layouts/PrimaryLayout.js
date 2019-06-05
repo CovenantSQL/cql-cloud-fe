@@ -54,6 +54,7 @@ class PrimaryLayout extends PureComponent {
       permissions,
       notifications,
       token,
+      mainwallet,
     } = app
     const { isMobile } = this.state
     const { onCollapseChange } = this
@@ -88,6 +89,7 @@ class PrimaryLayout extends PureComponent {
 
     const headerProps = {
       menus,
+      mainwallet,
       collapsed,
       notifications,
       onCollapseChange,

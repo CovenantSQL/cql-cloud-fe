@@ -3,10 +3,12 @@ import PropTypes from 'prop-types'
 import { Menu, Icon, Layout, Avatar, Popover, Badge, List } from 'antd'
 import { Ellipsis } from 'ant-design-pro'
 import { Trans, withI18n } from '@lingui/react'
-import { setLocale } from 'utils'
+import { router, setLocale } from 'utils'
 import moment from 'moment'
 import classnames from 'classnames'
 import config from 'config'
+import { WalletAvatar } from 'components'
+
 import styles from './Header.less'
 
 const { SubMenu } = Menu
@@ -16,6 +18,9 @@ class Header extends PureComponent {
   handleClickMenu = e => {
     e.key === 'SignOut' && this.props.onSignOut()
   }
+  handleWalletMenuClick = e => {
+    e.key === 'WalletSetup' && router.push('/wallets')
+  }
   render() {
     const {
       i18n,
@@ -23,6 +28,7 @@ class Header extends PureComponent {
       avatar,
       username,
       collapsed,
+      mainwallet,
       notifications,
       onCollapseChange,
       onAllNotificationsRead,
@@ -142,16 +148,45 @@ class Header extends PureComponent {
         })}
         id="layoutHeader"
       >
-        <div
-          className={styles.button}
-          onClick={onCollapseChange.bind(this, !collapsed)}
-        >
-          <Icon
-            type={classnames({
-              'menu-unfold': collapsed,
-              'menu-fold': !collapsed,
-            })}
-          />
+        <div className={styles.leftContainer}>
+          <div
+            className={styles.button}
+            onClick={onCollapseChange.bind(this, !collapsed)}
+          >
+            <Icon
+              type={classnames({
+                'menu-unfold': collapsed,
+                'menu-fold': !collapsed,
+              })}
+            />
+          </div>
+          <div>
+            <Menu
+              key="wallet"
+              mode="horizontal"
+              onClick={this.handleWalletMenuClick}
+            >
+              <SubMenu
+                title={
+                  <Fragment>
+                    <WalletAvatar
+                      seed={mainwallet.account}
+                      balance={mainwallet.balance}
+                      avatarSize={24}
+                      cutoff={10}
+                      accountPopoverTigger={'click'}
+                      balancePopoverTigger={'click'}
+                      withBalance
+                    />
+                  </Fragment>
+                }
+              >
+                <Menu.Item key="WalletSetup">
+                  <Trans>钱包设置</Trans>
+                </Menu.Item>
+              </SubMenu>
+            </Menu>
+          </div>
         </div>
 
         <div className={styles.rightContainer}>{rightContent}</div>
