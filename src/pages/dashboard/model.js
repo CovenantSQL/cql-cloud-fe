@@ -44,8 +44,8 @@ export default modelExtend(model, {
           dispatch({ type: 'app/checkMainWallet' })
 
           // query dashboard related
-          dispatch({ type: 'query' })
-          dispatch({ type: 'queryWeather' })
+          // dispatch({ type: 'query' })
+          // dispatch({ type: 'queryWeather' })
         }
       })
     },
