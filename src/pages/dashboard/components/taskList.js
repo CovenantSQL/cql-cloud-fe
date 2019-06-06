@@ -4,6 +4,7 @@ import moment from 'moment'
 import PropTypes from 'prop-types'
 import { Table, Tag, Button } from 'antd'
 import { Color } from 'utils'
+import TaskModal from './TaskModal'
 import styles from './taskList.less'
 
 const states = {
@@ -43,9 +44,10 @@ class TaskList extends PureComponent {
         showDetailModal: true,
         taskData: data.task,
       })
-
-      alert(JSON.stringify(data, null, 2))
     }
+  }
+  closeModal = () => {
+    this.setState({ showDetailModal: false })
   }
   render() {
     const { data } = this.props
@@ -76,9 +78,11 @@ class TaskList extends PureComponent {
         title: 'Finished',
         dataIndex: 'finished',
         render: text =>
-          moment(text)
-            .startOf('second')
-            .fromNow(),
+          text
+            ? moment(text)
+                .startOf('second')
+                .fromNow()
+            : '-',
       },
       {
         title: 'Details',
@@ -98,11 +102,14 @@ class TaskList extends PureComponent {
     return (
       <div className={styles.main}>
         <Table
-          pagination={true}
+          pagination={{ size: 'small', pageSize: 5 }}
           columns={columns}
           rowKey={(record, key) => key}
           dataSource={data}
         />
+        {this.state.showDetailModal && (
+          <TaskModal data={this.state.taskData} close={this.closeModal} />
+        )}
       </div>
     )
   }

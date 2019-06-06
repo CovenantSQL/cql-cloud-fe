@@ -145,6 +145,7 @@ class Dashboard extends PureComponent {
           </Row>
 
           <div style={{ float: 'right' }}>
+            备用
             <Switch
               size="small"
               onChange={checked => {
