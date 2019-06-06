@@ -13,12 +13,12 @@ import {
   Weather,
   RecentSales,
   Comments,
-  Completed,
+  // Completed,
   Browser,
   Cpu,
   User,
 } from './components_bck'
-import { GetPTC } from './components'
+import { GetPTC, TaskList } from './components'
 import styles from './index.less'
 
 const bodyStyle = {
@@ -41,6 +41,7 @@ class Dashboard extends PureComponent {
   render() {
     const { avatar, username, dashboard, loading } = this.props
     const {
+      tasks,
       weather,
       sales,
       quote,
@@ -129,6 +130,23 @@ class Dashboard extends PureComponent {
             </Col>
           </Row>
 
+          <Row className={styles.section} gutter={24}>
+            <div className={styles.sectionTitle}>
+              <Trans>Tasks</Trans>
+            </div>
+            <Col lg={12} md={16} sm={24}>
+              <Card
+                title="All Tasks"
+                bordered={false}
+                bodyStyle={{
+                  paddingTop: '0',
+                }}
+              >
+                <TaskList data={tasks} />
+              </Card>
+            </Col>
+          </Row>
+
           <div style={{ float: 'right' }}>
             <Switch
               size="small"
@@ -137,6 +155,7 @@ class Dashboard extends PureComponent {
               }}
             />
           </div>
+
           <div style={{ display: this.state.show ? 'inherit' : 'none' }}>
             <Col lg={6} md={24}>
               <Row gutter={24}>
@@ -175,9 +194,7 @@ class Dashboard extends PureComponent {
                 bodyStyle={{
                   padding: '24px 36px 24px 0',
                 }}
-              >
-                <Completed data={completed} />
-              </Card>
+              />
             </Col>
             <Col lg={8} md={24}>
               <Card bordered={false} {...bodyStyle}>

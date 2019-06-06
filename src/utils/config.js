@@ -2,8 +2,9 @@ module.exports = {
   siteName: 'Covenant Cloud',
   copyright: 'Covenant Cloud  © 2019 CovenantLabs',
   logoPath: '/logo.svg',
-  apiEndpoint: '//stg-api.covenantsql.io',
-  apiPrefix: '/v3',
+  apiEndpoint:
+    process.env.NODE_ENV === 'development' ? '' : '//stg-api.covenantsql.io',
+  apiPrefix: process.env.NODE_ENV === 'development' ? '/api/v1' : 'v3',
   fixedHeader: true, // sticky primary layout header
 
   /* Layout configuration, specify which layout to use for route. */

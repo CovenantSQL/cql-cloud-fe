@@ -30,20 +30,14 @@ class GetPTC extends PureComponent {
           <div>
             <p>
               <Trans>即将收取 PTC：</Trans>
-              {toPTC(data.amount)}
+              <Tag color="blue">{toPTC(data.amount)}</Tag>
               <Trans>，会在几分钟内到账。</Trans>
             </p>
             <p>
               <div>
-                <Trans>id: </Trans>
+                <Trans>详情见 Task ID: </Trans>
+                {data.task_id}
               </div>
-              <Tag color="blue">{data.id}</Tag>
-            </p>
-            <p>
-              <div>
-                <Trans>tx：</Trans>
-              </div>
-              <Tag color="green">{data.tx}</Tag>
             </p>
           </div>
         ),
