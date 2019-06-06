@@ -131,12 +131,12 @@ class Dashboard extends PureComponent {
             <div className={styles.sectionTitle}>
               <Trans>Tasks</Trans>
             </div>
-            <Col lg={14} md={16} sm={24}>
+            <Col lg={16} md={16} sm={24}>
               <Card
                 title="All Tasks"
                 bordered={false}
                 bodyStyle={{
-                  paddingTop: '0',
+                  paddingTop: '1px',
                 }}
               >
                 <TaskList data={tasks} />
