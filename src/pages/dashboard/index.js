@@ -13,7 +13,7 @@ import {
   Weather,
   RecentSales,
   Comments,
-  // Completed,
+  Completed,
   Browser,
   Cpu,
   User,
@@ -59,10 +59,7 @@ class Dashboard extends PureComponent {
     ))
 
     return (
-      <Page
-        // loading={loading.models.dashboard && sales.length === 0}
-        className={styles.dashboard}
-      >
+      <Page className={styles.dashboard}>
         <Row gutter={24}>
           <Row className={styles.section} gutter={24}>
             <div className={styles.sectionTitle}>
@@ -134,7 +131,7 @@ class Dashboard extends PureComponent {
             <div className={styles.sectionTitle}>
               <Trans>Tasks</Trans>
             </div>
-            <Col lg={12} md={16} sm={24}>
+            <Col lg={14} md={16} sm={24}>
               <Card
                 title="All Tasks"
                 bordered={false}
@@ -194,7 +191,9 @@ class Dashboard extends PureComponent {
                 bodyStyle={{
                   padding: '24px 36px 24px 0',
                 }}
-              />
+              >
+                <Completed data={completed} />
+              </Card>
             </Col>
             <Col lg={8} md={24}>
               <Card bordered={false} {...bodyStyle}>

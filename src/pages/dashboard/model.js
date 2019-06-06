@@ -4,7 +4,7 @@ import api from 'api'
 import { pathMatchRegexp } from 'utils'
 import { model } from 'utils/model'
 
-const { queryDashboard, queryWeather, getPTC, queryTasks } = api
+const { queryDashboard, queryWeather, getPTC, queryTasks, queryTask } = api
 
 export default modelExtend(model, {
   namespace: 'dashboard',
@@ -96,6 +96,10 @@ export default modelExtend(model, {
           payload: data,
         })
       }
+      return { data, success }
+    },
+    *getTaskInfo({ payload }, { call, put }) {
+      const { data, success } = yield call(queryTask, payload)
       return { data, success }
     },
   },
