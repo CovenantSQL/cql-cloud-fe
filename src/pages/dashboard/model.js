@@ -4,11 +4,12 @@ import api from 'api'
 import { pathMatchRegexp } from 'utils'
 import { model } from 'utils/model'
 
-const { queryDashboard, queryWeather, getPTC } = api
+const { queryDashboard, queryWeather, getPTC, queryTasks, queryTask } = api
 
 export default modelExtend(model, {
   namespace: 'dashboard',
   state: {
+    tasks: [],
     weather: {
       city: '深圳',
       temperature: '30',
@@ -45,7 +46,8 @@ export default modelExtend(model, {
 
           // query dashboard related
           dispatch({ type: 'query' })
-          dispatch({ type: 'queryWeather' })
+          // dispatch({ type: 'queryWeather' })
+          dispatch({ type: 'getTaskList', payload: { all: true } })
         }
       })
     },
@@ -81,6 +83,23 @@ export default modelExtend(model, {
     *getPTC({ payload }, { call, put }) {
       const { data, success } = yield call(getPTC)
       yield put({ type: 'app/checkMainWallet' })
+
+      // get all recent tasks
+      yield put({ type: 'getTaskList', payload: { all: true } })
+      return { data, success }
+    },
+    *getTaskList({ payload }, { call, put }) {
+      const { data, success } = yield call(queryTasks, payload)
+      if (success) {
+        yield put({
+          type: 'updateState',
+          payload: data,
+        })
+      }
+      return { data, success }
+    },
+    *getTaskInfo({ payload }, { call, put }) {
+      const { data, success } = yield call(queryTask, payload)
       return { data, success }
     },
   },

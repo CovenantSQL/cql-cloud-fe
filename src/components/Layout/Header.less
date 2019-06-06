@@ -6,7 +6,7 @@
   position: relative;
   display: flex;
   justify-content: space-between;
-  height: 72px;
+  height: @header-height;
   z-index: 9;
   align-items: center;
   background-color: #fff;
@@ -26,11 +26,11 @@
 
   :global {
     .ant-menu-submenu-title {
-      height: 72px;
+      height: @header-height;
     }
 
     .ant-menu-horizontal {
-      line-height: 72px;
+      line-height: @header-height;
 
       & > .ant-menu-submenu:hover {
         color: @primary-color;
@@ -40,7 +40,7 @@
 
     .ant-menu {
       border-bottom: none;
-      height: 72px;
+      height: @header-height;
     }
 
     .ant-menu-horizontal > .ant-menu-submenu {
@@ -75,9 +75,9 @@
     align-items: center;
   }
   .button {
-    width: 72px;
-    height: 72px;
-    line-height: 72px;
+    width: @header-height;
+    height: @header-height;
+    line-height: @header-height;
     text-align: center;
     font-size: 18px;
     cursor: pointer;

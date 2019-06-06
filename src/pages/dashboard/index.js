@@ -18,7 +18,7 @@ import {
   Cpu,
   User,
 } from './components_bck'
-import { GetPTC } from './components'
+import { GetPTC, TaskList } from './components'
 import styles from './index.less'
 
 const bodyStyle = {
@@ -41,6 +41,7 @@ class Dashboard extends PureComponent {
   render() {
     const { avatar, username, dashboard, loading } = this.props
     const {
+      tasks,
       weather,
       sales,
       quote,
@@ -58,10 +59,7 @@ class Dashboard extends PureComponent {
     ))
 
     return (
-      <Page
-        // loading={loading.models.dashboard && sales.length === 0}
-        className={styles.dashboard}
-      >
+      <Page className={styles.dashboard}>
         <Row gutter={24}>
           <Row className={styles.section} gutter={24}>
             <div className={styles.sectionTitle}>
@@ -129,7 +127,25 @@ class Dashboard extends PureComponent {
             </Col>
           </Row>
 
+          <Row className={styles.section} gutter={24}>
+            <div className={styles.sectionTitle}>
+              <Trans>Tasks</Trans>
+            </div>
+            <Col lg={16} md={16} sm={24}>
+              <Card
+                title="All Tasks"
+                bordered={false}
+                bodyStyle={{
+                  paddingTop: '1px',
+                }}
+              >
+                <TaskList data={tasks} />
+              </Card>
+            </Col>
+          </Row>
+
           <div style={{ float: 'right' }}>
+            备用
             <Switch
               size="small"
               onChange={checked => {
@@ -137,6 +153,7 @@ class Dashboard extends PureComponent {
               }}
             />
           </div>
+
           <div style={{ display: this.state.show ? 'inherit' : 'none' }}>
             <Col lg={6} md={24}>
               <Row gutter={24}>
