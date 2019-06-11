@@ -35,7 +35,6 @@ export default {
   // project
   createProject: 'POST /admin/project',
   queryProject: '/admin/project',
-  queryProjectPricing: '/admin/project/:db/pricing',
   queryProjectBalance: '/admin/project/:db/balance',
   topupProject: 'POST /admin/project/:db/topup',
   queryProjectUserList: '/admin/project/:db/user',
@@ -54,4 +53,5 @@ export default {
 
   // tmp
   queryProjectAudits: '/admin/project/:db/audits',
+  queryProjectPricing: '/admin/project/:db/pricing',
 }

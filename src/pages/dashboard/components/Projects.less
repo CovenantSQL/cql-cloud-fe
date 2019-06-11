@@ -21,19 +21,32 @@
   width: 100%;
   color: #fefefe;
 
-  .id {
-    font-size: 1.6rem;
-    font-weight: 600;
+  .top {
+    display: flex;
+    justify-content: space-between;
+    .id {
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+    .info {
+      margin-top: 8px;
+      margin-right: 5px;
+    }
   }
-  .avatar {
-    padding: 10px;
+  .name {
+    padding: 20px 10px 10px;
     display: flex;
     justify-content: space-between;
     align-content: center;
 
+    .avatar {
+      border: solid 2px #fcfcfc;
+    }
     .alias {
       width: 70%;
-      padding: 15px 0;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 12px 0;
       text-overflow: ellipsis;
       overflow: hidden;
     }

@@ -12,6 +12,8 @@ const {
   queryTask,
   createProject,
   queryProject,
+  queryProjectPricing,
+  queryProjectBalance,
 } = api
 
 export default modelExtend(model, {
@@ -116,6 +118,12 @@ export default modelExtend(model, {
 
       yield put({ type: 'getTaskList', payload: { all: true } })
       return { data, success }
+    },
+    *getProjectInfo({ payload }, { call, put }) {
+      const pricing = yield call(queryProjectPricing, payload)
+      const balance = yield call(queryProjectBalance, payload)
+      console.log('/////////////////', pricing, balance)
+      return { pricing, balance }
     },
   },
 })
