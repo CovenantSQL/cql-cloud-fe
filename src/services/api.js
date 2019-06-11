@@ -35,6 +35,9 @@ export default {
   // project
   createProject: 'POST /admin/project',
   queryProject: '/admin/project',
+  queryProjectPricing: '/admin/project/:db/pricing',
+  queryProjectBalance: '/admin/project/:db/balance',
+  topupProject: 'POST /admin/project/:db/topup',
   queryProjectUserList: '/admin/project/:db/user',
   createPreRregisterProjectUser: 'POST /admin/project/:db/user',
   queryProjectUser: '/admin/project/:db/user/:id',
