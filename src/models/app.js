@@ -18,6 +18,7 @@ const {
   logoutUser,
   queryUserInfo,
   queryCQLUserInfo,
+  queryProject,
 } = api
 
 export default {
@@ -56,6 +57,7 @@ export default {
         date: new Date(Date.now() - 50000000),
       },
     ],
+    projects: [],
   },
   subscriptions: {
     setupHistory({ dispatch, history }) {
@@ -193,6 +195,16 @@ export default {
       // query to redirect
       // yield put({ type: 'query' })
       router.push('/login')
+    },
+
+    *getProjectList({ payload }, { call, put }) {
+      const { data, success } = yield call(queryProject)
+      yield put({
+        type: 'updateState',
+        payload: {
+          projects: data.projects,
+        },
+      })
     },
   },
   reducers: {

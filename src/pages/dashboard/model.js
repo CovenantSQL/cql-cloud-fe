@@ -11,6 +11,7 @@ const {
   queryTasks,
   queryTask,
   createProject,
+  queryProject,
 } = api
 
 export default modelExtend(model, {
@@ -51,6 +52,7 @@ export default modelExtend(model, {
           // check mainwallet null
           dispatch({ type: 'app/checkMainWallet' })
 
+          dispatch({ type: 'app/getProjectList' })
           // query dashboard related
           dispatch({ type: 'query' })
           // dispatch({ type: 'queryWeather' })

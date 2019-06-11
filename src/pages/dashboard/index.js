@@ -18,7 +18,7 @@ import {
   Cpu,
   User,
 } from './components_bck'
-import { GetPTC, CreateProject, TaskList } from './components'
+import { GetPTC, CreateProject, TaskList, Projects } from './components'
 import styles from './index.less'
 
 const bodyStyle = {
@@ -106,6 +106,7 @@ class Dashboard extends PureComponent {
             <Col lg={6} md={6}>
               <CreateProject />
             </Col>
+            <Projects />
           </Row>
 
           <Row className={styles.section} gutter={24}>
