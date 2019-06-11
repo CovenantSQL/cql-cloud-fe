@@ -48,14 +48,14 @@ export default {
     locationPathname: '',
     locationQuery: {},
     notifications: [
-      {
-        title: 'New User is registered.',
-        date: new Date(Date.now() - 10000000),
-      },
-      {
-        title: 'Application has been approved.',
-        date: new Date(Date.now() - 50000000),
-      },
+      // {
+      //   title: 'New User is registered.',
+      //   date: new Date(Date.now() - 10000000),
+      // },
+      // {
+      //   title: 'Application has been approved.',
+      //   date: new Date(Date.now() - 50000000),
+      // },
     ],
     projects: [],
   },

@@ -103,7 +103,7 @@ class Dashboard extends PureComponent {
             <div className={styles.sectionTitle}>
               <Trans>Projects</Trans>
             </div>
-            <Col lg={6} md={6}>
+            <Col xl={6} lg={8} md={12}>
               <CreateProject />
             </Col>
             <Projects />

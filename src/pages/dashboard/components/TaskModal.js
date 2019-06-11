@@ -9,7 +9,6 @@ import { WalletAvatar } from 'components'
 import styles from './TaskModal.less'
 
 const ApplyToken = ({ data }) => {
-  console.log('....', data)
   return (
     <div>
       <Tag color="cyan">ID: {data.id}</Tag>

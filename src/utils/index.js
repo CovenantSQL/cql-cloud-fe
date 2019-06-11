@@ -259,3 +259,9 @@ export function toPTC(amount, digit = 3) {
   }
   return (amount / PTC_RATE).toFixed(digit)
 }
+export function fromPTC(amount) {
+  if (typeof amount !== 'number') {
+    return
+  }
+  return amount * PTC_RATE
+}

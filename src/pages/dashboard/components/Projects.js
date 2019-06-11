@@ -3,25 +3,75 @@ import { connect } from 'dva'
 import moment from 'moment'
 import makeBlockie from 'ethereum-blockies-base64'
 import PropTypes from 'prop-types'
-import { Card, Button, Modal, Col, Tag, Avatar } from 'antd'
-import { toPTC } from 'utils'
+import { Card, Button, Modal, Col, Tag, Avatar, InputNumber } from 'antd'
+import { toPTC, fromPTC } from 'utils'
 import { Trans, withI18n } from '@lingui/react'
 import styles from './Projects.less'
 
+@withI18n()
 @connect(({ loading, dashboard, app }) => ({ loading, dashboard, app }))
 class Projects extends PureComponent {
-  state = {}
-  componentDidMount() {
-    const { dispatch } = this.props
-    const projects = this.props.app.projects
+  state = {
+    amount: 0.1,
+  }
+  confirmAmount = db => {
+    const { i18n } = this.props
+    let local = this
 
-    projects.forEach(p => {
-      let db = p.project
-      dispatch({
-        type: 'dashboard/getProjectInfo',
-        payload: { db },
-      })
+    Modal.confirm({
+      title: i18n.t`请输入充值的金额：`,
+      content: (
+        <div>
+          <div>
+            <Trans>
+              可以根据项目数据库的运行状况进行充值，费用主要
+              TPS，副本数，运行时间决定。
+            </Trans>
+          </div>
+          <div>
+            <Trans>充值：</Trans>
+            <InputNumber
+              min={0.1}
+              step={0.1}
+              max={10}
+              defaultValue={0.1}
+              onChange={v => {
+                local.setState({ amount: v })
+              }}
+            />
+          </div>
+        </div>
+      ),
+      okText: i18n.t`好的`,
+      onOk() {
+        local.topup(db)
+      },
     })
+  }
+  topup = async db => {
+    const { dispatch, i18n } = this.props
+    const { amount } = this.state
+    const { data, success } = await dispatch({
+      type: 'dashboard/topupProjectDB',
+      payload: { db, amount: fromPTC(amount) },
+    })
+
+    if (success) {
+      Modal.success({
+        title: i18n.t`充值已提交，请耐心等待`,
+        content: (
+          <div>
+            <p>
+              <div>
+                <Trans>详情见 Task：</Trans>
+                <Tag color="green">ID {data.task_id}</Tag>
+              </div>
+            </p>
+          </div>
+        ),
+        okText: i18n.t`好的`,
+      })
+    }
   }
   _renderProjectCard = p => {
     return (
@@ -43,7 +93,12 @@ class Projects extends PureComponent {
               <Tag color="blue">
                 <Trans>Balance:</Trans> {toPTC(p.balance.deposit)} PTC
               </Tag>
-              <Button type="primary" size="small" shape="circle">
+              <Button
+                onClick={() => this.confirmAmount(p.project)}
+                type="primary"
+                size="small"
+                shape="circle"
+              >
                 $
               </Button>
             </div>
@@ -71,7 +126,7 @@ class Projects extends PureComponent {
         {projects.length === 0
           ? null
           : projects.map(p => (
-              <Col lg={6} md={6}>
+              <Col xl={6} lg={8} md={12}>
                 {this._renderProjectCard(p)}
               </Col>
             ))}
