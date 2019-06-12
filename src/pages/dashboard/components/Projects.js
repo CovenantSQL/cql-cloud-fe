@@ -91,7 +91,7 @@ class Projects extends PureComponent {
             <div className={styles.id}># {p.id}</div>
             <div className={styles.info}>
               <Tag color="blue">
-                <Trans>Balance:</Trans> {toPTC(p.balance.deposit)} PTC
+                <Trans>Balance:</Trans> {toPTC(p.balance.advance_payment)} PTC
               </Tag>
               <Button
                 onClick={() => this.confirmAmount(p.project)}
