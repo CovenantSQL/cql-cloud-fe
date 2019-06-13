@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'dva'
+import Link from 'umi/link'
 import moment from 'moment'
 import makeBlockie from 'ethereum-blockies-base64'
 import PropTypes from 'prop-types'
 import { Card, Button, Modal, Col, Tag, Avatar, InputNumber } from 'antd'
-import { toPTC, fromPTC } from 'utils'
+import { addLangPrefix, toPTC, fromPTC } from 'utils'
 import { Trans, withI18n } from '@lingui/react'
 import styles from './Projects.less'
 
@@ -74,6 +75,7 @@ class Projects extends PureComponent {
     }
   }
   _renderProjectCard = p => {
+    const route = `/project/${p.project}/auth`
     return (
       <Card
         bordered={false}
@@ -103,17 +105,19 @@ class Projects extends PureComponent {
               </Button>
             </div>
           </div>
-          <div className={styles.name}>
-            {p.project && (
-              <Avatar
-                className={styles.avatar}
-                shape={'round'}
-                size={48}
-                src={makeBlockie(p.project)}
-              />
-            )}
-            <div className={styles.alias}>{p.alias}</div>
-          </div>
+          <Link to={addLangPrefix(route)}>
+            <div className={styles.name}>
+              {p.project && (
+                <Avatar
+                  className={styles.avatar}
+                  shape={'round'}
+                  size={48}
+                  src={makeBlockie(p.project)}
+                />
+              )}
+              <div className={styles.alias}>{p.alias}</div>
+            </div>
+          </Link>
         </div>
       </Card>
     )
