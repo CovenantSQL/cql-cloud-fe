@@ -45,11 +45,11 @@ export default {
   queryProjectTableDetail: '/admin/project/:db/table/:table',
   queryProjectOAuthCallback: '/admin/project/:db/oauth/:provider/callback',
 
+  updateProjectOAuthConfig: 'PUT /admin/project/:db/oauth/:provider',
   createPreRregisterProjectUser: 'POST /admin/project/:db/user',
-  createProjectTable: 'POST /admin/project/:db/table',
   updateProjectUser: 'PUT /admin/project/:db/user',
   updateProjectMiscConfig: 'PUT /admin/project/:db/config/misc',
-  updateProjectOAuthConifg: 'PUT /admin/project/:db/oauth/:provider',
+  createProjectTable: 'POST /admin/project/:db/table',
   addFieldToProjectTable: 'PATCH /admin/project/:db/table/:table',
   dropProjectTable: 'DELETE /admin/project/:db/table/:table',
 

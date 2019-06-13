@@ -1,12 +1,20 @@
 import { pathMatchRegexp } from 'utils'
 import api from 'api'
 
-const { queryProjectConfig, queryProjectUserList, queryProjectTables } = api
+const {
+  queryProjectConfig,
+  queryProjectUserList,
+  queryProjectTables,
+  updateProjectOAuthConfig,
+  queryProjectOAuthCallback,
+  createProjectTable,
+} = api
 
 export default {
   namespace: 'projectDetail',
 
   state: {
+    db: '',
     config: {},
     userList: {},
     tables: {},
@@ -20,8 +28,8 @@ export default {
         if (match) {
           const db = match[1]
           const sub = match[2]
-
           dispatch({ type: 'query', payload: { db: match[1] } })
+
           if (sub) {
             switch (sub) {
               case 'auth':
@@ -44,6 +52,8 @@ export default {
 
   effects: {
     *query({ payload }, { call, put }) {
+      yield put({ type: 'updateState', payload: { db: payload.db } })
+
       const { data, success } = yield call(queryProjectConfig, payload)
       if (success) {
         yield put({
@@ -78,6 +88,30 @@ export default {
             tables: data,
           },
         })
+      } else {
+        throw data
+      }
+    },
+    *updateOAuthConfig({ payload }, { call, put }) {
+      const { data, success } = yield call(updateProjectOAuthConfig, payload)
+      if (success) {
+        return { data, success }
+      } else {
+        throw data
+      }
+    },
+    *getPrivderCallback({ payload }, { call, put }) {
+      const { data, success } = yield call(queryProjectOAuthCallback, payload)
+      if (success) {
+        return { data, success }
+      } else {
+        throw data
+      }
+    },
+    *createTable({ payload }, { call, put }) {
+      const { data, success } = yield call(createProjectTable, payload)
+      if (success) {
+        return { data, success }
       } else {
         throw data
       }
