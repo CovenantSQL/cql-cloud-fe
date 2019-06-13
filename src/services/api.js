@@ -34,21 +34,23 @@ export default {
 
   // project
   createProject: 'POST /admin/project',
+  topupProject: 'POST /admin/project/:db/topup',
+
   queryProject: '/admin/project',
   queryProjectBalance: '/admin/project/:db/balance',
-  topupProject: 'POST /admin/project/:db/topup',
-  queryProjectUserList: '/admin/project/:db/user',
-  createPreRregisterProjectUser: 'POST /admin/project/:db/user',
-  queryProjectUser: '/admin/project/:db/user/:id',
-  updateProjectUser: 'PUT /admin/project/:db/user',
   queryProjectConfig: '/admin/project/:db/config',
-  updateProjectMiscConfig: 'PUT /admin/project/:db/config/misc',
-  queryProjectOAuthCallback: '/admin/project/:db/oauth/:provider/callback',
-  updateProjectOAuthConifg: 'PUT /admin/project/:db/oauth/:provider',
+  queryProjectUserList: '/admin/project/:db/user',
+  queryProjectUser: '/admin/project/:db/user/:id',
   queryProjectTables: '/admin/project/:db/table',
-  createProjectTable: 'POST /admin/project/:db/table',
-  addFieldToProjectTable: 'PATCH /admin/project/:db/table/:table',
   queryProjectTableDetail: '/admin/project/:db/table/:table',
+  queryProjectOAuthCallback: '/admin/project/:db/oauth/:provider/callback',
+
+  createPreRregisterProjectUser: 'POST /admin/project/:db/user',
+  createProjectTable: 'POST /admin/project/:db/table',
+  updateProjectUser: 'PUT /admin/project/:db/user',
+  updateProjectMiscConfig: 'PUT /admin/project/:db/config/misc',
+  updateProjectOAuthConifg: 'PUT /admin/project/:db/oauth/:provider',
+  addFieldToProjectTable: 'PATCH /admin/project/:db/table/:table',
   dropProjectTable: 'DELETE /admin/project/:db/table/:table',
 
   // tmp

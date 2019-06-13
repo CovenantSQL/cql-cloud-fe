@@ -158,12 +158,12 @@ const routes = [
   // mock project routes
   {
     id: '101',
-    name: 'Project 1',
+    name: 'Project',
     zh: {
-      name: 'Project 1',
+      name: 'Project',
     },
     icon: 'book',
-    route: '/project/101',
+    route: '/project/:db',
   },
   {
     id: '1010',
@@ -174,7 +174,7 @@ const routes = [
       name: 'Authentication',
     },
     icon: 'contacts',
-    route: '/project/101/auth',
+    route: '/project/:db/auth',
   },
   {
     id: '1011',
@@ -185,7 +185,7 @@ const routes = [
       name: 'Database',
     },
     icon: 'database',
-    route: '/project/101/db',
+    route: '/project/:db/db',
   },
   {
     id: '1012',
@@ -196,7 +196,7 @@ const routes = [
       name: 'Security Rules',
     },
     icon: 'safety-certificate',
-    route: '/project/101/rules',
+    route: '/project/:db/rules',
   },
 ]
 
