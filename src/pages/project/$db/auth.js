@@ -1,8 +1,20 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+import _get from 'lodash/get'
 import { connect } from 'dva'
-import { Button, Icon, Modal, Tag, InputNumber } from 'antd'
+import {
+  Button,
+  Icon,
+  Modal,
+  Tag,
+  InputNumber,
+  Table,
+  Input,
+  Popconfirm,
+  Form,
+} from 'antd'
 import { Page } from 'components'
+import { OAuthTable } from './components'
 import styles from './index.less'
 
 @connect(({ projectDetail }) => ({ projectDetail }))
@@ -19,8 +31,6 @@ class ProjectDetail extends PureComponent {
         enabled: true,
       },
     })
-
-    console.log('//////////auth', data)
   }
   testCreateTable = async () => {
     const { dispatch, projectDetail } = this.props
@@ -45,6 +55,40 @@ class ProjectDetail extends PureComponent {
     })
     alert(JSON.stringify(data))
   }
+  updateOAuth = async ({ provider, client_id, client_secret, enabled }) => {
+    const { dispatch, projectDetail } = this.props
+
+    const { data, success } = await dispatch({
+      type: 'projectDetail/updateOAuthConfig',
+      payload: {
+        db: projectDetail.db,
+        provider,
+        client_id,
+        client_secret,
+        enabled,
+      },
+    })
+
+    return { data, success }
+  }
+  prepareOAuthTableData = () => {
+    let data = []
+    const oauth = _get(this.props.projectDetail, 'config.oauth')
+
+    if (oauth) {
+      oauth.map((d, idx) => {
+        data.push({
+          key: idx.toString(),
+          provider: d.provider,
+          enabled: d.config.enabled,
+          client_id: d.config.client_id,
+          client_secret: d.config.client_secret,
+        })
+      })
+    }
+
+    return data
+  }
   render() {
     const { projectDetail } = this.props
     const { config, userList } = projectDetail
@@ -52,9 +96,12 @@ class ProjectDetail extends PureComponent {
     return (
       <Page inner>
         <div className={styles.content}>
+          <OAuthTable
+            data={this.prepareOAuthTableData()}
+            udpate={this.updateOAuth}
+          />
           <pre>{JSON.stringify(config, null, 2)}</pre>
           <pre>{JSON.stringify(userList, null, 2)}</pre>
-
           <div>
             <Button onClick={this.testUpdateOAuth}>update oauth</Button>
             <Button onClick={this.testGetCallback}>get oauth callback</Button>
