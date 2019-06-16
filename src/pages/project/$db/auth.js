@@ -17,8 +17,34 @@ import { Page } from 'components'
 import { OAuthTable } from './components'
 import styles from './index.less'
 
+const DEFAULT_OAUTH = [
+  {
+    provider: 'github',
+    config: {
+      enabled: false,
+      client_id: '',
+      client_secret: '',
+    },
+  },
+  {
+    provider: 'twitter',
+    config: {
+      enabled: false,
+      client_id: '',
+      client_secret: '',
+    },
+  },
+  {
+    provider: 'google',
+    config: {
+      enabled: false,
+      client_id: '',
+      client_secret: '',
+    },
+  },
+]
 @connect(({ projectDetail }) => ({ projectDetail }))
-class ProjectDetail extends PureComponent {
+class Auth extends PureComponent {
   testUpdateOAuth = async () => {
     const { dispatch, projectDetail } = this.props
     const { data, success } = await dispatch({
@@ -77,7 +103,17 @@ class ProjectDetail extends PureComponent {
   }
   prepareOAuthTableData = () => {
     let data = []
-    const oauth = _get(this.props.projectDetail, 'config.oauth')
+    const backend_oauth = _get(this.props.projectDetail, 'config.oauth', [])
+    const oauth = DEFAULT_OAUTH.map(defaultConfig => {
+      let index = backend_oauth.findIndex(
+        config => config.provider === defaultConfig.provider
+      )
+      if (index > -1) {
+        return backend_oauth[index]
+      } else {
+        return defaultConfig
+      }
+    })
 
     if (oauth) {
       oauth.map((d, idx) => {
@@ -110,8 +146,8 @@ class ProjectDetail extends PureComponent {
   }
 }
 
-ProjectDetail.propTypes = {
+Auth.propTypes = {
   projectDetail: PropTypes.object,
 }
 
-export default ProjectDetail
+export default Auth
