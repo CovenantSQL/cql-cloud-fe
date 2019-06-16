@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import moment from 'moment'
+import _get from 'lodash/get'
 import _zipObject from 'lodash/zipObject'
 import { Empty, Table, Tag } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
@@ -15,17 +16,18 @@ const { Column } = Table
 @withI18n()
 @connect(({ projectDetail }) => ({ projectDetail }))
 class ProjectDetail extends PureComponent {
-  testCreateTable = async () => {
+  createTable = async ({ table, names, types }) => {
     const { dispatch, projectDetail } = this.props
     const { data, success } = await dispatch({
       type: 'projectDetail/createTable',
       payload: {
-        db: projectDetail.db,
-        table: 'test_table',
-        names: ['name', 'age', 'float', 'avatar'],
-        types: ['TEXT', 'INTEGER', 'REAL', 'BLOB'],
+        table,
+        names,
+        types,
       },
     })
+
+    return { data, success }
   }
   getColumns = name => {
     const { tables } = this.props.projectDetail
@@ -68,7 +70,10 @@ class ProjectDetail extends PureComponent {
               <div key={name}>
                 <div className={styles.tableName}>
                   {name} (
-                  {moment(tables[name].created).format('YYYY-MM-DD HH:mm:ss')})
+                  {moment(_get(tables, [name, 'created'])).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )}
+                  )
                 </div>
                 <div>
                   <Table
@@ -90,7 +95,7 @@ class ProjectDetail extends PureComponent {
           )}
         </div>
         <div className={styles.create}>
-          <AddTable />
+          <AddTable createTable={this.createTable} />
         </div>
         <div className={styles.content}>
           <pre>{JSON.stringify(tables, null, 2)}</pre>

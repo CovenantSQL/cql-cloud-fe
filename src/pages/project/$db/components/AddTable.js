@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { withI18n, Trans } from '@lingui/react'
-import { Form, Input, Icon, Button, Select } from 'antd'
+import { Form, Modal, Input, Icon, Button, Select } from 'antd'
 
 let id = 0
 const DATA_TYPES = ['TEXT', 'INTEGER', 'REAL', 'BLOB']
@@ -79,10 +79,18 @@ class ColumnInput extends React.Component {
   }
 }
 
+@withI18n()
 class DynamicAddTableForm extends React.Component {
   componentDidMount() {
     this.add()
   }
+
+  reset = () => {
+    const { form } = this.props
+    form.resetFields([])
+    // this.add()
+  }
+
   remove = k => {
     const { form } = this.props
     // can use data-binding to get
@@ -112,11 +120,35 @@ class DynamicAddTableForm extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    this.props.form.validateFields((err, values) => {
+    const { i18n } = this.props
+
+    this.props.form.validateFields(async (err, values) => {
       if (!err) {
-        const { keys, names } = values
+        const { keys, columns } = values
         console.log('Received values of form: ', values)
-        console.log('Merged values:', keys.map(key => names[key]))
+        console.log('Merged values:', keys.map(key => columns[key]))
+
+        const table = values.table_name
+        const names = values.columns.map(c => c.name)
+        const types = values.columns.map(c => c.type)
+
+        const { data, success } = await this.props.createTable({
+          table,
+          names,
+          types,
+        })
+
+        if (success) {
+          Modal.success({
+            title: i18n.t`Create Table Success!`,
+            content: (
+              <div>
+                <div>{data.table} created</div>
+              </div>
+            ),
+            okText: i18n.t`好的`,
+          })
+        }
       }
     })
   }
@@ -158,7 +190,7 @@ class DynamicAddTableForm extends React.Component {
         required={true}
         key={k}
       >
-        {getFieldDecorator(`names[${k}]`, {
+        {getFieldDecorator(`columns[${k}]`, {
           validateTrigger: ['onChange', 'onBlur'],
           initialValue: { name: '', type: DATA_TYPES[0] },
           rules: [{ validator: this.checkColumnName }],
@@ -208,7 +240,9 @@ class DynamicAddTableForm extends React.Component {
   }
 }
 
-DynamicAddTableForm.propTypes = {}
+DynamicAddTableForm.propTypes = {
+  createTable: PropTypes.func,
+}
 const AddTable = Form.create({ name: 'dynamic_add_table_form' })(
   DynamicAddTableForm
 )

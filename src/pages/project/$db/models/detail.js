@@ -142,8 +142,11 @@ export default {
         throw data
       }
     },
-    *createTable({ payload }, { call, put }) {
-      const { data, success } = yield call(createProjectTable, payload)
+    *createTable({ payload }, { call, put, select }) {
+      const { db } = yield select(_ => _.projectDetail)
+      let _payload = Object.assign({ db }, payload)
+
+      const { data, success } = yield call(createProjectTable, _payload)
       if (success) {
         return { data, success }
       } else {
