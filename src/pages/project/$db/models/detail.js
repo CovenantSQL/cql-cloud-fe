@@ -99,7 +99,7 @@ export default {
       }
     },
     *getProjectTables({ payload }, { call, put, select }) {
-      const { db, tables } = yield select(_ => _.projectDetail)
+      const { db } = yield select(_ => _.projectDetail)
       let _payload = Object.assign({ db }, payload)
 
       const { data, success } = yield call(queryProjectTables, _payload)
@@ -111,14 +111,15 @@ export default {
           },
         })
         for (let i = 0; i < data.tables.length; i++) {
-          let table = data.tables[i]
-          let detail = yield call(queryProjectTableDetail, { table, db })
+          let table_name = data.tables[i]
+          let detail = yield call(queryProjectTableDetail, {
+            table: table_name,
+            db,
+          })
           yield put({
-            type: 'updateState',
+            type: 'updateTable',
             payload: {
-              tables: Object.assign({}, tables, {
-                [table]: detail.data,
-              }),
+              [table_name]: detail.data,
             },
           })
         }
@@ -160,6 +161,15 @@ export default {
       return {
         ...state,
         ...payload,
+      }
+    },
+    updateTable(state, { payload }) {
+      return {
+        ...state,
+        tables: {
+          ...state.tables,
+          ...payload,
+        },
       }
     },
   },
