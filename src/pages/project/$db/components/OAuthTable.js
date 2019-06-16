@@ -1,19 +1,22 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { Table, Input, InputNumber, Popconfirm, Form, Switch } from 'antd'
+import { Table, Input, InputNumber, Popconfirm, Form, Switch, Tag } from 'antd'
 
 const EditableContext = React.createContext()
 
 class EditableCell extends React.Component {
   getInput = () => {
+    const dataIndex = this.props.dataIndex
+    const value = this.props.record[dataIndex]
+
     if (this.props.inputType === 'switch') {
-      return <Switch onChange={() => {}} size="small" />
+      return <Switch size="small" />
     }
     return <Input />
   }
 
-  renderCell = () => {
+  renderCell = ({ getFieldDecorator }) => {
     const {
       editing,
       dataIndex,
@@ -27,7 +30,18 @@ class EditableCell extends React.Component {
     return (
       <td {...restProps}>
         {editing ? (
-          <Form.Item style={{ margin: 0 }}>{this.getInput()}</Form.Item>
+          <Form.Item style={{ margin: 0 }}>
+            {getFieldDecorator(dataIndex, {
+              rules: [
+                {
+                  required: true,
+                  message: `Please Input ${title}!`,
+                },
+              ],
+              initialValue: record[dataIndex],
+              valuePropName: inputType === 'switch' ? 'checked' : 'value',
+            })(this.getInput())}
+          </Form.Item>
         ) : (
           children
         )}
@@ -49,6 +63,7 @@ class OAuthTable extends PureComponent {
       data: [],
       editingKey: '',
     }
+
     this.columns = [
       {
         title: 'Enable',
@@ -68,17 +83,18 @@ class OAuthTable extends PureComponent {
         title: 'Provider',
         dataIndex: 'provider',
         width: '10%',
+        render: text => <Tag color="green">{text}</Tag>,
       },
       {
         title: 'Client ID',
         dataIndex: 'client_id',
-        width: '20%',
+        width: '30%',
         editable: true,
       },
       {
         title: 'Client Secret',
         dataIndex: 'client_secret',
-        width: '25%',
+        width: '35%',
         editable: true,
       },
       {
@@ -120,7 +136,28 @@ class OAuthTable extends PureComponent {
     ]
   }
 
-  save = () => {}
+  save = (form, key) => {
+    console.log('........', form)
+    form.validateFields((error, row) => {
+      if (error) {
+        return
+      }
+      const newData = [...this.state.data]
+      console.log('........', newData, row)
+      const index = newData.findIndex(item => key === item.key)
+      if (index > -1) {
+        const item = newData[index]
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
+        })
+        this.setState({ data: newData, editingKey: '' })
+      } else {
+        newData.push(row)
+        this.setState({ data: newData, editingKey: '' })
+      }
+    })
+  }
 
   isEditing = record => record.key === this.state.editingKey
 
@@ -133,7 +170,7 @@ class OAuthTable extends PureComponent {
   }
 
   render() {
-    console.log('//', this.state.data)
+    console.log('//', this.state)
 
     const components = {
       body: {
@@ -178,4 +215,5 @@ OAuthTable.propTypes = {
   data: PropTypes.array,
   udpate: PropTypes.func,
 }
-export default OAuthTable
+const EditableOAuthTable = Form.create()(OAuthTable)
+export default EditableOAuthTable

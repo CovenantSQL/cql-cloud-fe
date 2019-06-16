@@ -163,7 +163,8 @@ const routes = [
       name: 'Project',
     },
     icon: 'book',
-    route: '/project/:db',
+    route:
+      '/project/8f52f1d65dd25a070dcb6e27f53961d88ff78588b36ea31c41071ee5f2f6a058',
   },
   {
     id: '1010',
@@ -174,7 +175,8 @@ const routes = [
       name: 'Authentication',
     },
     icon: 'contacts',
-    route: '/project/:db/auth',
+    route:
+      '/project/8f52f1d65dd25a070dcb6e27f53961d88ff78588b36ea31c41071ee5f2f6a058/auth',
   },
   {
     id: '1011',
@@ -185,7 +187,8 @@ const routes = [
       name: 'Database',
     },
     icon: 'database',
-    route: '/project/:db/db',
+    route:
+      '/project/8f52f1d65dd25a070dcb6e27f53961d88ff78588b36ea31c41071ee5f2f6a058/db',
   },
   {
     id: '1012',
@@ -196,7 +199,8 @@ const routes = [
       name: 'Security Rules',
     },
     icon: 'safety-certificate',
-    route: '/project/:db/rules',
+    route:
+      '/project/8f52f1d65dd25a070dcb6e27f53961d88ff78588b36ea31c41071ee5f2f6a058/rules',
   },
 ]
 
