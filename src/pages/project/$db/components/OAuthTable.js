@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withI18n, Trans } from '@lingui/react'
 import {
   Table,
+  Divider,
   Modal,
   Input,
   InputNumber,
@@ -143,6 +144,7 @@ class OAuthTable extends PureComponent {
                   Callback URL
                 </a>
               </Tag>
+              <Divider type="vertical" />
               <Tag>
                 <a
                   disabled={editingKey !== ''}

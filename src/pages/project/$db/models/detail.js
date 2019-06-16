@@ -7,6 +7,7 @@ const {
   queryProjectTables,
   updateProjectOAuthConfig,
   queryProjectOAuthCallback,
+  queryProjectTableDetail,
   createProjectTable,
 } = api
 
@@ -17,6 +18,7 @@ export default {
     db: '',
     config: {},
     userList: {},
+    table_names: [],
     tables: {},
   },
 
@@ -37,7 +39,7 @@ export default {
                 dispatch({ type: 'getProjectUserList', payload: { db } })
                 break
               case 'db':
-                dispatch({ type: 'getProjectTables', payload: { db } })
+                dispatch({ type: 'getProjectTables' })
                 break
               case 'rules':
                 console.log('TODO: get current rules')
@@ -80,19 +82,6 @@ export default {
         throw data
       }
     },
-    *getProjectTables({ payload }, { call, put }) {
-      const { data, success } = yield call(queryProjectTables, payload)
-      if (success) {
-        yield put({
-          type: 'updateState',
-          payload: {
-            tables: data,
-          },
-        })
-      } else {
-        throw data
-      }
-    },
     *updateOAuthConfig({ payload }, { call, put }) {
       const { data, success } = yield call(updateProjectOAuthConfig, payload)
       if (success) {
@@ -105,6 +94,50 @@ export default {
       const { data, success } = yield call(queryProjectOAuthCallback, payload)
       if (success) {
         return { data, success }
+      } else {
+        throw data
+      }
+    },
+    *getProjectTables({ payload }, { call, put, select }) {
+      const { db, tables } = yield select(_ => _.projectDetail)
+      let _payload = Object.assign({ db }, payload)
+
+      const { data, success } = yield call(queryProjectTables, _payload)
+      if (success) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            table_names: data.tables,
+          },
+        })
+        for (let i = 0; i < data.tables.length; i++) {
+          let table = data.tables[i]
+          let detail = yield call(queryProjectTableDetail, { table, db })
+          yield put({
+            type: 'updateState',
+            payload: {
+              tables: Object.assign({}, tables, {
+                [table]: detail.data,
+              }),
+            },
+          })
+        }
+      } else {
+        throw data
+      }
+    },
+    *getProjectTableDetail({ payload }, { call, put, select }) {
+      const { db } = yield select(_ => _.projectDetail)
+      let _payload = Object.assign({ db }, payload)
+
+      const { data, success } = yield call(queryProjectTableDetail, _payload)
+      if (success) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            tables: data,
+          },
+        })
       } else {
         throw data
       }
