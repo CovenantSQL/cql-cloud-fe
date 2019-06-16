@@ -70,16 +70,16 @@ class Auth extends PureComponent {
       },
     })
   }
-  testGetCallback = async () => {
+  getCallbackURL = async provider => {
     const { dispatch, projectDetail } = this.props
     const { data, success } = await dispatch({
       type: 'projectDetail/getPrivderCallback',
       payload: {
         db: projectDetail.db,
-        provider: 'github',
+        provider,
       },
     })
-    alert(JSON.stringify(data))
+    return { data, success }
   }
   updateOAuth = ({ provider, client_id, client_secret, enabled }) => {
     const { dispatch, projectDetail } = this.props
@@ -139,6 +139,7 @@ class Auth extends PureComponent {
           <OAuthTable
             data={this.prepareOAuthTableData()}
             update={this.updateOAuth}
+            getCallbackURL={this.getCallbackURL}
           />
         </div>
       </Page>

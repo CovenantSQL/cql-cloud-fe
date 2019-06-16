@@ -134,16 +134,45 @@ class OAuthTable extends PureComponent {
               </Popconfirm>
             </span>
           ) : (
-            <a
-              disabled={editingKey !== ''}
-              onClick={() => this.edit(record.key)}
-            >
-              Edit
-            </a>
+            <>
+              <Tag>
+                <a
+                  disabled={editingKey !== ''}
+                  onClick={() => this.getCallbackURL(record.provider)}
+                >
+                  Callback URL
+                </a>
+              </Tag>
+              <Tag>
+                <a
+                  disabled={editingKey !== ''}
+                  onClick={() => this.edit(record.key)}
+                >
+                  Edit
+                </a>
+              </Tag>
+            </>
           )
         },
       },
     ]
+  }
+
+  getCallbackURL = async provider => {
+    const { i18n } = this.props
+    const { data, success } = await this.props.getCallbackURL(provider)
+    if (success) {
+      Modal.success({
+        title: i18n.t`OAuth Callback URL：`,
+        content: (
+          <div>
+            <div style={{ marginBottom: '10px' }}>{provider}:</div>
+            <Tag>{data.callbacks[0]}</Tag>
+          </div>
+        ),
+        okText: i18n.t`好的`,
+      })
+    }
   }
 
   save = (form, key) => {
@@ -232,6 +261,7 @@ class OAuthTable extends PureComponent {
 OAuthTable.propTypes = {
   data: PropTypes.array,
   update: PropTypes.func,
+  getCallbackURL: PropTypes.func,
 }
 const EditableOAuthTable = Form.create()(OAuthTable)
 export default EditableOAuthTable
