@@ -7,6 +7,7 @@ import { Empty, Table, Tag } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
 
 import { Page } from 'components'
+import { AddTable } from './components'
 import styles from './db.less'
 
 const { Column } = Table
@@ -14,6 +15,18 @@ const { Column } = Table
 @withI18n()
 @connect(({ projectDetail }) => ({ projectDetail }))
 class ProjectDetail extends PureComponent {
+  testCreateTable = async () => {
+    const { dispatch, projectDetail } = this.props
+    const { data, success } = await dispatch({
+      type: 'projectDetail/createTable',
+      payload: {
+        db: projectDetail.db,
+        table: 'test_table',
+        names: ['name', 'age', 'float', 'avatar'],
+        types: ['TEXT', 'INTEGER', 'REAL', 'BLOB'],
+      },
+    })
+  }
   getColumns = name => {
     const { tables } = this.props.projectDetail
     let tableDetail = tables[name]
@@ -34,7 +47,9 @@ class ProjectDetail extends PureComponent {
 
     if (tableDetail) {
       let { columns, types } = tableDetail
-      return [_zipObject(columns, types)]
+      let row = [_zipObject(columns, types)]
+      row['key'] = name
+      return row
     } else {
       return []
     }
@@ -43,11 +58,12 @@ class ProjectDetail extends PureComponent {
   render() {
     const { projectDetail } = this.props
     const { table_names, tables } = projectDetail
+    console.log('/////////////', table_names)
 
     return (
       <Page inner>
         <div className={styles.tables}>
-          {table_names.length !== 0 ? (
+          {Object.keys(tables).length !== 0 ? (
             table_names.map(name => (
               <div key={name}>
                 <div className={styles.tableName}>
@@ -73,7 +89,9 @@ class ProjectDetail extends PureComponent {
             />
           )}
         </div>
-        <div className={styles.create} />
+        <div className={styles.create}>
+          <AddTable />
+        </div>
         <div className={styles.content}>
           <pre>{JSON.stringify(tables, null, 2)}</pre>
         </div>

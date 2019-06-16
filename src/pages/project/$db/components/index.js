@@ -1,3 +1,4 @@
 import OAuthTable from './OAuthTable'
+import AddTable from './AddTable'
 
-export { OAuthTable }
+export { OAuthTable, AddTable }
