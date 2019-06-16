@@ -1,7 +1,16 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'dva'
-import { Table, Input, InputNumber, Popconfirm, Form, Switch, Tag } from 'antd'
+import { withI18n, Trans } from '@lingui/react'
+import {
+  Table,
+  Modal,
+  Input,
+  InputNumber,
+  Popconfirm,
+  Form,
+  Switch,
+  Tag,
+} from 'antd'
 
 const EditableContext = React.createContext()
 
@@ -56,6 +65,7 @@ class EditableCell extends React.Component {
   }
 }
 
+@withI18n()
 class OAuthTable extends PureComponent {
   constructor(props) {
     super(props)
@@ -137,26 +147,34 @@ class OAuthTable extends PureComponent {
   }
 
   save = (form, key) => {
-    console.log('........', form)
     form.validateFields((error, row) => {
       if (error) {
         return
       }
-      const newData = [...this.state.data]
-      console.log('........', newData, row)
-      const index = newData.findIndex(item => key === item.key)
-      if (index > -1) {
-        const item = newData[index]
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        })
-        this.setState({ data: newData, editingKey: '' })
-      } else {
-        newData.push(row)
-        this.setState({ data: newData, editingKey: '' })
-      }
+
+      const data = this.props.data
+      const index = data.findIndex(item => key === item.key)
+      const config = data[index]
+
+      const newConfig = Object.assign({}, config, row)
+      this.updateRowConfig(newConfig)
     })
+  }
+
+  updateRowConfig = async config => {
+    // config: { provider, client_id, client_secret, enabled }
+    const { i18n } = this.props
+    const { data, success } = await this.props.update(config)
+
+    if (success) {
+      Modal.success({
+        title: i18n.t`OAuth 配置已更新`,
+        content: '',
+        okText: i18n.t`好的`,
+      })
+
+      this.setState({ editingKey: '' })
+    }
   }
 
   isEditing = record => record.key === this.state.editingKey
@@ -170,7 +188,7 @@ class OAuthTable extends PureComponent {
   }
 
   render() {
-    console.log('//', this.state)
+    // console.log('//', this.state)
 
     const components = {
       body: {
@@ -213,7 +231,7 @@ class OAuthTable extends PureComponent {
 
 OAuthTable.propTypes = {
   data: PropTypes.array,
-  udpate: PropTypes.func,
+  update: PropTypes.func,
 }
 const EditableOAuthTable = Form.create()(OAuthTable)
 export default EditableOAuthTable

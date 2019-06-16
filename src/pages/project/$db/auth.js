@@ -55,10 +55,10 @@ class ProjectDetail extends PureComponent {
     })
     alert(JSON.stringify(data))
   }
-  updateOAuth = async ({ provider, client_id, client_secret, enabled }) => {
+  updateOAuth = ({ provider, client_id, client_secret, enabled }) => {
     const { dispatch, projectDetail } = this.props
 
-    const { data, success } = await dispatch({
+    return dispatch({
       type: 'projectDetail/updateOAuthConfig',
       payload: {
         db: projectDetail.db,
@@ -68,8 +68,6 @@ class ProjectDetail extends PureComponent {
         enabled,
       },
     })
-
-    return { data, success }
   }
   prepareOAuthTableData = () => {
     let data = []
@@ -98,7 +96,7 @@ class ProjectDetail extends PureComponent {
         <div className={styles.content}>
           <OAuthTable
             data={this.prepareOAuthTableData()}
-            udpate={this.updateOAuth}
+            update={this.updateOAuth}
           />
           <pre>{JSON.stringify(config, null, 2)}</pre>
           <pre>{JSON.stringify(userList, null, 2)}</pre>
