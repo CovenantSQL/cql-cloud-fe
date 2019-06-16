@@ -28,7 +28,8 @@ export default {
         if (match) {
           const db = match[1]
           const sub = match[2]
-          dispatch({ type: 'query', payload: { db: match[1] } })
+          dispatch({ type: 'updateState', payload: { db: match[1] } })
+          dispatch({ type: 'query' })
 
           if (sub) {
             switch (sub) {
@@ -51,10 +52,10 @@ export default {
   },
 
   effects: {
-    *query({ payload }, { call, put }) {
-      yield put({ type: 'updateState', payload: { db: payload.db } })
+    *query({ payload }, { call, put, select }) {
+      const { db } = yield select(_ => _.projectDetail)
 
-      const { data, success } = yield call(queryProjectConfig, payload)
+      const { data, success } = yield call(queryProjectConfig, { db })
       if (success) {
         yield put({
           type: 'updateState',

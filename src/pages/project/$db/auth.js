@@ -58,15 +58,21 @@ class ProjectDetail extends PureComponent {
   updateOAuth = ({ provider, client_id, client_secret, enabled }) => {
     const { dispatch, projectDetail } = this.props
 
-    return dispatch({
-      type: 'projectDetail/updateOAuthConfig',
-      payload: {
-        db: projectDetail.db,
-        provider,
-        client_id,
-        client_secret,
-        enabled,
-      },
+    return new Promise(async (resolve, reject) => {
+      const { data, success } = await dispatch({
+        type: 'projectDetail/updateOAuthConfig',
+        payload: {
+          db: projectDetail.db,
+          provider,
+          client_id,
+          client_secret,
+          enabled,
+        },
+      })
+
+      await dispatch({ type: 'projectDetail/query' })
+
+      resolve({ data, success })
     })
   }
   prepareOAuthTableData = () => {
@@ -98,13 +104,6 @@ class ProjectDetail extends PureComponent {
             data={this.prepareOAuthTableData()}
             update={this.updateOAuth}
           />
-          <pre>{JSON.stringify(config, null, 2)}</pre>
-          <pre>{JSON.stringify(userList, null, 2)}</pre>
-          <div>
-            <Button onClick={this.testUpdateOAuth}>update oauth</Button>
-            <Button onClick={this.testGetCallback}>get oauth callback</Button>
-            <Button onClick={this.testCreateTable}>create table</Button>
-          </div>
         </div>
       </Page>
     )
