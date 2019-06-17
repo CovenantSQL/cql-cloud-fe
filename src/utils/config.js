@@ -4,7 +4,7 @@ module.exports = {
   logoPath: '/logo.svg',
   apiEndpoint:
     process.env.NODE_ENV === 'development' ? '' : '//stg-api.covenantsql.io',
-  apiPrefix: process.env.NODE_ENV === 'development' ? '/api/v1' : 'v3',
+  apiPrefix: process.env.NODE_ENV === 'development' ? '/api/v1' : '/v3',
   fixedHeader: true, // sticky primary layout header
 
   /* Layout configuration, specify which layout to use for route. */

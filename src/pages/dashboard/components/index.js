@@ -1,4 +1,6 @@
 import GetPTC from './getPTC'
 import TaskList from './taskList'
+import CreateProject from './createProject'
+import Projects from './Projects'
 
-export { GetPTC, TaskList }
+export { GetPTC, TaskList, CreateProject, Projects }

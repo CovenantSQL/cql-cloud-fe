@@ -18,7 +18,7 @@ import {
   Cpu,
   User,
 } from './components_bck'
-import { GetPTC, TaskList } from './components'
+import { GetPTC, CreateProject, TaskList, Projects } from './components'
 import styles from './index.less'
 
 const bodyStyle = {
@@ -103,28 +103,10 @@ class Dashboard extends PureComponent {
             <div className={styles.sectionTitle}>
               <Trans>Projects</Trans>
             </div>
-            <Col lg={6} md={6}>
-              <Card
-                bordered={false}
-                bodyStyle={{
-                  padding: 10,
-                  height: 160,
-                  color: '#fefefe',
-                  fontSize: '24px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  background: Color.blue,
-                }}
-              >
-                <span style={{ marginRight: '6px' }}>
-                  <Icon type="plus-circle" theme="filled" />
-                </span>
-                <span style={{ fontWeight: '600' }}>
-                  <Trans>Create Project</Trans>
-                </span>
-              </Card>
+            <Col xl={6} lg={8} md={12}>
+              <CreateProject />
             </Col>
+            <Projects />
           </Row>
 
           <Row className={styles.section} gutter={24}>

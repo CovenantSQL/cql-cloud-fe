@@ -18,6 +18,7 @@ const {
   logoutUser,
   queryUserInfo,
   queryCQLUserInfo,
+  queryProject,
 } = api
 
 export default {
@@ -47,15 +48,16 @@ export default {
     locationPathname: '',
     locationQuery: {},
     notifications: [
-      {
-        title: 'New User is registered.',
-        date: new Date(Date.now() - 10000000),
-      },
-      {
-        title: 'Application has been approved.',
-        date: new Date(Date.now() - 50000000),
-      },
+      // {
+      //   title: 'New User is registered.',
+      //   date: new Date(Date.now() - 10000000),
+      // },
+      // {
+      //   title: 'Application has been approved.',
+      //   date: new Date(Date.now() - 50000000),
+      // },
     ],
+    projects: [],
   },
   subscriptions: {
     setupHistory({ dispatch, history }) {
@@ -193,6 +195,16 @@ export default {
       // query to redirect
       // yield put({ type: 'query' })
       router.push('/login')
+    },
+
+    *getProjectList({ payload }, { call, put }) {
+      const { data, success } = yield call(queryProject)
+      yield put({
+        type: 'updateState',
+        payload: {
+          projects: data.projects,
+        },
+      })
     },
   },
   reducers: {
