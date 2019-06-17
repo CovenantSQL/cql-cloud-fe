@@ -60,20 +60,24 @@ class ProjectDetail extends PureComponent {
   render() {
     const { projectDetail } = this.props
     const { table_names, tables } = projectDetail
-    console.log('//--------------', table_names)
 
     return (
       <Page inner>
         <div className={styles.tables}>
+          <div className={styles.title}>
+            <Trans>Table Details:</Trans>
+          </div>
           {Object.keys(tables).length !== 0 ? (
             table_names.map(name => (
               <div key={name} className={styles.table}>
                 <div className={styles.tableName}>
-                  {name} (
-                  {moment(_get(tables, [name, 'created'])).format(
-                    'YYYY-MM-DD HH:mm:ss'
-                  )}
-                  )
+                  <Tag color="green">{name}</Tag>
+                  <Tag>
+                    Created:{' '}
+                    {moment(_get(tables, [name, 'created'])).format(
+                      'YYYY-MM-DD HH:mm:ss'
+                    )}
+                  </Tag>
                 </div>
                 <div>
                   <Table
@@ -95,6 +99,9 @@ class ProjectDetail extends PureComponent {
           )}
         </div>
         <div className={styles.create}>
+          <div className={styles.title}>
+            <Trans>Create Table:</Trans>
+          </div>
           <AddTable createTable={this.createTable} />
         </div>
         <div className={styles.props}>

@@ -99,13 +99,13 @@ class OAuthTable extends PureComponent {
       {
         title: 'Client ID',
         dataIndex: 'client_id',
-        width: '30%',
+        width: '25%',
         editable: true,
       },
       {
         title: 'Client Secret',
         dataIndex: 'client_secret',
-        width: '35%',
+        width: '30%',
         editable: true,
       },
       {
