@@ -15,7 +15,7 @@ import {
 } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
 import { Page } from 'components'
-import { OAuthTable, List } from './auth_components'
+import { OAuthTable, List, UpdateUser } from './auth_components'
 import styles from './auth.less'
 
 const DEFAULT_OAUTH = [
@@ -46,30 +46,9 @@ const DEFAULT_OAUTH = [
 ]
 @connect(({ projectDetail, loading }) => ({ projectDetail, loading }))
 class Auth extends PureComponent {
-  testUpdateOAuth = async () => {
-    const { dispatch, projectDetail } = this.props
-    const { data, success } = await dispatch({
-      type: 'projectDetail/updateOAuthConfig',
-      payload: {
-        db: projectDetail.db,
-        provider: 'github',
-        client_id: 'foo',
-        client_secret: 'bar',
-        enabled: true,
-      },
-    })
-  }
-  testCreateTable = async () => {
-    const { dispatch, projectDetail } = this.props
-    const { data, success } = await dispatch({
-      type: 'projectDetail/createTable',
-      payload: {
-        db: projectDetail.db,
-        table: 'test_table',
-        names: ['name', 'age', 'float', 'avatar'],
-        types: ['TEXT', 'INTEGER', 'REAL', 'BLOB'],
-      },
-    })
+  state = {
+    updateUserVisible: false,
+    userToUpdate: {},
   }
   getCallbackURL = async provider => {
     const { dispatch, projectDetail } = this.props
@@ -130,6 +109,8 @@ class Auth extends PureComponent {
 
     return data
   }
+  closeUpdateUserModal = () =>
+    this.setState({ updateUserVisible: false, userToUpdate: {} })
   render() {
     const { projectDetail, loading } = this.props
     const { config, userList, pagination } = projectDetail
@@ -159,21 +140,18 @@ class Auth extends PureComponent {
         //   })
         // })
       },
-      onEditItem(item) {
+      onEditItem: item => {
         console.log('edit item', item)
-        // dispatch({
-        //   type: 'user/showModal',
-        //   payload: {
-        //     modalType: 'update',
-        //     currentItem: item,
-        //   },
-        // })
+        this.setState({
+          updateUserVisible: true,
+          userToUpdate: item,
+        })
       },
     }
 
     return (
       <Page inner>
-        <div className={styles.authTable}>
+        <section className={styles.authTable} id="oauth">
           <div className={styles.title}>
             <Trans>OAuth Config:</Trans>
           </div>
@@ -182,13 +160,18 @@ class Auth extends PureComponent {
             update={this.updateOAuth}
             getCallbackURL={this.getCallbackURL}
           />
-        </div>
-        <div className={styles.users}>
+        </section>
+        <section className={styles.users} id="users">
           <div className={styles.title}>
             <Trans>Users:</Trans>
           </div>
           <List {...listProps} />
-        </div>
+          <UpdateUser
+            visible={this.state.updateUserVisible}
+            user={this.state.userToUpdate}
+            close={this.closeUpdateUserModal}
+          />
+        </section>
 
         <div className={styles.props}>
           <pre>{JSON.stringify(userList, null, 2)}</pre>

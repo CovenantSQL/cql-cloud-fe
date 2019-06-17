@@ -5,10 +5,11 @@ const {
   queryProjectConfig,
   queryProjectUserList,
   queryProjectTables,
-  updateProjectOAuthConfig,
   queryProjectOAuthCallback,
   queryProjectTableDetail,
   createProjectTable,
+  updateProjectUser,
+  updateProjectOAuthConfig,
 } = api
 
 export default {
@@ -19,7 +20,10 @@ export default {
     // auth
     config: {},
     userList: [],
-    pagination: {},
+    pagination: {
+      current: 1,
+      pageSize: 10,
+    },
     // db
     table_names: [],
     tables: {},
@@ -41,7 +45,8 @@ export default {
               case 'auth':
                 dispatch({
                   type: 'getProjectUserList',
-                  payload: { enabled: false, page: 1, pageSize: 10 },
+                  payload: {},
+                  pagi: { current: 1, pageSize: 10 },
                 })
                 break
               case 'db':
@@ -80,15 +85,17 @@ export default {
      * page: current page
      * pageSize: page size
      */
-    *getProjectUserList({ payload }, { call, put, select }) {
-      const { db } = yield select(_ => _.projectDetail)
+    *getProjectUserList({ payload, pagi }, { call, put, select }) {
+      const { db, pagination } = yield select(_ => _.projectDetail)
+      let p = pagi || pagination
+
       let _payload = Object.assign(
         { db },
         {
-          enabled: payload.enabled,
-          offset: payload.pageSize * (payload.page - 1),
-          limit: payload.pageSize,
-        }
+          offset: p.pageSize * (p.current - 1),
+          limit: p.pageSize,
+        },
+        payload
       )
 
       /**
@@ -105,8 +112,8 @@ export default {
           payload: {
             userList: data.users,
             pagination: {
-              current: Number(payload.page) || 1,
-              pageSize: Number(payload.pageSize) || 10,
+              current: Number(p.current),
+              pageSize: Number(p.pageSize),
               total: data.total,
             },
           },
@@ -181,6 +188,17 @@ export default {
       let _payload = Object.assign({ db }, payload)
 
       const { data, success } = yield call(createProjectTable, _payload)
+      if (success) {
+        return { data, success }
+      } else {
+        throw data
+      }
+    },
+    *updateUser({ payload }, { call, put, select }) {
+      const { db } = yield select(_ => _.projectDetail)
+      let _payload = Object.assign({ db }, payload)
+
+      const { data, success } = yield call(updateProjectUser, _payload)
       if (success) {
         return { data, success }
       } else {
