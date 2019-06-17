@@ -13,9 +13,10 @@ import {
   Popconfirm,
   Form,
 } from 'antd'
+import { Trans, withI18n } from '@lingui/react'
 import { Page } from 'components'
-import { OAuthTable } from './components'
-import styles from './index.less'
+import { OAuthTable, List } from './auth_components'
+import styles from './auth.less'
 
 const DEFAULT_OAUTH = [
   {
@@ -43,7 +44,7 @@ const DEFAULT_OAUTH = [
     },
   },
 ]
-@connect(({ projectDetail }) => ({ projectDetail }))
+@connect(({ projectDetail, loading }) => ({ projectDetail, loading }))
 class Auth extends PureComponent {
   testUpdateOAuth = async () => {
     const { dispatch, projectDetail } = this.props
@@ -130,17 +131,67 @@ class Auth extends PureComponent {
     return data
   }
   render() {
-    const { projectDetail } = this.props
-    const { config, userList } = projectDetail
+    const { projectDetail, loading } = this.props
+    const { config, userList, pagination } = projectDetail
+
+    const listProps = {
+      dataSource: userList,
+      loading: loading.effects['projectDetail/getProjectUserList'],
+      pagination,
+      onChange(page) {
+        console.log('changed page', page)
+        // handleRefresh({
+        //   page: page.current,
+        //   pageSize: page.pageSize,
+        // })
+      },
+      onDeleteItem(id) {
+        console.log('delete', id)
+        // dispatch({
+        //   type: 'user/delete',
+        //   payload: id,
+        // }).then(() => {
+        //   handleRefresh({
+        //     page:
+        //       list.length === 1 && pagination.current > 1
+        //         ? pagination.current - 1
+        //         : pagination.current,
+        //   })
+        // })
+      },
+      onEditItem(item) {
+        console.log('edit item', item)
+        // dispatch({
+        //   type: 'user/showModal',
+        //   payload: {
+        //     modalType: 'update',
+        //     currentItem: item,
+        //   },
+        // })
+      },
+    }
 
     return (
       <Page inner>
-        <div className={styles.content}>
+        <div className={styles.authTable}>
+          <div className={styles.title}>
+            <Trans>OAuth Config:</Trans>
+          </div>
           <OAuthTable
             data={this.prepareOAuthTableData()}
             update={this.updateOAuth}
             getCallbackURL={this.getCallbackURL}
           />
+        </div>
+        <div className={styles.users}>
+          <div className={styles.title}>
+            <Trans>Users:</Trans>
+          </div>
+          <List {...listProps} />
+        </div>
+
+        <div className={styles.props}>
+          <pre>{JSON.stringify(userList, null, 2)}</pre>
         </div>
       </Page>
     )

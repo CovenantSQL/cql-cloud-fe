@@ -16,8 +16,11 @@ export default {
 
   state: {
     db: '',
+    // auth
     config: {},
-    userList: {},
+    userList: [],
+    pagination: {},
+    // db
     table_names: [],
     tables: {},
   },
@@ -36,7 +39,10 @@ export default {
           if (sub) {
             switch (sub) {
               case 'auth':
-                dispatch({ type: 'getProjectUserList', payload: { db } })
+                dispatch({
+                  type: 'getProjectUserList',
+                  payload: { enabled: false, page: 1, pageSize: 10 },
+                })
                 break
               case 'db':
                 dispatch({ type: 'getProjectTables' })
@@ -56,7 +62,6 @@ export default {
   effects: {
     *query({ payload }, { call, put, select }) {
       const { db } = yield select(_ => _.projectDetail)
-
       const { data, success } = yield call(queryProjectConfig, { db })
       if (success) {
         yield put({
@@ -69,13 +74,41 @@ export default {
         throw data
       }
     },
-    *getProjectUserList({ payload }, { call, put }) {
-      const { data, success } = yield call(queryProjectUserList, payload)
+    /**
+     * payload:
+     * enabled: only show enabled
+     * page: current page
+     * pageSize: page size
+     */
+    *getProjectUserList({ payload }, { call, put, select }) {
+      const { db } = yield select(_ => _.projectDetail)
+      let _payload = Object.assign(
+        { db },
+        {
+          enabled: payload.enabled,
+          offset: payload.pageSize * (payload.page - 1),
+          limit: payload.pageSize,
+        }
+      )
+
+      /**
+       * _payload for API call:
+       * db, term
+       * enabled: only show enabled
+       * offset: page * limit
+       * limit: page size
+       */
+      const { data, success } = yield call(queryProjectUserList, _payload)
       if (success) {
         yield put({
           type: 'updateState',
           payload: {
-            userList: data,
+            userList: data.users,
+            pagination: {
+              current: Number(payload.page) || 1,
+              pageSize: Number(payload.pageSize) || 10,
+              total: data.total,
+            },
           },
         })
       } else {
