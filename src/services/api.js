@@ -47,7 +47,7 @@ export default {
 
   updateProjectOAuthConfig: 'PUT /admin/project/:db/oauth/:provider',
   createPreRregisterProjectUser: 'POST /admin/project/:db/user',
-  updateProjectUser: 'PUT /admin/project/:db/user',
+  updateProjectUser: 'PUT /admin/project/:db/user/:id',
   updateProjectMiscConfig: 'PUT /admin/project/:db/config/misc',
   createProjectTable: 'POST /admin/project/:db/table',
   addFieldToProjectTable: 'PATCH /admin/project/:db/table/:table',

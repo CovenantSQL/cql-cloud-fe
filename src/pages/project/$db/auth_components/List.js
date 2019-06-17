@@ -15,15 +15,17 @@ class List extends PureComponent {
     const { onDeleteItem, onEditItem, i18n } = this.props
 
     if (e.key === '1') {
+      console.log('......edit', record)
       onEditItem(record)
-    } else if (e.key === '2') {
-      confirm({
-        title: i18n.t`Are you sure delete this record?`,
-        onOk() {
-          onDeleteItem(record.id)
-        },
-      })
     }
+    // } else if (e.key === '2') {
+    //   confirm({
+    //     title: i18n.t`Are you sure delete this record?`,
+    //     onOk() {
+    //       onDeleteItem(record.id)
+    //     },
+    //   })
+    // }
   }
 
   render() {
@@ -55,7 +57,7 @@ class List extends PureComponent {
         dataIndex: 'state',
         key: 'state',
         render: text => (
-          <Tag color={text === 'Enabled' ? 'green' : 'red'}>{text}</Tag>
+          <Tag color={text === 'Disabled' ? 'red' : 'green'}>{text}</Tag>
         ),
       },
       {
@@ -85,7 +87,7 @@ class List extends PureComponent {
         key: 'extra.location',
       },
       {
-        title: <Trans>CreateTime</Trans>,
+        title: <Trans>Create Time</Trans>,
         dataIndex: 'extra.created_at',
         key: 'extra.created_at',
         render: text => <Tag>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</Tag>,
@@ -98,10 +100,7 @@ class List extends PureComponent {
           return (
             <DropOption
               onMenuClick={e => this.handleMenuClick(record, e)}
-              menuOptions={[
-                { key: '1', name: i18n.t`Update` },
-                { key: '2', name: i18n.t`Delete` },
-              ]}
+              menuOptions={[{ key: '1', name: i18n.t`Update` }]}
             />
           )
         },
