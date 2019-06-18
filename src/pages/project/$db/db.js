@@ -6,8 +6,7 @@ import _get from 'lodash/get'
 import _zipObject from 'lodash/zipObject'
 import { Empty, Table, Tag } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
-
-import { Page } from 'components'
+import { Page, DropOption } from 'components'
 import { AddTable } from './components'
 import styles from './db.less'
 
@@ -27,18 +26,38 @@ class ProjectDetail extends PureComponent {
       },
     })
 
+    dispatch({ type: 'projectDetail/getProjectTables' })
+
     return { data, success }
+  }
+  handleAddField = (record, e) => {
+    console.log('////', record, e)
   }
   getColumns = name => {
     const { tables } = this.props.projectDetail
     let tableDetail = tables[name]
 
     if (tableDetail) {
-      return tableDetail.columns.map(c => ({
+      let cols = tableDetail.columns.map(c => ({
         title: c,
         dataIndex: c,
         key: c,
       }))
+
+      cols.push({
+        title: <Trans>Operation</Trans>,
+        key: 'operation',
+        render: (text, record) => {
+          return (
+            <DropOption
+              onMenuClick={e => this.handleAddField(record, e)}
+              menuOptions={[{ key: '1', name: `Add Field` }]}
+            />
+          )
+        },
+      })
+
+      return cols
     } else {
       return []
     }
@@ -84,6 +103,7 @@ class ProjectDetail extends PureComponent {
                     dataSource={this.getDataSource(name)}
                     columns={this.getColumns(name)}
                     pagination={false}
+                    bordered
                   />
                 </div>
               </div>

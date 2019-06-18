@@ -128,17 +128,6 @@ class Auth extends PureComponent {
       },
       onDeleteItem(id) {
         console.log('delete', id)
-        // dispatch({
-        //   type: 'user/delete',
-        //   payload: id,
-        // }).then(() => {
-        //   handleRefresh({
-        //     page:
-        //       list.length === 1 && pagination.current > 1
-        //         ? pagination.current - 1
-        //         : pagination.current,
-        //   })
-        // })
       },
       onEditItem: item => {
         console.log('edit item', item)

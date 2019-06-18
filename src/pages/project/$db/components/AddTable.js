@@ -4,7 +4,7 @@ import { withI18n, Trans } from '@lingui/react'
 import { Form, Modal, Input, Icon, Button, Select } from 'antd'
 
 let id = 0
-const DATA_TYPES = ['TEXT', 'INTEGER', 'REAL', 'BLOB']
+const DATA_TYPES = ['INTEGER', 'TEXT', 'REAL', 'BLOB']
 class ColumnInput extends React.Component {
   static getDerivedStateFromProps(nextProps) {
     // Should be a controlled component.
@@ -132,6 +132,7 @@ class DynamicAddTableForm extends React.Component {
         const names = values.columns.map(c => c.name)
         const types = values.columns.map(c => c.type)
 
+        // return
         const { data, success } = await this.props.createTable({
           table,
           names,
@@ -148,6 +149,9 @@ class DynamicAddTableForm extends React.Component {
             ),
             okText: i18n.t`好的`,
           })
+
+          // reset form
+          this.reset()
         }
       }
     })

@@ -18,14 +18,6 @@ class List extends PureComponent {
       console.log('......edit', record)
       onEditItem(record)
     }
-    // } else if (e.key === '2') {
-    //   confirm({
-    //     title: i18n.t`Are you sure delete this record?`,
-    //     onOk() {
-    //       onDeleteItem(record.id)
-    //     },
-    //   })
-    // }
   }
 
   render() {
