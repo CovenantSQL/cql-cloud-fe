@@ -132,7 +132,7 @@ class Projects extends PureComponent {
         {projects.length === 0
           ? null
           : projects.map(p => (
-              <Col xl={6} lg={8} md={12}>
+              <Col xl={6} lg={8} md={12} key={p.project}>
                 {this._renderProjectCard(p)}
               </Col>
             ))}

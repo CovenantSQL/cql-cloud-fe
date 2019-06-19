@@ -51,7 +51,6 @@ class TaskList extends PureComponent {
   }
   render() {
     const { data } = this.props
-    console.log('loading', this.props.loading)
     const columns = [
       {
         title: 'ID',
