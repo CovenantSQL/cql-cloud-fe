@@ -4,17 +4,20 @@ import { connect } from 'dva'
 import moment from 'moment'
 import _get from 'lodash/get'
 import _zipObject from 'lodash/zipObject'
-import { Empty, Table, Tag } from 'antd'
+import { Form, Modal, Empty, Table, Tag, message } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
 import { Page, DropOption } from 'components'
-import { AddTable } from './components'
+import { AddTable, ColumnInput } from './components'
 import styles from './db.less'
 
 const { Column } = Table
 
+const DATA_TYPES = ['INTEGER', 'TEXT', 'REAL', 'BLOB']
+
 @withI18n()
+@Form.create()
 @connect(({ projectDetail }) => ({ projectDetail }))
-class ProjectDetail extends PureComponent {
+class DatabaseDetail extends PureComponent {
   createTable = async ({ table, names, types }) => {
     const { dispatch, projectDetail } = this.props
     const { data, success } = await dispatch({
@@ -30,10 +33,61 @@ class ProjectDetail extends PureComponent {
 
     return { data, success }
   }
-  handleAddField = (record, e) => {
-    console.log('////', record, e)
+
+  checkColumnName = (rule, value, callback) => {
+    if (value.name !== '') {
+      callback()
+      return
+    }
+    callback('Column name cannot be empty')
   }
-  getColumns = name => {
+  handleAddField = (tableName, record, e) => {
+    let local = this
+    const { getFieldDecorator } = this.props.form
+
+    Modal.confirm({
+      title: (
+        <div>
+          Add field to <Tag>{tableName}</Tag>
+        </div>
+      ),
+      content: (
+        <div>
+          <Form onSubmit={this.onOk}>
+            <Form.Item label={'Table Name'} required={true}>
+              {getFieldDecorator(`column`, {
+                validateTrigger: ['onChange', 'onBlur'],
+                initialValue: { name: '', type: DATA_TYPES[0] },
+                rules: [{ validator: this.checkColumnName }],
+              })(<ColumnInput />)}
+            </Form.Item>
+          </Form>
+        </div>
+      ),
+      okText: 'Submit',
+      onOk() {
+        // this.addFieldToTable()
+        alert('ok, will add filed')
+        // local.addFieldToTable()
+      },
+    })
+  }
+  addFieldToTable = async ({ table, name, type }) => {
+    const { dispatch, projectDetail } = this.props
+    const { data, success } = await dispatch({
+      type: 'projectDetail/addTableField',
+      payload: {
+        table,
+        name,
+        type,
+      },
+    })
+
+    if (success) {
+      message.success('Add field success')
+    }
+  }
+  getTableColumns = name => {
     const { tables } = this.props.projectDetail
     let tableDetail = tables[name]
 
@@ -47,10 +101,10 @@ class ProjectDetail extends PureComponent {
       cols.push({
         title: <Trans>Operation</Trans>,
         key: 'operation',
-        render: (text, record) => {
+        render: (text, record, idx) => {
           return (
             <DropOption
-              onMenuClick={e => this.handleAddField(record, e)}
+              onMenuClick={e => this.handleAddField(name, record, e)}
               menuOptions={[{ key: '1', name: `Add Field` }]}
             />
           )
@@ -62,7 +116,7 @@ class ProjectDetail extends PureComponent {
       return []
     }
   }
-  getDataSource = name => {
+  getTableData = name => {
     const { tables } = this.props.projectDetail
     let tableDetail = tables[name]
 
@@ -100,8 +154,8 @@ class ProjectDetail extends PureComponent {
                 </div>
                 <div>
                   <Table
-                    dataSource={this.getDataSource(name)}
-                    columns={this.getColumns(name)}
+                    dataSource={this.getTableData(name)}
+                    columns={this.getTableColumns(name)}
                     pagination={false}
                     bordered
                   />
@@ -132,8 +186,8 @@ class ProjectDetail extends PureComponent {
   }
 }
 
-ProjectDetail.propTypes = {
+DatabaseDetail.propTypes = {
   projectDetail: PropTypes.object,
 }
 
-export default ProjectDetail
+export default DatabaseDetail
