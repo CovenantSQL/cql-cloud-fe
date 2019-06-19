@@ -4,22 +4,29 @@ import { connect } from 'dva'
 import moment from 'moment'
 import _get from 'lodash/get'
 import _zipObject from 'lodash/zipObject'
-import { Form, Modal, Empty, Table, Tag, message } from 'antd'
+import { Modal, Empty, Table, Tag, message } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
 import { Page, DropOption } from 'components'
-import { AddTable, ColumnInput } from './components'
+import { AddTable, AddFieldModal } from './components'
 import styles from './db.less'
 
 const { Column } = Table
-
-const DATA_TYPES = ['INTEGER', 'TEXT', 'REAL', 'BLOB']
+const initState = () =>
+  Object.assign(
+    {},
+    {
+      targetTableToAddField: '',
+      addFieldModalVisible: false,
+    }
+  )
 
 @withI18n()
-@Form.create()
 @connect(({ projectDetail }) => ({ projectDetail }))
 class DatabaseDetail extends PureComponent {
+  state = initState()
+
   createTable = async ({ table, names, types }) => {
-    const { dispatch, projectDetail } = this.props
+    const { dispatch } = this.props
     const { data, success } = await dispatch({
       type: 'projectDetail/createTable',
       payload: {
@@ -29,64 +36,23 @@ class DatabaseDetail extends PureComponent {
       },
     })
 
-    dispatch({ type: 'projectDetail/getProjectTables' })
+    this.getLatestTables()
 
     return { data, success }
   }
 
-  checkColumnName = (rule, value, callback) => {
-    if (value.name !== '') {
-      callback()
-      return
-    }
-    callback('Column name cannot be empty')
+  getLatestTables = () => {
+    const { dispatch } = this.props
+    dispatch({ type: 'projectDetail/getProjectTables' })
   }
-  handleAddField = (tableName, record, e) => {
-    let local = this
-    const { getFieldDecorator } = this.props.form
 
-    Modal.confirm({
-      title: (
-        <div>
-          Add field to <Tag>{tableName}</Tag>
-        </div>
-      ),
-      content: (
-        <div>
-          <Form onSubmit={this.onOk}>
-            <Form.Item label={'Table Name'} required={true}>
-              {getFieldDecorator(`column`, {
-                validateTrigger: ['onChange', 'onBlur'],
-                initialValue: { name: '', type: DATA_TYPES[0] },
-                rules: [{ validator: this.checkColumnName }],
-              })(<ColumnInput />)}
-            </Form.Item>
-          </Form>
-        </div>
-      ),
-      okText: 'Submit',
-      onOk() {
-        // this.addFieldToTable()
-        alert('ok, will add filed')
-        // local.addFieldToTable()
-      },
+  handleAddField = tableName => {
+    this.setState({
+      targetTableToAddField: tableName,
+      addFieldModalVisible: true,
     })
   }
-  addFieldToTable = async ({ table, name, type }) => {
-    const { dispatch, projectDetail } = this.props
-    const { data, success } = await dispatch({
-      type: 'projectDetail/addTableField',
-      payload: {
-        table,
-        name,
-        type,
-      },
-    })
 
-    if (success) {
-      message.success('Add field success')
-    }
-  }
   getTableColumns = name => {
     const { tables } = this.props.projectDetail
     let tableDetail = tables[name]
@@ -116,6 +82,7 @@ class DatabaseDetail extends PureComponent {
       return []
     }
   }
+
   getTableData = name => {
     const { tables } = this.props.projectDetail
     let tableDetail = tables[name]
@@ -129,6 +96,8 @@ class DatabaseDetail extends PureComponent {
       return []
     }
   }
+
+  closeAddFieldModal = () => this.setState(initState())
 
   render() {
     const { projectDetail } = this.props
@@ -172,6 +141,14 @@ class DatabaseDetail extends PureComponent {
             />
           )}
         </div>
+        {this.state.addFieldModalVisible && (
+          <AddFieldModal
+            table={this.state.targetTableToAddField}
+            visible={this.state.addFieldModalVisible}
+            query={this.getLatestTables}
+            close={this.closeAddFieldModal}
+          />
+        )}
         <div className={styles.create}>
           <div className={styles.title}>
             <Trans>Create Table:</Trans>

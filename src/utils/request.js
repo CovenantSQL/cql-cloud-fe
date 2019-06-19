@@ -97,7 +97,7 @@ export default function request(options) {
       if (response && response instanceof Object) {
         const { data, statusText } = response
         statusCode = response.status
-        msg = data.message || statusText
+        msg = data.msg || statusText
       } else {
         statusCode = 600
         msg = error.message || 'Network Error'

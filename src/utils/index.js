@@ -11,6 +11,8 @@ export { Color } from './theme'
 export const { defaultLanguage } = i18n
 export const languages = i18n.languages.map(item => item.key)
 
+export const DATA_TYPES = ['INTEGER', 'TEXT', 'REAL', 'BLOB']
+
 /**
  * Query objects that specify keys and values in an array where all values are objects.
  * @param   {array}         array   An array where all values are objects, like [{key:1},{key:2}].

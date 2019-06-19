@@ -2,32 +2,27 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { withI18n, Trans } from '@lingui/react'
 import { Form, Modal, Input, Icon, Button, Select } from 'antd'
+import { DATA_TYPES } from 'utils'
 
-let id = 0
-const DATA_TYPES = ['INTEGER', 'TEXT', 'REAL', 'BLOB']
 class ColumnInput extends React.Component {
   constructor(props) {
     super(props)
 
     const value = props.value || {}
     this.state = {
-      name: value.name || 0,
-      type: value.type || 'rmb',
+      name: value.name || '',
+      type: value.type || DATA_TYPES[0],
     }
   }
 
   handleNameChange = e => {
     const name = e.target.value
-    if (!('value' in this.props)) {
-      this.setState({ name })
-    }
+    this.setState({ name })
     this.triggerChange({ name })
   }
 
   handleTypeChange = type => {
-    if (!('value' in this.props)) {
-      this.setState({ type })
-    }
+    this.setState({ type })
     this.triggerChange({ type })
   }
 
