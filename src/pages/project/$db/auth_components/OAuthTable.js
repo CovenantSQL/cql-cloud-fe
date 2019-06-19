@@ -74,39 +74,98 @@ class OAuthTable extends PureComponent {
       data: [],
       editingKey: '',
     }
+  }
 
-    this.columns = [
+  getCallbackURL = async provider => {
+    const { i18n } = this.props
+    const { data, success } = await this.props.getCallbackURL(provider)
+    if (success) {
+      Modal.success({
+        title: i18n.t`OAuth Callback URL：`,
+        content: (
+          <div>
+            <div style={{ marginBottom: '10px' }}>{provider}:</div>
+            <Tag>{data.callbacks[0]}</Tag>
+          </div>
+        ),
+        okText: i18n.t`OK!`,
+      })
+    }
+  }
+
+  save = (form, key) => {
+    form.validateFields((error, row) => {
+      if (error) {
+        return
+      }
+
+      const data = this.props.data
+      const index = data.findIndex(item => key === item.key)
+      const config = data[index]
+
+      const newConfig = Object.assign({}, config, row)
+      this.updateRowConfig(newConfig)
+    })
+  }
+
+  updateRowConfig = async config => {
+    // config: { provider, client_id, client_secret, enabled }
+    const { i18n } = this.props
+    const { data, success } = await this.props.update(config)
+
+    if (success) {
+      Modal.success({
+        title: i18n.t`OAuth 配置已更新`,
+        content: '',
+        okText: i18n.t`好的`,
+      })
+
+      this.setState({ editingKey: '' })
+    }
+  }
+
+  isEditing = record => record.key === this.state.editingKey
+
+  cancel = () => {
+    this.setState({ editingKey: '' })
+  }
+
+  edit(key) {
+    this.setState({ editingKey: key })
+  }
+
+  render() {
+    const { data, update, getCallbackURL, ...tableProps } = this.props
+
+    const _columns = [
       {
         title: 'Enable',
         dataIndex: 'enabled',
         width: '5%',
         editable: true,
         render: text => (
-          <Switch
-            onChange={() => {}}
-            size="small"
-            defaultChecked={text}
-            disabled
-          />
+          <Switch size="small" checked={text} defaultChecked={text} disabled />
         ),
       },
       {
         title: 'Provider',
         dataIndex: 'provider',
         width: '10%',
-        render: text => <Tag color="green">{text}</Tag>,
+        render: text => <Tag color="blue">{text}</Tag>,
       },
       {
         title: 'Client ID',
         dataIndex: 'client_id',
         width: '25%',
         editable: true,
+        render: text => <Tag color="geekblue">{text || '-'}</Tag>,
       },
       {
         title: 'Client Secret',
         dataIndex: 'client_secret',
         width: '30%',
         editable: true,
+        render: text => <Tag color="geekblue">{text || '-'}</Tag>,
       },
       {
         title: 'Operation',
@@ -158,68 +217,6 @@ class OAuthTable extends PureComponent {
         },
       },
     ]
-  }
-
-  getCallbackURL = async provider => {
-    const { i18n } = this.props
-    const { data, success } = await this.props.getCallbackURL(provider)
-    if (success) {
-      Modal.success({
-        title: i18n.t`OAuth Callback URL：`,
-        content: (
-          <div>
-            <div style={{ marginBottom: '10px' }}>{provider}:</div>
-            <Tag>{data.callbacks[0]}</Tag>
-          </div>
-        ),
-        okText: i18n.t`好的`,
-      })
-    }
-  }
-
-  save = (form, key) => {
-    form.validateFields((error, row) => {
-      if (error) {
-        return
-      }
-
-      const data = this.props.data
-      const index = data.findIndex(item => key === item.key)
-      const config = data[index]
-
-      const newConfig = Object.assign({}, config, row)
-      this.updateRowConfig(newConfig)
-    })
-  }
-
-  updateRowConfig = async config => {
-    // config: { provider, client_id, client_secret, enabled }
-    const { i18n } = this.props
-    const { data, success } = await this.props.update(config)
-
-    if (success) {
-      Modal.success({
-        title: i18n.t`OAuth 配置已更新`,
-        content: '',
-        okText: i18n.t`好的`,
-      })
-
-      this.setState({ editingKey: '' })
-    }
-  }
-
-  isEditing = record => record.key === this.state.editingKey
-
-  cancel = () => {
-    this.setState({ editingKey: '' })
-  }
-
-  edit(key) {
-    this.setState({ editingKey: key })
-  }
-
-  render() {
-    // console.log('//', this.state)
 
     const components = {
       body: {
@@ -227,7 +224,7 @@ class OAuthTable extends PureComponent {
       },
     }
 
-    const columns = this.columns.map(col => {
+    const columns = _columns.map(col => {
       if (!col.editable) {
         return col
       }
@@ -247,6 +244,7 @@ class OAuthTable extends PureComponent {
       <div>
         <EditableContext.Provider value={this.props.form}>
           <Table
+            {...tableProps}
             components={components}
             bordered
             dataSource={this.props.data}

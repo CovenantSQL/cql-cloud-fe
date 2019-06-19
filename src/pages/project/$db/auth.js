@@ -59,7 +59,6 @@ class Auth extends PureComponent {
   prepareOAuthTableData = () => {
     let data = []
     const backend_oauth = _get(this.props.projectDetail, 'config.oauth') || []
-    console.log('//////////////////kj', backend_oauth)
     const oauth = DEFAULT_OAUTH.map(defaultConfig => {
       let index = backend_oauth.findIndex(
         config => config.provider === defaultConfig.provider
@@ -91,16 +90,16 @@ class Auth extends PureComponent {
     const { projectDetail, loading } = this.props
     const { config, userList, pagination } = projectDetail
 
+    const authTableProps = {
+      loading: loading.effects['projectDetail/query'],
+    }
+
     const listProps = {
       dataSource: userList,
       loading: loading.effects['projectDetail/getProjectUserList'],
       pagination,
       onChange(page) {
         console.log('changed page', page)
-        // handleRefresh({
-        //   page: page.current,
-        //   pageSize: page.pageSize,
-        // })
       },
       onDeleteItem(id) {
         console.log('delete', id)
@@ -121,6 +120,7 @@ class Auth extends PureComponent {
             <Trans>OAuth Config:</Trans>
           </div>
           <OAuthTable
+            {...authTableProps}
             data={this.prepareOAuthTableData()}
             update={this.updateOAuth}
             getCallbackURL={this.getCallbackURL}
