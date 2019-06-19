@@ -4,20 +4,29 @@ import { connect } from 'dva'
 import moment from 'moment'
 import _get from 'lodash/get'
 import _zipObject from 'lodash/zipObject'
-import { Empty, Table, Tag } from 'antd'
+import { Modal, Empty, Table, Tag, message } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
-
-import { Page } from 'components'
-import { AddTable } from './components'
+import { Page, DropOption } from 'components'
+import { AddTable, AddFieldModal } from './components'
 import styles from './db.less'
 
 const { Column } = Table
+const initState = () =>
+  Object.assign(
+    {},
+    {
+      targetTableToAddField: '',
+      addFieldModalVisible: false,
+    }
+  )
 
 @withI18n()
 @connect(({ projectDetail }) => ({ projectDetail }))
-class ProjectDetail extends PureComponent {
+class DatabaseDetail extends PureComponent {
+  state = initState()
+
   createTable = async ({ table, names, types }) => {
-    const { dispatch, projectDetail } = this.props
+    const { dispatch } = this.props
     const { data, success } = await dispatch({
       type: 'projectDetail/createTable',
       payload: {
@@ -27,23 +36,54 @@ class ProjectDetail extends PureComponent {
       },
     })
 
+    this.getLatestTables()
+
     return { data, success }
   }
-  getColumns = name => {
+
+  getLatestTables = () => {
+    const { dispatch } = this.props
+    dispatch({ type: 'projectDetail/getProjectTables' })
+  }
+
+  handleAddField = tableName => {
+    this.setState({
+      targetTableToAddField: tableName,
+      addFieldModalVisible: true,
+    })
+  }
+
+  getTableColumns = name => {
     const { tables } = this.props.projectDetail
     let tableDetail = tables[name]
 
     if (tableDetail) {
-      return tableDetail.columns.map(c => ({
+      let cols = tableDetail.columns.map(c => ({
         title: c,
         dataIndex: c,
         key: c,
       }))
+
+      cols.push({
+        title: <Trans>Operation</Trans>,
+        key: 'operation',
+        render: (text, record, idx) => {
+          return (
+            <DropOption
+              onMenuClick={e => this.handleAddField(name, record, e)}
+              menuOptions={[{ key: '1', name: `Add Field` }]}
+            />
+          )
+        },
+      })
+
+      return cols
     } else {
       return []
     }
   }
-  getDataSource = name => {
+
+  getTableData = name => {
     const { tables } = this.props.projectDetail
     let tableDetail = tables[name]
 
@@ -56,6 +96,8 @@ class ProjectDetail extends PureComponent {
       return []
     }
   }
+
+  closeAddFieldModal = () => this.setState(initState())
 
   render() {
     const { projectDetail } = this.props
@@ -81,9 +123,10 @@ class ProjectDetail extends PureComponent {
                 </div>
                 <div>
                   <Table
-                    dataSource={this.getDataSource(name)}
-                    columns={this.getColumns(name)}
+                    dataSource={this.getTableData(name)}
+                    columns={this.getTableColumns(name)}
                     pagination={false}
+                    bordered
                   />
                 </div>
               </div>
@@ -98,6 +141,14 @@ class ProjectDetail extends PureComponent {
             />
           )}
         </div>
+        {this.state.addFieldModalVisible && (
+          <AddFieldModal
+            table={this.state.targetTableToAddField}
+            visible={this.state.addFieldModalVisible}
+            query={this.getLatestTables}
+            close={this.closeAddFieldModal}
+          />
+        )}
         <div className={styles.create}>
           <div className={styles.title}>
             <Trans>Create Table:</Trans>
@@ -112,8 +163,8 @@ class ProjectDetail extends PureComponent {
   }
 }
 
-ProjectDetail.propTypes = {
+DatabaseDetail.propTypes = {
   projectDetail: PropTypes.object,
 }
 
-export default ProjectDetail
+export default DatabaseDetail

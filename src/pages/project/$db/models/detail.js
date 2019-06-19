@@ -10,6 +10,7 @@ const {
   createProjectTable,
   updateProjectUser,
   updateProjectOAuthConfig,
+  addFieldToProjectTable,
 } = api
 
 export default {
@@ -199,6 +200,17 @@ export default {
       let _payload = Object.assign({ db }, payload)
 
       const { data, success } = yield call(updateProjectUser, _payload)
+      if (success) {
+        return { data, success }
+      } else {
+        throw data
+      }
+    },
+    *addTableField({ payload }, { call, put, select }) {
+      const { db } = yield select(_ => _.projectDetail)
+      let _payload = Object.assign({ db }, payload)
+
+      const { data, success } = yield call(addFieldToProjectTable, _payload)
       if (success) {
         return { data, success }
       } else {
