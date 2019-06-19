@@ -190,18 +190,6 @@ const routes = [
     route:
       '/project/8f52f1d65dd25a070dcb6e27f53961d88ff78588b36ea31c41071ee5f2f6a058/db',
   },
-  {
-    id: '1012',
-    breadcrumbParentId: '101',
-    menuParentId: '101',
-    name: 'Security Rules',
-    zh: {
-      name: 'Security Rules',
-    },
-    icon: 'safety-certificate',
-    route:
-      '/project/8f52f1d65dd25a070dcb6e27f53961d88ff78588b36ea31c41071ee5f2f6a058/rules',
-  },
 ]
 
 export default routes

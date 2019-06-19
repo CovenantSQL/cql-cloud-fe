@@ -44,6 +44,7 @@ export default {
   queryProjectTables: '/admin/project/:db/table',
   queryProjectTableDetail: '/admin/project/:db/table/:table',
   queryProjectOAuthCallback: '/admin/project/:db/oauth/:provider/callback',
+  queryBatchProjectUser: '/admin/project/:db/user/:id/batch',
 
   updateProjectOAuthConfig: 'PUT /admin/project/:db/oauth/:provider',
   createPreRregisterProjectUser: 'POST /admin/project/:db/user',
@@ -52,6 +53,9 @@ export default {
   createProjectTable: 'POST /admin/project/:db/table',
   addFieldToProjectTable: 'PATCH /admin/project/:db/table/:table',
   dropProjectTable: 'DELETE /admin/project/:db/table/:table',
+
+  updateProjectGroupConfig: 'PUT /admin//project/:db/config/group',
+  updateProjectTableRules: 'PUT /admin/project/:db/table/:table/rules',
 
   // tmp
   queryProjectAudits: '/admin/project/:db/audits',
