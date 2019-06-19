@@ -88,6 +88,7 @@ export default {
     setup({ dispatch }) {
       // if not login then redirect to login page
       dispatch({ type: 'query' })
+      dispatch({ type: 'getProjectList' })
     },
   },
   effects: {
@@ -99,9 +100,7 @@ export default {
 
       if (success) {
         // if login, set permisson as developer
-        let permissions = USER_PERMISSION.DEVELOPER
-        permissions.visit = routes.map(item => item.id)
-        const routeList = routes
+        yield put({ type: 'updateRoutes' })
 
         // construct user data
         const {
@@ -115,6 +114,7 @@ export default {
           created_at,
           avatar_url,
         } = data.extra
+
         const user = {
           id,
           name,
@@ -127,14 +127,8 @@ export default {
           avatar: avatar_url,
         }
 
-        yield put({
-          type: 'updateState',
-          payload: {
-            user,
-            permissions,
-            routeList,
-          },
-        })
+        yield put({ type: 'updateState', payload: { user } })
+
         if (pathMatchRegexp(['/', '/login'], window.location.pathname)) {
           router.push({
             pathname: '/dashboard',
@@ -199,10 +193,80 @@ export default {
 
     *getProjectList({ payload }, { call, put }) {
       const { data, success } = yield call(queryProject)
+
       yield put({
         type: 'updateState',
         payload: {
           projects: data.projects,
+        },
+      })
+
+      // if has projects, create project related routes
+      if (data.projects && data.projects.length > 0) {
+        yield put({
+          type: 'appendProjectRoutes',
+          payload: { projects: data.projects },
+        })
+      }
+    },
+    *appendProjectRoutes({ payload }, { put }) {
+      const { projects } = payload
+      let routesToAppend = []
+      projects.map(p => {
+        let baseRoute = {
+          id: `10${p.id}`,
+          name: p.alias,
+          zh: {
+            name: p.alias,
+          },
+          icon: 'book',
+          route: `/project/${p.project}`,
+        }
+        routesToAppend.push(baseRoute)
+
+        let authRoute = {
+          id: `10${p.id}0`,
+          breadcrumbParentId: `10${p.id}`,
+          menuParentId: `10${p.id}`,
+          name: 'Auth & Users',
+          zh: {
+            name: 'Auth & Users',
+          },
+          icon: 'contacts',
+          route: `/project/${p.project}/auth`,
+        }
+        routesToAppend.push(authRoute)
+
+        let dbRoute = {
+          id: `10${p.id}1`,
+          breadcrumbParentId: `10${p.id}`,
+          menuParentId: `10${p.id}`,
+          name: 'Database',
+          zh: {
+            name: 'Database',
+          },
+          icon: 'database',
+          route: `/project/${p.project}/db`,
+        }
+        routesToAppend.push(dbRoute)
+      })
+
+      yield put({ type: 'updateRoutes', payload: { append: routesToAppend } })
+    },
+    *updateRoutes({ payload }, { put }) {
+      let routeList = routes
+      if (payload && payload.append) {
+        routeList = routeList.concat(payload.append)
+      }
+
+      let permissions = USER_PERMISSION.DEVELOPER
+      permissions.visit = routes.map(item => item.id)
+
+      yield put({
+        type: 'updateState',
+        payload: {
+          permissions,
+          routeList,
         },
       })
     },
