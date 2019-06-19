@@ -31,6 +31,7 @@ const bodyStyle = {
 @connect(({ app, dashboard, loading }) => ({
   avatar: app.user.avatar,
   username: app.user.username,
+  projects: app.projects,
   dashboard,
   loading,
 }))
@@ -106,7 +107,7 @@ class Dashboard extends PureComponent {
             <Col xl={6} lg={8} md={12}>
               <CreateProject />
             </Col>
-            <Projects />
+            {this.props.projects.length > 0 && <Projects />}
           </Row>
 
           <Row className={styles.section} gutter={24}>

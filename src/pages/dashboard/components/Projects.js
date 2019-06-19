@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'dva'
 import Link from 'umi/link'
+import _get from 'lodash/get'
 import moment from 'moment'
 import makeBlockie from 'ethereum-blockies-base64'
 import PropTypes from 'prop-types'
@@ -93,7 +94,8 @@ class Projects extends PureComponent {
             <div className={styles.id}># {p.id}</div>
             <div className={styles.info}>
               <Tag color="blue">
-                <Trans>Balance:</Trans> {toPTC(p.balance.advance_payment)} PTC
+                <Trans>Balance:</Trans>{' '}
+                {toPTC(_get(p, ['balance', 'advance_payment']))} PTC
               </Tag>
               <Button
                 onClick={() => this.confirmAmount(p.project)}

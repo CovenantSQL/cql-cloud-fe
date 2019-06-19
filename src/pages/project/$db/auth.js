@@ -16,34 +16,9 @@ import {
 import { Trans, withI18n } from '@lingui/react'
 import { Page } from 'components'
 import { OAuthTable, List, UpdateUser } from './auth_components'
+import { DEFAULT_OAUTH } from 'utils'
 import styles from './auth.less'
 
-const DEFAULT_OAUTH = [
-  {
-    provider: 'github',
-    config: {
-      enabled: false,
-      client_id: '',
-      client_secret: '',
-    },
-  },
-  {
-    provider: 'twitter',
-    config: {
-      enabled: false,
-      client_id: '',
-      client_secret: '',
-    },
-  },
-  {
-    provider: 'google',
-    config: {
-      enabled: false,
-      client_id: '',
-      client_secret: '',
-    },
-  },
-]
 @connect(({ projectDetail, loading }) => ({ projectDetail, loading }))
 class Auth extends PureComponent {
   state = {
@@ -83,7 +58,8 @@ class Auth extends PureComponent {
   }
   prepareOAuthTableData = () => {
     let data = []
-    const backend_oauth = _get(this.props.projectDetail, 'config.oauth', [])
+    const backend_oauth = _get(this.props.projectDetail, 'config.oauth') || []
+    console.log('//////////////////kj', backend_oauth)
     const oauth = DEFAULT_OAUTH.map(defaultConfig => {
       let index = backend_oauth.findIndex(
         config => config.provider === defaultConfig.provider
