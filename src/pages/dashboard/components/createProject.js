@@ -41,8 +41,8 @@ class CreateProject extends PureComponent {
         </div>
       ),
       okText: i18n.t`好的`,
-      onOk() {
-        local.createProject()
+      onOk: () => {
+        this.createProject()
       },
     })
   }
