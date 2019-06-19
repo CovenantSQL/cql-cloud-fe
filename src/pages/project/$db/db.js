@@ -46,10 +46,47 @@ class DatabaseDetail extends PureComponent {
     dispatch({ type: 'projectDetail/getProjectTables' })
   }
 
-  handleAddField = tableName => {
-    this.setState({
-      targetTableToAddField: tableName,
-      addFieldModalVisible: true,
+  handleMenuClick = (tableName, e) => {
+    if (e.key === '1') {
+      this.setState({
+        targetTableToAddField: tableName,
+        addFieldModalVisible: true,
+      })
+    } else if (e.key === '2') {
+      this.confirmDropTable(tableName)
+    }
+  }
+
+  confirmDropTable = async table => {
+    const { dispatch } = this.props
+
+    const yes = await Modal.confirm({
+      title: (
+        <div>
+          Are you sure to drop table: <Tag>{table}</Tag>
+        </div>
+      ),
+      content: (
+        <Trans>
+          DROP TABLE cannot be undone, please make sure your decision.
+        </Trans>
+      ),
+      okText: <Trans>Confirm Drop Table</Trans>,
+      okType: 'danger',
+      cancelText: <Trans>Cancel</Trans>,
+      onOk: async () => {
+        const success = await dispatch({
+          type: 'projectDetail/dropTable',
+          payload: { table },
+        })
+        if (success) {
+          this.getLatestTables()
+          message.success(`Successfully dropped table: ${table}`)
+        }
+      },
+      onCancel() {
+        console.log('Cancel drop')
+      },
     })
   }
 
@@ -70,8 +107,11 @@ class DatabaseDetail extends PureComponent {
         render: (text, record, idx) => {
           return (
             <DropOption
-              onMenuClick={e => this.handleAddField(name, record, e)}
-              menuOptions={[{ key: '1', name: `Add Field` }]}
+              onMenuClick={e => this.handleMenuClick(name, e, record)}
+              menuOptions={[
+                { key: '1', name: `Add Field` },
+                { key: '2', name: `Drop Table` },
+              ]}
             />
           )
         },

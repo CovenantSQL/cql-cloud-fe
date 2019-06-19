@@ -44,8 +44,8 @@ class Projects extends PureComponent {
         </div>
       ),
       okText: i18n.t`好的`,
-      onOk() {
-        local.topup(db)
+      onOk: () => {
+        this.topup(db)
       },
     })
   }
