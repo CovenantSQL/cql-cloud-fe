@@ -16,7 +16,7 @@ import {
 import { Trans, withI18n } from '@lingui/react'
 import { Page } from 'components'
 import { OAuthTable, List, UpdateUser } from './auth_components'
-import { DEFAULT_OAUTH } from 'utils'
+import { DEFAULT_OAUTH } from 'utils/constant'
 import styles from './auth.less'
 
 @connect(({ projectDetail, loading }) => ({ projectDetail, loading }))

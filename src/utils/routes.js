@@ -155,41 +155,6 @@ const routes = [
     route: '/chart/Recharts',
     menuParentId: '-1',
   },
-  // // mock project routes
-  // {
-  //   id: '101',
-  //   name: 'Project',
-  //   zh: {
-  //     name: 'Project',
-  //   },
-  //   icon: 'book',
-  //   route:
-  //     '/project/8f52f1d65dd25a070dcb6e27f53961d88ff78588b36ea31c41071ee5f2f6a058',
-  // },
-  // {
-  //   id: '1010',
-  //   breadcrumbParentId: '101',
-  //   menuParentId: '101',
-  //   name: 'Authentication',
-  //   zh: {
-  //     name: 'Authentication',
-  //   },
-  //   icon: 'contacts',
-  //   route:
-  //     '/project/8f52f1d65dd25a070dcb6e27f53961d88ff78588b36ea31c41071ee5f2f6a058/auth',
-  // },
-  // {
-  //   id: '1011',
-  //   breadcrumbParentId: '101',
-  //   menuParentId: '101',
-  //   name: 'Database',
-  //   zh: {
-  //     name: 'Database',
-  //   },
-  //   icon: 'database',
-  //   route:
-  //     '/project/8f52f1d65dd25a070dcb6e27f53961d88ff78588b36ea31c41071ee5f2f6a058/db',
-  // },
 ]
 
 export default routes
