@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import styles from './Loader.less'
 
+// temporiary disable fullscreen Loader
 const Loader = ({ spinning = true, fullScreen }) => {
   return (
     <div
+      style={{ display: 'none' }}
       className={classNames(styles.loader, {
         [styles.hidden]: !spinning,
         [styles.fullScreen]: fullScreen,
