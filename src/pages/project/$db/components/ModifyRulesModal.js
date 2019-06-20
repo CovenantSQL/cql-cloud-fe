@@ -3,8 +3,19 @@ import { connect } from 'dva'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import { withI18n, Trans } from '@lingui/react'
-import { Form, Modal, Select, Tag, Switch, message } from 'antd'
+import { Form, Modal, Select, Tag, Switch, message, notification } from 'antd'
+import CodeMirror from 'react-codemirror'
 import * as ENABLED_RULES from 'utils/rules'
+
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/monokai.css'
+
+const initCode = JSON.stringify(
+  ENABLED_RULES['PUBLIC_VIEW_PUBLIC_MODIFY_RULE'],
+  null,
+  2
+)
 
 @withI18n()
 @Form.create()
@@ -12,54 +23,70 @@ import * as ENABLED_RULES from 'utils/rules'
 class ModifyRulesModal extends React.Component {
   state = {
     proMode: false,
-    userEnteredRules: null,
+    rules: initCode,
   }
+
+  componentDidMount() {
+    const currentRules = this.getCurrentRules()
+    if (currentRules) {
+      this.setState({
+        rules: JSON.stringify(currentRules, null, 2),
+      })
+    }
+  }
+
   handleSubmit = e => {
     e.preventDefault()
-    const { i18n, dispatch, table } = this.props
+    const { dispatch, table } = this.props
+    const { proMode, rules } = this.state
 
-    this.props.form.validateFields(async (err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values)
-        const { rules_name } = values
-
-        const { success } = await dispatch({
-          type: 'projectDetail/modifyTableRules',
-          payload: {
-            table,
-            rules: ENABLED_RULES[rules_name],
-          },
+    if (proMode) {
+      try {
+        const rules = JSON.parse(this.state.rules)
+        this.callModifyAPI({ table, rules })
+      } catch (e) {
+        notification.error({
+          message: 'JSON Parse Error',
+          description: e.message,
+          duration: 10,
         })
-
-        if (success) {
-          this.props.close()
-          this.props.query()
-          message.success(i18n.t`Modify rules success`)
-        }
       }
-    })
+    } else {
+      this.props.form.validateFields(async (err, values) => {
+        if (!err) {
+          console.log('Received values of form: ', values)
+          const { rules_name } = values
+          const rules = ENABLED_RULES[rules_name]
 
-    this.props.form.resetFields()
+          this.callModifyAPI({ table, rules })
+        }
+      })
+
+      this.props.form.resetFields()
+    }
   }
 
-  _renderRules = () => {
+  callModifyAPI = async ({ table, rules }) => {
+    const { success } = await this.props.dispatch({
+      type: 'projectDetail/modifyTableRules',
+      payload: {
+        table,
+        rules,
+      },
+    })
+
+    if (success) {
+      this.props.close()
+      this.props.query()
+      message.success(this.props.i18n.t`Modify rules success`)
+    }
+  }
+
+  getCurrentRules = () => {
     const { table } = this.props
     const { tables } = this.props.projectDetail
 
-    return (
-      <div
-        style={{
-          maxHeight: '200px',
-          overflow: 'scroll',
-          background: '#eee',
-          borderRadius: '5px',
-          padding: '5px',
-          fontSize: '10px',
-        }}
-      >
-        <pre>{JSON.stringify(_get(tables, [table, 'rules']), null, 2)}</pre>
-      </div>
-    )
+    return _get(tables, [table, 'rules'])
   }
 
   getRuleOption = rule => {
@@ -75,6 +102,12 @@ class ModifyRulesModal extends React.Component {
       default:
         return '--'
     }
+  }
+
+  onCodeMirrorChange = v => {
+    this.setState({
+      rules: v,
+    })
   }
 
   render() {
@@ -103,31 +136,64 @@ class ModifyRulesModal extends React.Component {
         <div>
           <div style={{ textAlign: 'right' }}>
             Pro Mode:
-            <Switch defaultChecked={this.state.proMode} size="small" />
+            <Switch
+              onChange={checked => this.setState({ proMode: checked })}
+              defaultChecked={this.state.proMode}
+              size="small"
+            />
           </div>
-          <Form {...formItemLayout}>
-            <Form.Item label="Table Rule">
-              {getFieldDecorator('rules_name', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please select the target table rule',
-                  },
-                ],
-              })(
-                <Select placeholder="Select a table rule">
-                  {Object.keys(ENABLED_RULES).map(r => (
-                    <Select.Option value={r} key={r}>
-                      {this.getRuleOption(r)}
-                    </Select.Option>
-                  ))}
-                </Select>
-              )}
-            </Form.Item>
-          </Form>
+          {this.state.proMode ? (
+            <div style={{ margin: '10px 0' }}>
+              <CodeMirror
+                value={this.state.rules}
+                onChange={this.onCodeMirrorChange}
+                options={{
+                  lineNumbers: true,
+                  matchBrackets: true,
+                  autoCloseBrackets: true,
+                  mode: 'application/ld+json',
+                  lineWrapping: true,
+                  theme: 'monokai',
+                }}
+              />
+            </div>
+          ) : (
+            <Form {...formItemLayout}>
+              <Form.Item label="Table Rule">
+                {getFieldDecorator('rules_name', {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Please select the target table rule',
+                    },
+                  ],
+                })(
+                  <Select placeholder="Select a table rule">
+                    {Object.keys(ENABLED_RULES).map(r => (
+                      <Select.Option value={r} key={r}>
+                        {this.getRuleOption(r)}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                )}
+              </Form.Item>
+            </Form>
+          )}
           <div>
             Current Rules:
-            {this._renderRules()}
+            <div
+              style={{
+                maxHeight: '200px',
+                overflow: 'scroll',
+                background: '#eee',
+                borderRadius: '5px',
+                marginTop: '10px',
+                padding: '5px',
+                fontSize: '10px',
+              }}
+            >
+              <pre>{JSON.stringify(this.getCurrentRules(), null, 2)}</pre>
+            </div>
           </div>
         </div>
       </Modal>
