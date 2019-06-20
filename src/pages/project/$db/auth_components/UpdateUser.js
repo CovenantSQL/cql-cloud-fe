@@ -1,20 +1,11 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { withI18n, Trans } from '@lingui/react'
+import { Trans } from '@lingui/react'
 import { connect } from 'dva'
-import {
-  Modal,
-  Button,
-  Input,
-  InputNumber,
-  Form,
-  Select,
-  Tag,
-  message,
-} from 'antd'
+import { Modal, Button, Input, Form, Select, Tag, message } from 'antd'
+import { USER_STATES } from 'utils/constant'
 import styles from './UpdateUser.less'
 
-const USER_STATES = ['PreRegistered', 'SignedUp', 'Enabled', 'Disabled']
 @Form.create()
 @connect(({ projectDetail }) => ({ projectDetail }))
 class UpdateUser extends PureComponent {
@@ -31,7 +22,6 @@ class UpdateUser extends PureComponent {
       }
 
       console.log('Received values of form: ', values)
-      const provider = user.provider
       const payload = {
         // fields disable update
         id: user.id,
@@ -43,7 +33,7 @@ class UpdateUser extends PureComponent {
       }
 
       this.setState({ loading: true })
-      const { data, success } = await dispatch({
+      const { success } = await dispatch({
         type: 'projectDetail/updateUser',
         payload,
       })

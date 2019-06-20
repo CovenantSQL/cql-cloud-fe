@@ -52,8 +52,7 @@ const routes = [
     'pt-br': {
       name: 'Detalhes do usuário',
     },
-    route: '/user/:id',
-    menuParentId: '-1',
+    route: '/project/:db/user/:id',
   },
   {
     id: '3',
@@ -85,7 +84,6 @@ const routes = [
   {
     id: '45',
     breadcrumbParentId: '4',
-    menuParentId: '4',
     name: 'Editor',
     zh: {
       name: 'Editor',
@@ -113,7 +111,6 @@ const routes = [
   {
     id: '51',
     breadcrumbParentId: '5',
-    menuParentId: '5',
     name: 'ECharts',
     zh: {
       name: 'ECharts',
@@ -128,7 +125,6 @@ const routes = [
   {
     id: '52',
     breadcrumbParentId: '5',
-    menuParentId: '5',
     name: 'HighCharts',
     zh: {
       name: 'HighCharts',
@@ -143,7 +139,6 @@ const routes = [
   {
     id: '53',
     breadcrumbParentId: '5',
-    menuParentId: '5',
     name: 'Rechartst',
     zh: {
       name: 'Rechartst',
@@ -155,41 +150,6 @@ const routes = [
     route: '/chart/Recharts',
     menuParentId: '-1',
   },
-  // // mock project routes
-  // {
-  //   id: '101',
-  //   name: 'Project',
-  //   zh: {
-  //     name: 'Project',
-  //   },
-  //   icon: 'book',
-  //   route:
-  //     '/project/8f52f1d65dd25a070dcb6e27f53961d88ff78588b36ea31c41071ee5f2f6a058',
-  // },
-  // {
-  //   id: '1010',
-  //   breadcrumbParentId: '101',
-  //   menuParentId: '101',
-  //   name: 'Authentication',
-  //   zh: {
-  //     name: 'Authentication',
-  //   },
-  //   icon: 'contacts',
-  //   route:
-  //     '/project/8f52f1d65dd25a070dcb6e27f53961d88ff78588b36ea31c41071ee5f2f6a058/auth',
-  // },
-  // {
-  //   id: '1011',
-  //   breadcrumbParentId: '101',
-  //   menuParentId: '101',
-  //   name: 'Database',
-  //   zh: {
-  //     name: 'Database',
-  //   },
-  //   icon: 'database',
-  //   route:
-  //     '/project/8f52f1d65dd25a070dcb6e27f53961d88ff78588b36ea31c41071ee5f2f6a058/db',
-  // },
 ]
 
 export default routes

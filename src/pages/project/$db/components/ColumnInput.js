@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { withI18n, Trans } from '@lingui/react'
 import { Form, Modal, Input, Icon, Button, Select } from 'antd'
-import { DATA_TYPES } from 'utils'
+import { DATA_TYPES } from 'utils/constant'
 
 class ColumnInput extends React.Component {
   constructor(props) {

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Page } from 'components'
 // import styles from './index.less'
@@ -13,7 +13,10 @@ class Auth extends PureComponent {
     return (
       <Page inner>
         <div>
-          <pre>{JSON.stringify(config, null, 2)}</pre>
+          🚧 WIP 🚧
+          <div className="debug">
+            <pre>{JSON.stringify(config, null, 2)}</pre>
+          </div>
         </div>
       </Page>
     )

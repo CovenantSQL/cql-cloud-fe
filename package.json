@@ -64,6 +64,7 @@
     "mockjs": "^1.0.1-beta3",
     "module": "^1.2.5",
     "prettier": "^1.16.0",
+    "react-codemirror": "^1.0.0",
     "stylelint": "^9.10.0",
     "stylelint-config-prettier": "^5.0.0",
     "stylelint-config-standard": "^18.2.0",

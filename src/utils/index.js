@@ -11,34 +11,6 @@ export { Color } from './theme'
 export const { defaultLanguage } = i18n
 export const languages = i18n.languages.map(item => item.key)
 
-export const DATA_TYPES = ['INTEGER', 'TEXT', 'REAL', 'BLOB']
-export const DEFAULT_OAUTH = [
-  {
-    provider: 'github',
-    config: {
-      enabled: false,
-      client_id: '',
-      client_secret: '',
-    },
-  },
-  {
-    provider: 'twitter',
-    config: {
-      enabled: false,
-      client_id: '',
-      client_secret: '',
-    },
-  },
-  {
-    provider: 'google',
-    config: {
-      enabled: false,
-      client_id: '',
-      client_secret: '',
-    },
-  },
-]
-
 /**
  * Query objects that specify keys and values in an array where all values are objects.
  * @param   {array}         array   An array where all values are objects, like [{key:1},{key:2}].

@@ -3,7 +3,7 @@ import { connect } from 'dva'
 import PropTypes from 'prop-types'
 import { withI18n, Trans } from '@lingui/react'
 import { Form, Modal, Input, Tag, message } from 'antd'
-import { DATA_TYPES } from 'utils'
+import { DATA_TYPES } from 'utils/constant'
 import ColumnInput from './ColumnInput'
 
 @withI18n()

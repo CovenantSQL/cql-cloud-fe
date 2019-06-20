@@ -48,7 +48,7 @@ class GithubCallback extends PureComponent {
       <>
         <div className={styles.form}>
           <Icon type="loading" className={styles.loading} />
-          <h3>Github login...</h3>
+          <h3>Github Login...</h3>
         </div>
         <div className={styles.footer}>
           <GlobalFooter links={footerLinks} copyright={config.copyright} />
