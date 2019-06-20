@@ -53,7 +53,11 @@ class Login extends PureComponent {
                 type="primary"
                 onClick={this.handleGithubLogin}
                 loading={loading.effects.login}
+                className={styles.githubBtn}
               >
+                <span className={styles.icon}>
+                  <Icon type="github" />
+                </span>
                 <Trans>Sign in with Github</Trans>
               </Button>
             </Row>

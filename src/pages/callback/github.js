@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Icon } from 'antd'
 import qs from 'query-string'
@@ -45,12 +45,15 @@ class GithubCallback extends PureComponent {
     }
 
     return (
-      <Fragment>
-        <div className={styles.form}>Github login...</div>
+      <>
+        <div className={styles.form}>
+          <Icon type="loading" className={styles.loading} />
+          <h3>Github login...</h3>
+        </div>
         <div className={styles.footer}>
           <GlobalFooter links={footerLinks} copyright={config.copyright} />
         </div>
-      </Fragment>
+      </>
     )
   }
 }

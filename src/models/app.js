@@ -194,19 +194,21 @@ export default {
     *getProjectList({ payload }, { call, put }) {
       const { data, success } = yield call(queryProject)
 
-      yield put({
-        type: 'updateState',
-        payload: {
-          projects: data.projects,
-        },
-      })
-
-      // if has projects, create project related routes
-      if (data.projects && data.projects.length > 0) {
+      if (success) {
         yield put({
-          type: 'appendProjectRoutes',
-          payload: { projects: data.projects },
+          type: 'updateState',
+          payload: {
+            projects: data.projects,
+          },
         })
+
+        // if has projects, create project related routes
+        if (data.projects && data.projects.length > 0) {
+          yield put({
+            type: 'appendProjectRoutes',
+            payload: { projects: data.projects },
+          })
+        }
       }
     },
     *appendProjectRoutes({ payload }, { put }) {

@@ -1,4 +1,6 @@
 @import '~themes/vars';
+@githubColor: #333;
+@githubHoverColor: #555;
 
 .form {
   position: absolute;
@@ -9,6 +11,23 @@
   height: 320px;
   padding: 36px;
   box-shadow: 0 0 100px rgba(0, 0, 0, 0.08);
+
+  .githubBtn {
+    height: 38px;
+    border-radius: 5px;
+    font-size: 14px;
+    .icon {
+      margin-right: 10px;
+      font-size: 16px;
+    }
+
+    background-color: @githubColor;
+    border-color: @githubColor;
+    &:hover {
+      background-color: @githubHoverColor;
+      border-color: @githubHoverColor;
+    }
+  }
 
   button {
     width: 100%;
