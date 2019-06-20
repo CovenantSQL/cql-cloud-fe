@@ -7,14 +7,15 @@ import _zipObject from 'lodash/zipObject'
 import { Modal, Empty, Table, Tag, Icon, message } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
 import { Page, DropOption } from 'components'
-import { AddTable, AddFieldModal } from './components'
+import { AddTable, AddFieldModal, ModifyRulesModal } from './components'
 import styles from './db.less'
 
 const initState = () =>
   Object.assign(
     {},
     {
-      targetTableToAddField: '',
+      targetTable: '',
+      modifyRulesModalVisible: false,
       addFieldModalVisible: false,
     }
   )
@@ -46,9 +47,14 @@ class DatabaseDetail extends PureComponent {
   }
 
   handleMenuClick = (tableName, e) => {
-    if (e.key === '1') {
+    if (e.key === '0') {
       this.setState({
-        targetTableToAddField: tableName,
+        targetTable: tableName,
+        modifyRulesModalVisible: true,
+      })
+    } else if (e.key === '1') {
+      this.setState({
+        targetTable: tableName,
         addFieldModalVisible: true,
       })
     } else if (e.key === '2') {
@@ -159,7 +165,7 @@ class DatabaseDetail extends PureComponent {
     }
   }
 
-  closeAddFieldModal = () => this.setState(initState())
+  closeModal = () => this.setState(initState())
 
   render() {
     const { projectDetail } = this.props
@@ -205,10 +211,18 @@ class DatabaseDetail extends PureComponent {
         </div>
         {this.state.addFieldModalVisible && (
           <AddFieldModal
-            table={this.state.targetTableToAddField}
+            table={this.state.targetTable}
             visible={this.state.addFieldModalVisible}
             query={this.getLatestTables}
-            close={this.closeAddFieldModal}
+            close={this.closeModal}
+          />
+        )}
+        {this.state.modifyRulesModalVisible && (
+          <ModifyRulesModal
+            table={this.state.targetTable}
+            visible={this.state.modifyRulesModalVisible}
+            query={this.getLatestTables}
+            close={this.closeModal}
           />
         )}
         <div className={styles.create}>
