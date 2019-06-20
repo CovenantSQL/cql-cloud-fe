@@ -52,8 +52,7 @@ const routes = [
     'pt-br': {
       name: 'Detalhes do usuário',
     },
-    route: '/user/:id',
-    menuParentId: '-1',
+    route: '/project/:db/user/:id',
   },
   {
     id: '3',
@@ -85,7 +84,6 @@ const routes = [
   {
     id: '45',
     breadcrumbParentId: '4',
-    menuParentId: '4',
     name: 'Editor',
     zh: {
       name: 'Editor',
@@ -113,7 +111,6 @@ const routes = [
   {
     id: '51',
     breadcrumbParentId: '5',
-    menuParentId: '5',
     name: 'ECharts',
     zh: {
       name: 'ECharts',
@@ -128,7 +125,6 @@ const routes = [
   {
     id: '52',
     breadcrumbParentId: '5',
-    menuParentId: '5',
     name: 'HighCharts',
     zh: {
       name: 'HighCharts',
@@ -143,7 +139,6 @@ const routes = [
   {
     id: '53',
     breadcrumbParentId: '5',
-    menuParentId: '5',
     name: 'Rechartst',
     zh: {
       name: 'Rechartst',

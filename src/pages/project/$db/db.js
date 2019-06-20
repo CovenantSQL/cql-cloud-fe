@@ -4,13 +4,12 @@ import { connect } from 'dva'
 import moment from 'moment'
 import _get from 'lodash/get'
 import _zipObject from 'lodash/zipObject'
-import { Modal, Empty, Table, Tag, message } from 'antd'
+import { Modal, Empty, Table, Tag, Icon, message } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
 import { Page, DropOption } from 'components'
 import { AddTable, AddFieldModal } from './components'
 import styles from './db.less'
 
-const { Column } = Table
 const initState = () =>
   Object.assign(
     {},
@@ -60,7 +59,7 @@ class DatabaseDetail extends PureComponent {
   confirmDropTable = async table => {
     const { dispatch } = this.props
 
-    const yes = await Modal.confirm({
+    Modal.confirm({
       title: (
         <div>
           Are you sure to drop table: <Tag>{table}</Tag>
@@ -109,8 +108,31 @@ class DatabaseDetail extends PureComponent {
             <DropOption
               onMenuClick={e => this.handleMenuClick(name, e, record)}
               menuOptions={[
-                { key: '1', name: `Add Field` },
-                { key: '2', name: `Drop Table` },
+                {
+                  key: '0',
+                  name: (
+                    <span>
+                      <Icon type="security-scan" theme="twoTone" /> Set Table
+                      Rules
+                    </span>
+                  ),
+                },
+                {
+                  key: '1',
+                  name: (
+                    <span>
+                      <Icon type="file-add" theme="twoTone" /> Add Field
+                    </span>
+                  ),
+                },
+                {
+                  key: '2',
+                  name: (
+                    <span>
+                      <Icon type="delete" theme="twoTone" /> Drop Table
+                    </span>
+                  ),
+                },
               ]}
             />
           )
@@ -195,7 +217,7 @@ class DatabaseDetail extends PureComponent {
           </div>
           <AddTable createTable={this.createTable} />
         </div>
-        <div className={styles.props}>
+        <div className="debug">
           <pre>{JSON.stringify(tables, null, 2)}</pre>
         </div>
       </Page>

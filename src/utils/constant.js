@@ -22,6 +22,10 @@ export const CANCEL_REQUEST_MESSAGE = 'cancel request'
 // Table column data type (sqlite)
 export const DATA_TYPES = ['INTEGER', 'TEXT', 'REAL', 'BLOB']
 
+// Project user states
+export const USER_STATES = ['Enabled', 'Disabled']
+// export const USER_STATES = ['PreRegistered', 'SignedUp', 'Enabled', 'Disabled']
+
 // Enabled oauth
 export const DEFAULT_OAUTH = [
   {

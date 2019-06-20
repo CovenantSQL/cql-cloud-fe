@@ -2,17 +2,6 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import { connect } from 'dva'
-import {
-  Button,
-  Icon,
-  Modal,
-  Tag,
-  InputNumber,
-  Table,
-  Input,
-  Popconfirm,
-  Form,
-} from 'antd'
 import { Trans, withI18n } from '@lingui/react'
 import { Page } from 'components'
 import { OAuthTable, List, UpdateUser } from './auth_components'
@@ -71,7 +60,7 @@ class Auth extends PureComponent {
     })
 
     if (oauth) {
-      oauth.map((d, idx) => {
+      oauth.forEach((d, idx) => {
         data.push({
           key: idx.toString(),
           provider: d.provider,
@@ -88,7 +77,7 @@ class Auth extends PureComponent {
     this.setState({ updateUserVisible: false, userToUpdate: {} })
   render() {
     const { projectDetail, loading } = this.props
-    const { config, userList, pagination } = projectDetail
+    const { userList, pagination } = projectDetail
 
     const authTableProps = {
       loading: loading.effects['projectDetail/query'],
@@ -138,7 +127,7 @@ class Auth extends PureComponent {
           />
         </section>
 
-        <div className={styles.props}>
+        <div className="debug">
           <pre>{JSON.stringify(userList, null, 2)}</pre>
         </div>
       </Page>

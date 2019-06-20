@@ -243,7 +243,9 @@ class RequestPage extends React.Component {
               </Row>
             </div>
 
-            <div className={styles.result}>{result}</div>
+            <div className={styles.result}>
+              <pre>{JSON.stringify(JSON.parse(result), null, 2)}</pre>
+            </div>
           </Col>
         </Row>
       </Page>
