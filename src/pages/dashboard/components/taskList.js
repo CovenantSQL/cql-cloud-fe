@@ -71,17 +71,24 @@ class TaskList extends PureComponent {
       {
         title: 'Created',
         dataIndex: 'created',
-        render: text => moment(text).format('MM-DD HH:mm:ss'),
+        render: text => {
+          let d = new Date(text)
+          return moment(d).format('MM-DD HH:mm:ss')
+        },
       },
       {
         title: 'Finished',
         dataIndex: 'finished',
-        render: text =>
-          text
-            ? moment(text)
-                .startOf('second')
-                .fromNow()
-            : '-',
+        render: text => {
+          if (text) {
+            let d = new Date(text)
+            return moment(d)
+              .startOf('second')
+              .fromNow()
+          } else {
+            return '-'
+          }
+        },
       },
       {
         title: 'Details',
