@@ -5,6 +5,8 @@ module.exports = {
   apiEndpoint:
     process.env.NODE_ENV === 'development' ? '' : '//stg-api.covenantsql.io',
   apiPrefix: process.env.NODE_ENV === 'development' ? '/api/v1' : '/v3',
+  loginClientID:
+    process.env.NODE_ENV === 'development' ? '' : 'Iv1.3d8508c548b90714',
   fixedHeader: true, // sticky primary layout header
 
   /* Layout configuration, specify which layout to use for route. */

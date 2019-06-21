@@ -14,7 +14,10 @@ import styles from './index.less'
 class Login extends PureComponent {
   handleGithubLogin = () => {
     const { dispatch } = this.props
-    dispatch({ type: 'login/loginGithub', payload: {} })
+    dispatch({
+      type: 'login/loginGithub',
+      payload: { client_id: config.loginClientID },
+    })
   }
 
   render() {
