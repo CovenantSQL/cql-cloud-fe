@@ -7,8 +7,8 @@ import qs from 'qs'
 import store from 'store'
 import config from 'utils/config'
 
-const { CancelToken } = axios
-window.cancelRequest = new Map()
+// const { CancelToken } = axios
+// window.cancelRequest = new Map()
 
 export default function request(options) {
   let { data, url, method = 'get' } = options
@@ -40,12 +40,12 @@ export default function request(options) {
       ? `${url}${isEmpty(cloneData) ? '' : '?'}${qs.stringify(cloneData)}`
       : url
 
-  options.cancelToken = new CancelToken(cancel => {
-    window.cancelRequest.set(Symbol(Date.now()), {
-      pathname: window.location.pathname,
-      cancel,
-    })
-  })
+  // options.cancelToken = new CancelToken(cancel => {
+  //   window.cancelRequest.set(Symbol(Date.now()), {
+  //     pathname: window.location.pathname,
+  //     cancel,
+  //   })
+  // })
 
   // Add X-CQL-Token for authorization
   const token = store.get('token')
