@@ -18,6 +18,7 @@ CovenantSQL Cloud front-end portal, wallet managements, PTC faucet, database man
 ![Travis (.org)](https://img.shields.io/travis/foreseaz/cql-cloud-fe.svg)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/foreseaz/cql-cloud-fe/pulls)
 [![Gitter](https://badges.gitter.im/CovenantSQL/CovenantSQL.svg)](https://gitter.im/CovenantSQL/CovenantSQL?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ce7d2cc1-0004-45bd-85b9-325fb1f49cfb/deploy-status)](https://app.netlify.com/sites/cql-cloud/deploys)
 
 </div>
 
@@ -77,3 +78,9 @@ CovenantSQL Cloud Portal is developed on top of [antd-admin](https://github.com/
 - [commitizen](https://github.com/commitizen/cz-cli)
 - [Ant Design Pro](https://github.com/ant-design/ant-design-pro)
 - ...
+
+<div align="center">
+   <a href="https://www.netlify.com">
+    <img src="https://www.netlify.com/img/global/badges/netlify-color-bg.svg"/>
+  </a>
+</div>
