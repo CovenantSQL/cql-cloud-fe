@@ -7,7 +7,7 @@ import { message } from 'antd'
 import { ROLE_TYPE } from 'utils/constant'
 import { queryLayout, pathMatchRegexp } from 'utils'
 import { CANCEL_REQUEST_MESSAGE, USER_PERMISSION } from 'utils/constant'
-import { find } from 'lodash'
+import { find, unionBy } from 'lodash'
 import routes from 'utils/routes'
 import api from 'api'
 import config from 'config'
@@ -36,15 +36,7 @@ export default {
     permissions: {
       visit: [],
     },
-    routeList: [
-      {
-        id: '1',
-        icon: 'laptop',
-        name: 'Dashboard',
-        zhName: '仪表盘',
-        router: '/dashboard',
-      },
-    ],
+    routeList: routes,
     locationPathname: '',
     locationQuery: {},
     notifications: [
@@ -255,10 +247,12 @@ export default {
 
       yield put({ type: 'updateRoutes', payload: { append: routesToAppend } })
     },
-    *updateRoutes({ payload }, { put }) {
-      let routeList = routes
+    *updateRoutes({ payload }, { put, select }) {
+      const _app = yield select(_ => _.app)
+      let routeList = _app.routeList
+
       if (payload && payload.append) {
-        routeList = routeList.concat(payload.append)
+        routeList = unionBy(routeList, payload.append, 'id')
       }
 
       let permissions = USER_PERMISSION.DEVELOPER
