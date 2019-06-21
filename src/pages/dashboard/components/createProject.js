@@ -5,7 +5,7 @@ import { Card, Icon, Modal, Tag, InputNumber } from 'antd'
 import { Trans, withI18n } from '@lingui/react'
 
 import { Color, toPTC } from 'utils'
-import styles from './CreateProject.less'
+import styles from './createProject.less'
 
 @withI18n()
 @connect(({ loading, dashboard }) => ({ loading, dashboard }))

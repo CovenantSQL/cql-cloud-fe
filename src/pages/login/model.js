@@ -26,8 +26,8 @@ export default {
         throw data
       }
     },
-    *loginGithub({}, { put, call, select }) {
-      const data = yield call(queryGithubOAuth)
+    *loginGithub({ payload }, { put, call, select }) {
+      const data = yield call(queryGithubOAuth, payload)
       const redirectUrl = get(data, 'data.url')
       if (redirectUrl) {
         window.location.href = redirectUrl
