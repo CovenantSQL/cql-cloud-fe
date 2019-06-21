@@ -16,7 +16,7 @@ const {
   queryAccount,
   queryRouteList,
   logoutUser,
-  queryUserInfo,
+  // queryUserInfo,
   queryCQLUserInfo,
   queryProject,
 } = api

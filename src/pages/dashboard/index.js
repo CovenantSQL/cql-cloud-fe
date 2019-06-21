@@ -6,19 +6,7 @@ import { Trans, withI18n } from '@lingui/react'
 import { Color } from 'utils'
 import { Page, ScrollBar } from 'components'
 import ScanSVG from './components/covenantscan.svg'
-import {
-  // NumberCard,
-  Quote,
-  // Sales,
-  Weather,
-  RecentSales,
-  Comments,
-  Completed,
-  Browser,
-  Cpu,
-  User,
-} from './components_bck'
-import { GetPTC, CreateProject, TaskList, Projects } from './components'
+import { User, GetPTC, CreateProject, TaskList, Projects } from './components'
 import styles from './index.less'
 
 const bodyStyle = {
@@ -29,35 +17,16 @@ const bodyStyle = {
 }
 
 @connect(({ app, dashboard, loading }) => ({
-  avatar: app.user.avatar,
-  username: app.user.username,
+  user: app.user,
   projects: app.projects,
+  mainwallet: app.mainwallet,
   dashboard,
   loading,
 }))
 class Dashboard extends PureComponent {
-  state = {
-    show: false,
-  }
   render() {
-    const { avatar, username, dashboard, loading } = this.props
-    const {
-      tasks,
-      weather,
-      sales,
-      quote,
-      numbers,
-      recentSales,
-      comments,
-      completed,
-      browser,
-      cpu,
-      user,
-    } = dashboard
-
-    const numberCards = numbers.map((item, key) => (
-      <Col key={key} lg={6} md={12} />
-    ))
+    const { user, dashboard, loading } = this.props
+    const { tasks } = dashboard
 
     return (
       <Page className={styles.dashboard}>
@@ -67,10 +36,7 @@ class Dashboard extends PureComponent {
               <Trans>Utilities</Trans>
             </div>
             <Col lg={6} md={6}>
-              <GetPTC
-                {...weather}
-                loading={loading.effects['dashboard/queryWeather']}
-              />
+              <GetPTC />
             </Col>
             <Col lg={6} md={6}>
               <Card
@@ -114,6 +80,7 @@ class Dashboard extends PureComponent {
             <div className={styles.sectionTitle}>
               <Trans>Tasks</Trans>
             </div>
+
             <Col lg={16} md={16} sm={24}>
               <Card
                 title="All Tasks"
@@ -125,81 +92,20 @@ class Dashboard extends PureComponent {
                 <TaskList data={tasks} />
               </Card>
             </Col>
-          </Row>
 
-          <div style={{ float: 'right' }}>
-            备用
-            <Switch
-              size="small"
-              onChange={checked => {
-                this.setState({ show: checked })
-              }}
-            />
-          </div>
-
-          <div style={{ display: this.state.show ? 'inherit' : 'none' }}>
-            <Col lg={6} md={24}>
-              <Row gutter={24}>
-                <Col lg={24} md={12}>
-                  <Card
-                    bordered={false}
-                    className={styles.quote}
-                    bodyStyle={{
-                      padding: 0,
-                      height: 204,
-                      background: Color.peach,
-                    }}
-                  >
-                    <ScrollBar>
-                      <Quote {...quote} />
-                    </ScrollBar>
-                  </Card>
-                </Col>
-              </Row>
-            </Col>
-            <Col lg={12} md={24}>
-              <Card bordered={false} {...bodyStyle}>
-                <RecentSales data={recentSales} />
-              </Card>
-            </Col>
-            <Col lg={12} md={24}>
-              <Card bordered={false} {...bodyStyle}>
-                <ScrollBar>
-                  <Comments data={comments} />
-                </ScrollBar>
-              </Card>
-            </Col>
-            <Col lg={24} md={24}>
-              <Card
-                bordered={false}
-                bodyStyle={{
-                  padding: '24px 36px 24px 0',
-                }}
-              >
-                <Completed data={completed} />
-              </Card>
-            </Col>
-            <Col lg={8} md={24}>
-              <Card bordered={false} {...bodyStyle}>
-                <Browser data={browser} />
-              </Card>
-            </Col>
-            <Col lg={8} md={24}>
-              <Card bordered={false} {...bodyStyle}>
-                <ScrollBar>
-                  <Cpu {...cpu} />
-                </ScrollBar>
-              </Card>
-            </Col>
             <Col lg={8} md={24}>
               <Card
                 bordered={false}
                 bodyStyle={{ ...bodyStyle.bodyStyle, padding: 0 }}
               >
-                <User {...user} avatar={avatar} username={username} />
+                <User
+                  {...user}
+                  projectNum={this.props.projects.length}
+                  ptc={this.props.mainwallet.balance}
+                />
               </Card>
             </Col>
-          </div>
+          </Row>
         </Row>
       </Page>
     )

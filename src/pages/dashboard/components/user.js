@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, Avatar } from 'antd'
 import CountUp from 'react-countup'
-import { Color } from 'utils'
+import Link from 'umi/link'
+import { Color, toPTC } from 'utils'
 import styles from './user.less'
 
 const countUpProps = {
@@ -13,7 +14,7 @@ const countUpProps = {
   separator: ',',
 }
 
-function User({ avatar, username, sales = 0, sold = 0 }) {
+function User({ avatar, username, projectNum = 0, ptc = 0 }) {
   return (
     <div className={styles.user}>
       <div className={styles.header}>
@@ -24,22 +25,29 @@ function User({ avatar, username, sales = 0, sold = 0 }) {
       </div>
       <div className={styles.number}>
         <div className={styles.item}>
-          <p>EARNING SALES</p>
+          <p># Projects</p>
           <p style={{ color: Color.green }}>
-            <CountUp end={sales} prefix="$" {...countUpProps} />
+            <CountUp end={projectNum} prefix="" {...countUpProps} />
           </p>
         </div>
         <div className={styles.item}>
-          <p>ITEM SOLD</p>
+          <p>Current Wallet PTC</p>
           <p style={{ color: Color.blue }}>
-            <CountUp end={sold} {...countUpProps} />
+            <CountUp
+              end={toPTC(ptc)}
+              suffix=" PTC"
+              {...countUpProps}
+              decimals={2}
+            />
           </p>
         </div>
       </div>
       <div className={styles.footer}>
-        <Button type="ghost" size="large">
-          View Profile
-        </Button>
+        <Link to="/wallets">
+          <Button type="ghost" size="large">
+            Change Wallet
+          </Button>
+        </Link>
       </div>
     </div>
   )
