@@ -100,6 +100,7 @@ class TaskList extends PureComponent {
           <Button
             shape="circle"
             icon="profile"
+            size="small"
             onClick={() => this.detailClickHandler(id)}
           />
         ),

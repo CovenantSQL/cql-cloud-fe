@@ -190,7 +190,7 @@ export default {
         yield put({
           type: 'updateState',
           payload: {
-            projects: data.projects,
+            projects: data.projects || [],
           },
         })
 
