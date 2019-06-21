@@ -1,6 +1,6 @@
 
 <p align="center">
-  <a href="http://github.com/foreseaz/cql-cloud-fe">
+  <a href="http://github.com/CovenantSQL/cql-cloud-fe">
     <img alt="Covenant Cloud" height="64" src="./docs/_media/logo.svg">
   </a>
 </p>
@@ -15,27 +15,28 @@ CovenantSQL Cloud front-end portal, wallet managements, PTC faucet, database man
 [![antd](https://img.shields.io/badge/antd-^3.10.0-blue.svg?style=flat-square)](https://github.com/ant-design/ant-design)
 [![umi](https://img.shields.io/badge/umi-^2.2.1-orange.svg?style=flat-square)](https://github.com/umijs/umi)
 [![MIT](https://img.shields.io/dub/l/vibe-d.svg?style=flat-square)](http://opensource.org/licenses/MIT)
-![Travis (.org)](https://img.shields.io/travis/foreseaz/cql-cloud-fe.svg)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/foreseaz/cql-cloud-fe/pulls)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/CovenantSQL/cql-cloud-fe/pulls)
 [![Gitter](https://badges.gitter.im/CovenantSQL/CovenantSQL.svg)](https://gitter.im/CovenantSQL/CovenantSQL?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/ce7d2cc1-0004-45bd-85b9-325fb1f49cfb/deploy-status)](https://app.netlify.com/sites/cql-cloud/deploys)
+
+![](./docs/_media/dashboard_screenshot.png)
 
 </div>
 
 ## Features
 
-- Internationalization, extracting translation fields from source code, loading language packs on demand
-- Dynamic permissions, different permissions for different menus
-- Elegant and beautiful, Ant Design system
-- Mock data, local data debugging
-
+- Create, downlaod, upload CovenantSQL wallets, get PTC from faucet
+- Create project and database, top-up projects
+- One-click OAuth integration in projects
+- Create tables and add fields to database, set table rules
+- CLQ cloud database empower your SPA into a full dynamic App
 
 ## Usage
 
 1. Clone project code.
 
 ```bash
-git clone https://github.com/foreseaz/cql-cloud-fe.git my-project
+git clone https://github.com/CovenantSQL/cql-cloud-fe.git my-project
 cd my-project
 ```
 
@@ -60,7 +61,7 @@ npm run start
 4. After the startup is complete, open a browser and visit [http://localhost:7000](http://localhost:7000), If you need to change the startup port, you can configure it in the `.env` file.
 
 
-> More instructions at [documentation](https://doc.cql-cloud-fe.foreseaz.com)。
+> [documentation]() is working in progress
 
 
 ## Browsers support
