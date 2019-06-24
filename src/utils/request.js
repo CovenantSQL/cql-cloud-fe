@@ -19,6 +19,7 @@ export default function request(options) {
     const urlMatch = url.match(/[a-zA-z]+:\/\/[^/]*/)
     if (urlMatch) {
       ;[domain] = urlMatch
+      console.log('...................', domain, urlMatch)
       url = url.slice(domain.length)
     }
 

@@ -243,6 +243,19 @@ export default {
           route: `/project/${p.project}/db`,
         }
         routesToAppend.push(dbRoute)
+
+        let reqRoute = {
+          id: `10${p.id}2`,
+          breadcrumbParentId: `10${p.id}`,
+          menuParentId: `10${p.id}`,
+          name: 'Request',
+          zh: {
+            name: 'Request',
+          },
+          icon: 'api',
+          route: `/project/${p.project}/request`,
+        }
+        routesToAppend.push(reqRoute)
       })
 
       yield put({ type: 'updateRoutes', payload: { append: routesToAppend } })
