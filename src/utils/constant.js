@@ -53,3 +53,12 @@ export const DEFAULT_OAUTH = [
     },
   },
 ]
+
+export const CLIENT_API = {
+  userinfo: '/userinfo',
+  find: '/data/:table/find',
+  count: '/data/:table/count',
+  insert: 'POST /data/:table/insert',
+  update: 'POST /data/:table/update',
+  remove: 'POST /data/:table/remove',
+}

@@ -32,7 +32,7 @@ export default function request(options) {
     }
     url = domain + url
   } catch (e) {
-    message.error(e.message)
+    console.error(e.message)
   }
 
   options.url =
