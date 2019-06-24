@@ -19,7 +19,6 @@ export default function request(options) {
     const urlMatch = url.match(/[a-zA-z]+:\/\/[^/]*/)
     if (urlMatch) {
       ;[domain] = urlMatch
-      console.log('...................', domain, urlMatch)
       url = url.slice(domain.length)
     }
 
@@ -33,7 +32,7 @@ export default function request(options) {
     }
     url = domain + url
   } catch (e) {
-    message.error(e.message)
+    console.error(e.message)
   }
 
   options.url =

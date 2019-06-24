@@ -13,6 +13,7 @@ import {
   Form,
   Icon,
   Checkbox,
+  notification,
 } from 'antd'
 import classnames from 'classnames'
 import CodeMirror from 'react-codemirror'
@@ -67,20 +68,19 @@ class RequestPage extends React.Component {
       keys: [1],
       result: null,
       visible: true,
+      code: '',
     }
   }
 
   constructAPIDomain = () => {
     const alias = _get(this.props.config, ['misc', 'alias'], '')
-    console.log('...l..', this.props.config)
     return '//' + alias + '.stg-api.covenantsql.io:15153'
   }
 
   constructTableSelection = () => {
-    const tables = _get(this.props.config, ['misc', 'tables'], [])
-    return tables.map(t => ({}))
+    const tables = _get(this.props.config, ['tables'], [])
     return (
-      <Select placeholder="Please select a country">
+      <Select placeholder="Select a table" style={{ minWidth: '160px' }}>
         {tables.map(t => {
           if (!t.config.is_deleted) {
             return (
@@ -103,26 +103,47 @@ class RequestPage extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const params = {}
-        console.log('.///', values)
-        if (values.key) {
-          values.key.forEach((item, index) => {
-            if (item && values.check[index]) {
-              params[item] = values.value[index]
-            }
-          })
 
-          if (values.value.data) {
-            console.log('parsing, ', values.value.data)
-            params.data = JSON.parse(values.value.data)
+        if (this.state.url.indexOf(':table') > -1) {
+          const { table_value, data_value } = values
+          params.table = table_value
+          try {
+            let d = data_value.replace(/[\n\r]+/g, '')
+            params.data = data_value && JSON.parse(d)
+          } catch (e) {
+            notification.error({
+              message: 'Table change `data` JSON parse error',
+              duration: 10,
+            })
+            return
+          }
+        } else {
+          if (values.key) {
+            values.key.forEach((item, index) => {
+              if (item && values.check[index]) {
+                params[item] = values.value[index]
+              }
+            })
           }
         }
 
         console.log(params)
-
-        request({ method, url, data: params }).then(data => {
-          this.setState({
-            result: JSON.stringify(data),
+        request({ method, url, data: params })
+          .then(data => {
+            this.setState({
+              result: JSON.stringify(data),
+            })
           })
+          .catch(e => {
+            notification.error({
+              message: e.message,
+              duration: 10,
+            })
+          })
+      } else {
+        notification.error({
+          message: 'Please input required fields',
+          description: '',
         })
       }
     })
@@ -171,10 +192,15 @@ class RequestPage extends React.Component {
     })
   }
 
+  onCodeMirrorChange = v => {
+    this.setState({
+      code: v,
+    })
+  }
+
   render() {
     const { result, url, method, keys, visible } = this.state
     const { getFieldDecorator } = this.props.form
-    console.log('///////////', this.state)
 
     return (
       <Page inner>
@@ -304,42 +330,35 @@ class RequestPage extends React.Component {
                   </Col>
                   <Col style={{ marginTop: 8 }}>
                     {getFieldDecorator(`key[table]`)(
-                      <Input placeholder="table" value={'table'} disabled />
+                      <Input placeholder="table" disabled />
                     )}
                   </Col>
                   <Col style={{ marginTop: 8 }}>
-                    {getFieldDecorator(`value[table]`)(
-                      <Input placeholder="Value" />
-                    )}
+                    {getFieldDecorator(`table_value`, {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Please select a table',
+                        },
+                      ],
+                    })(this.constructTableSelection())}
                   </Col>
                 </Row>
                 <Row gutter={8}>
                   <div style={{ padding: '15px 10px 5px', fontWeight: '600' }}>
                     Data:
                   </div>
-                  {getFieldDecorator('value[data]', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please input table data',
-                        type: 'json',
-                      },
-                    ],
-                  })(
-                    <div style={{ margin: '10px 0' }}>
-                      <CodeMirror
-                        value={this.state.rules}
-                        onChange={this.onCodeMirrorChange}
-                        options={{
-                          lineNumbers: true,
-                          matchBrackets: true,
-                          autoCloseBrackets: true,
-                          mode: 'application/ld+json',
-                          lineWrapping: true,
-                          theme: 'monokai',
-                        }}
-                      />
-                    </div>
+                  {getFieldDecorator('data_value')(
+                    <CodeMirror
+                      options={{
+                        lineNumbers: true,
+                        matchBrackets: true,
+                        autoCloseBrackets: true,
+                        mode: 'application/ld+json',
+                        lineWrapping: true,
+                        theme: 'monokai',
+                      }}
+                    />
                   )}
                 </Row>
               </div>
