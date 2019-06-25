@@ -1,6 +1,6 @@
 module.exports = {
-  siteName: 'Covenant Cloud',
-  copyright: 'Covenant Cloud  © 2019 CovenantLabs',
+  siteName: 'CQL Cloud',
+  copyright: 'CQL Cloud  © 2019 CovenantLabs',
   logoPath: '/logo.svg',
   apiEndpoint:
     process.env.NODE_ENV === 'development' ? '' : '//stg-api.covenantsql.io',

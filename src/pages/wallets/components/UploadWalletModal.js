@@ -71,7 +71,7 @@ class UploadWalletModal extends PureComponent {
       content: (
         <div>
           <p>
-            <Trans>你现在即可用下面的钱包来使用 Covenant Cloud 服务</Trans>
+            <Trans>你现在即可用下面的钱包来使用 CQL Cloud 服务</Trans>
           </p>
           <WalletAvatar seed={account} cutoff={20} />
         </div>

@@ -53,7 +53,7 @@ class Wallets extends PureComponent {
     const { dispatch } = this.props
 
     Modal.confirm({
-      title: <Trans>确定要在 Covenant Cloud 上移除此钱包么？</Trans>,
+      title: <Trans>确定要在 CQL Cloud 上移除此钱包么？</Trans>,
       content: `${account}`,
       okText: <Trans>确认移除</Trans>,
       okType: 'danger',

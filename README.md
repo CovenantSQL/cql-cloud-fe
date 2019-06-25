@@ -1,7 +1,7 @@
 
 <p align="center">
   <a href="http://github.com/CovenantSQL/cql-cloud-fe">
-    <img alt="Covenant Cloud" height="64" src="./docs/_media/logo.svg">
+    <img alt="CQL Cloud" height="64" src="./docs/_media/logo.svg">
   </a>
 </p>
 
