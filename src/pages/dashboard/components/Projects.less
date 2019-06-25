@@ -34,9 +34,11 @@
     }
   }
   .name {
-    padding: 20px 10px 10px;
+    margin-top: 10px;
+    padding: 10px;
     display: flex;
     align-content: center;
+    position: relative;
 
     .avatar {
       border: solid 2px #fcfcfc;
@@ -46,9 +48,16 @@
       margin-left: 15px;
       font-size: 1rem;
       font-weight: 600;
-      padding: 12px 0;
+      padding: 12px 20px 12px 0;
       text-overflow: ellipsis;
       overflow: hidden;
+    }
+    .editBtn {
+      height: 16px;
+      font-size: 10px;
+      position: absolute;
+      right: 0;
+      top: calc(50% - 8px);
     }
   }
 }

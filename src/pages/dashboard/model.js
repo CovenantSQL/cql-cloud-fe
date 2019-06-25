@@ -5,14 +5,13 @@ import { pathMatchRegexp } from 'utils'
 import { model } from 'utils/model'
 
 const {
-  // queryDashboard,
-  // queryWeather,
   getPTC,
   queryTasks,
   queryTask,
   createProject,
   queryProject,
   topupProject,
+  updateProjectMiscConfig,
 } = api
 
 export default modelExtend(model, {
@@ -34,41 +33,12 @@ export default modelExtend(model, {
 
           dispatch({ type: 'app/getProjectList' })
           // query dashboard related
-          // dispatch({ type: 'query' })
-          // dispatch({ type: 'queryWeather' })
           dispatch({ type: 'getTaskList', payload: { all: true } })
         }
       })
     },
   },
   effects: {
-    // *query({ payload }, { call, put }) {
-    //   const data = yield call(queryDashboard, parse(payload))
-    //   yield put({
-    //     type: 'updateState',
-    //     payload: data,
-    //   })
-    // },
-    // *queryWeather({ payload = {} }, { call, put }) {
-    //   payload.location = 'shenzhen'
-    //   const result = yield call(queryWeather, payload)
-    //   const { success } = result
-    //   if (success) {
-    //     const data = result.results[0]
-    //     const weather = {
-    //       city: data.location.name,
-    //       temperature: data.now.temperature,
-    //       name: data.now.text,
-    //       icon: `//s5.sencdn.com/web/icons/3d_50/${data.now.code}.png`,
-    //     }
-    //     yield put({
-    //       type: 'updateState',
-    //       payload: {
-    //         weather,
-    //       },
-    //     })
-    //   }
-    // },
     *getPTC({ payload }, { call, put }) {
       const { data, success } = yield call(getPTC)
       yield put({ type: 'app/checkMainWallet' })
@@ -99,6 +69,10 @@ export default modelExtend(model, {
     },
     *topupProjectDB({ payload }, { call, put }) {
       const { data, success } = yield call(topupProject, payload)
+      return { data, success }
+    },
+    *updateProjectMisc({ payload }, { call, put }) {
+      const { data, success } = yield call(updateProjectMiscConfig, payload)
       return { data, success }
     },
   },
