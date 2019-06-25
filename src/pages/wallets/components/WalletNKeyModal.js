@@ -37,7 +37,7 @@ class WalletNKeyModal extends PureComponent {
             {isNewCreated ? (
               <Trans>
                 你的 CovenantSQL 钱包已成功生成，为方便使用，你的钱包会暂存在
-                Covenant Cloud 上, 并绑定你的 Github 账户。你可以随时在 Covenant
+                CQL Cloud 上, 并绑定你的 Github 账户。你可以随时在 Covenant
                 Cloud 下载并加密，或移除你的钱包。
               </Trans>
             ) : (

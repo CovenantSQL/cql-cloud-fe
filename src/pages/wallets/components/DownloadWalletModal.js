@@ -77,7 +77,7 @@ class DownloadWalletModal extends PureComponent {
         >
           <p className={styles.instru}>
             <Trans>
-              此钱包暂存在 Covenant Cloud
+              此钱包暂存在 CQL Cloud
               上，你可以设置私钥加密密码来对钱包进行加密，
               或者直接下载明文私钥钱包。
             </Trans>
