@@ -25,7 +25,7 @@ function User({ avatar, username, projectNum = 0, ptc = 0 }) {
       </div>
       <div className={styles.number}>
         <div className={styles.item}>
-          <p># Projects</p>
+          <p>Projects</p>
           <p style={{ color: Color.green }}>
             <CountUp end={projectNum} prefix="" {...countUpProps} />
           </p>
