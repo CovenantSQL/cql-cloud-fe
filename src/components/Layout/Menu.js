@@ -16,7 +16,7 @@ const { SubMenu } = Menu
 @withRouter
 class SiderMenu extends PureComponent {
   state = {
-    openKeys: store.get('openKeys') || [],
+    openKeys: store.get('openKeys') || ['101'], // default open the first project
   }
 
   onOpenChange = openKeys => {
