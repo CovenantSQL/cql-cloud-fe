@@ -5,9 +5,20 @@ import _get from 'lodash/get'
 import moment from 'moment'
 import makeBlockie from 'ethereum-blockies-base64'
 import PropTypes from 'prop-types'
-import { Card, Button, Modal, Col, Tag, Avatar, InputNumber } from 'antd'
+import {
+  Card,
+  Button,
+  Modal,
+  Col,
+  Tag,
+  Avatar,
+  Input,
+  InputNumber,
+  Icon,
+} from 'antd'
 import { addLangPrefix, toPTC, fromPTC } from 'utils'
 import { Trans, withI18n } from '@lingui/react'
+import UpdateAliasModal from './UpdateAliasModal'
 import styles from './Projects.less'
 
 @withI18n()
@@ -15,6 +26,8 @@ import styles from './Projects.less'
 class Projects extends PureComponent {
   state = {
     amount: 0.1,
+    alias: '',
+    updateAlias: false,
   }
   confirmAmount = db => {
     const { i18n } = this.props
@@ -50,6 +63,17 @@ class Projects extends PureComponent {
       },
     })
   }
+  confirmEditAlias = (project, e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    this.setState({
+      alias: project.alias,
+      db: project.project,
+      updateAlias: true,
+    })
+  }
+  closeUpdateAliasModal = () => this.setState({ alias: '', updateAlias: false })
   topup = async db => {
     const { dispatch, i18n } = this.props
     const { amount } = this.state
@@ -118,6 +142,13 @@ class Projects extends PureComponent {
                 />
               )}
               <div className={styles.alias}>{p.alias}</div>
+              <Button
+                onClick={e => this.confirmEditAlias(p, e)}
+                className={styles.editBtn}
+                size="small"
+              >
+                <Icon type="edit" theme="twoTone" />
+              </Button>
             </div>
           </Link>
         </div>
@@ -136,6 +167,13 @@ class Projects extends PureComponent {
                 {this._renderProjectCard(p)}
               </Col>
             ))}
+        {this.state.updateAlias && (
+          <UpdateAliasModal
+            db={this.state.db}
+            alias={this.state.alias}
+            close={this.closeUpdateAliasModal}
+          />
+        )}
       </>
     )
   }
