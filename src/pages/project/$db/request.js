@@ -73,12 +73,12 @@ class RequestPage extends React.Component {
   }
 
   constructAPIDomain = () => {
-    const alias = _get(this.props.config, ['misc', 'alias'], '')
-    return '//' + alias + '.stg-api.covenantsql.io:15153'
+    const api_domain = _get(this.props.config, ['client_api_domains', 0])
+    return '//' + api_domain
   }
 
   constructTableSelection = () => {
-    const tables = _get(this.props.config, ['tables'], [])
+    const tables = _get(this.props.config, ['tables']) || []
     return (
       <Select placeholder="Select a table" style={{ minWidth: '160px' }}>
         {tables.map(t => {

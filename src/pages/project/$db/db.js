@@ -171,13 +171,16 @@ class DatabaseDetail extends PureComponent {
     const { projectDetail } = this.props
     const { table_names, tables } = projectDetail
 
+    const number_of_tables =
+      (Object.keys(tables) && Object.keys(tables).length) || 0
+
     return (
       <Page inner>
         <div className={styles.tables}>
           <div className={styles.title}>
             <Trans>Table Details:</Trans>
           </div>
-          {Object.keys(tables).length !== 0 ? (
+          {number_of_tables !== 0 ? (
             table_names.map(name => (
               <div key={name} className={styles.table}>
                 <div className={styles.tableName}>

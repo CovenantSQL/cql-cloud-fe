@@ -147,6 +147,7 @@ export default {
 
       const { data, success } = yield call(queryProjectTables, _payload)
       if (success) {
+        if (!data.tables) return
         yield put({
           type: 'updateState',
           payload: {
