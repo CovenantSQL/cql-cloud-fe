@@ -113,7 +113,7 @@ export default {
         yield put({
           type: 'updateState',
           payload: {
-            userList: data.users,
+            userList: data.users || [],
             pagination: {
               current: Number(p.current),
               pageSize: Number(p.pageSize),
