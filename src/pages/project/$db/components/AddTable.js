@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { withI18n, Trans } from '@lingui/react'
-import { Form, Modal, Input, Icon, Button, Select } from 'antd'
+import { Form, notification, Input, Icon, Button, Select } from 'antd'
 import ColumnInput from './ColumnInput'
 
 let id = 0
@@ -55,8 +55,8 @@ class DynamicAddTableForm extends React.Component {
         console.log('Merged values:', keys.map(key => columns[key]))
 
         const table = values.table_name
-        const names = values.columns.map(c => c.name)
-        const types = values.columns.map(c => c.type)
+        const names = values.columns.map(c => c.name).filter(i => i !== null)
+        const types = values.columns.map(c => c.type).filter(i => i !== null)
 
         // return
         const { data, success } = await this.props.createTable({
@@ -66,14 +66,9 @@ class DynamicAddTableForm extends React.Component {
         })
 
         if (success) {
-          Modal.success({
-            title: i18n.t`Create Table Success!`,
-            content: (
-              <div>
-                <div>{data.table} created</div>
-              </div>
-            ),
-            okText: i18n.t`好的`,
+          notification.success({
+            message: i18n.t`Create Table Success!`,
+            description: `${data.table} created`,
           })
 
           // reset form
