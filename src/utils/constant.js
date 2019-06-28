@@ -19,8 +19,11 @@ export const USER_PERMISSION = {
 
 export const CANCEL_REQUEST_MESSAGE = 'cancel request'
 
-// Table column data type (sqlite)
-export const DATA_TYPES = ['INTEGER', 'TEXT', 'REAL', 'BLOB']
+// Table column data type
+// NUMBER => INTEGER & REAL in sqlite
+// TEXT   => TEXT in sqlite
+// BINARY => BLOB in sqlite
+export const DATA_TYPES = ['NUMBER', 'TEXT', 'BINARY']
 
 // Project user states
 export const USER_STATES = ['Enabled', 'Disabled']
