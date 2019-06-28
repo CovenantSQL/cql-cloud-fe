@@ -56,6 +56,8 @@ const requests = Object.values(CLIENT_API).map(item => {
   }
 })
 
+const FormItem = Form.Item
+
 let uuid = 2
 @Form.create()
 @connect(({ projectDetail }) => ({ config: projectDetail.config }))
@@ -140,11 +142,6 @@ class RequestPage extends React.Component {
               duration: 10,
             })
           })
-      } else {
-        notification.error({
-          message: 'Please input required fields',
-          description: '',
-        })
       }
     })
   }
@@ -324,28 +321,34 @@ class RequestPage extends React.Component {
               <div>
                 <Row gutter={8} type="flex" justify="start" align="middle">
                   <Col style={{ marginTop: 8 }}>
-                    {getFieldDecorator(`check[table]`, {
-                      initialValue: true,
-                    })(<Checkbox defaultChecked disabled />)}
+                    <FormItem>
+                      {getFieldDecorator(`check[table]`, {
+                        initialValue: true,
+                      })(<Checkbox defaultChecked disabled />)}
+                    </FormItem>
                   </Col>
                   <Col style={{ marginTop: 8 }}>
-                    {getFieldDecorator(`key[table]`)(
-                      <Input placeholder="table" disabled />
-                    )}
+                    <FormItem>
+                      {getFieldDecorator(`key[table]`)(
+                        <Input placeholder="table" disabled />
+                      )}
+                    </FormItem>
                   </Col>
                   <Col style={{ marginTop: 8 }}>
-                    {getFieldDecorator(`table_value`, {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please select a table',
-                        },
-                      ],
-                    })(this.constructTableSelection())}
+                    <FormItem hasFeedback>
+                      {getFieldDecorator(`table_value`, {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please select a table',
+                          },
+                        ],
+                      })(this.constructTableSelection())}
+                    </FormItem>
                   </Col>
                 </Row>
                 <Row gutter={8}>
-                  <div style={{ padding: '15px 10px 5px', fontWeight: '600' }}>
+                  <div style={{ padding: '0 10px 5px', fontWeight: '600' }}>
                     Data:
                   </div>
                   {getFieldDecorator('data_value')(
