@@ -25,10 +25,11 @@ class App extends React.Component {
 
 class Home extends React.Component {
   loginGithub = () => {
-    const url = "http://testproject.stg-api.covenantsql.io:15153/v3/auth/authorize/github"
-    const name = "CQL Github Login"
-    const specs = "width=500,height=600,top=200,left=500"
-    window.open(url, name, specs)
+    const authUrl = "http://w.stg-api.covenantsql.io:15153/v3/auth/authorize/github"
+    window.location.href = authUrl
+    // const name = "CQL Github Login"
+    // const specs = "width=500,height=600,top=200,left=500"
+    // window.open(authUrl, name, specs)
   }
   render () {
     return (
@@ -37,16 +38,47 @@ class Home extends React.Component {
         <button className="login-button" onClick={this.loginGithub}>
           Login from Github
         </button>
+        <a href="http://w.stg-api.covenantsql.io:15153/v3/auth/authorize/github">
+          Login from Github
+        </a>
       </div>
     )
   }
 }
 
 class Callback extends React.Component {
+  requestCQLToken = () => {
+    const callbackUrl = "http://w.stg-api.covenantsql.io:15153/v3/auth/callback/github"
+    const search = window.location.search
+    // const state = search.match(new RegExp('[?&]state=([^&#]*)'))[1]
+    // const code = search.match(new RegExp('[?&]code=([^&#]*)'))[1]
+    // console.log('//------ from Github:', state, code)
+
+    const requestTokenUrl = callbackUrl + search
+
+    fetch(requestTokenUrl, {
+      method: 'POST',
+      credentials: 'include'
+      // headers: {
+      //   'Accept': 'application/json',
+      //   'Content-Type': 'application/json'
+      // },
+      // body: JSON.stringify({ state, code })
+    })
+    .then(res => {
+      return res.json()
+    })
+    .then(data => {
+      console.log('//------ CQL TOKEN:', data)
+    })
+  }
   render () {
     return (
       <div>
         <h2>Callback...</h2>
+        <button className="login-button" onClick={this.requestCQLToken}>
+          Request For CQL Token
+        </button>
       </div>
     )
   }
